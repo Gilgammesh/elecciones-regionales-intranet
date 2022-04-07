@@ -1,0 +1,18 @@
+/*----------------------------------------
+    Sweet Alert 2 
+------------------------------------------*/
+.btn-swal2 {
+	font-size: 1.4rem !important;
+	line-height: 36px !important;
+	height: 36px !important;
+	padding: 0 2rem !important;
+}
+.swal2-popup.swal2-toast {
+	padding: 1.2rem !important;
+}
+.swal2-popup.swal2-toast .swal2-title {
+	font-size: 1.5rem !important;
+}
+.swal2-title.text-white {
+	color: #ffffff !important;
+}
