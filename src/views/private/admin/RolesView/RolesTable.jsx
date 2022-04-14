@@ -184,6 +184,9 @@ const RolesTable = props => {
 										<TableCell className="py-2" component="th" scope="row" align="center">
 											{index + 1 + page * rowsPerPage}
 										</TableCell>
+										<TableCell className="py-2" component="th" scope="row" align="center">
+											{row.codigo}
+										</TableCell>
 										<TableCell className="py-2" component="th" scope="row">
 											{row.nombre}
 										</TableCell>

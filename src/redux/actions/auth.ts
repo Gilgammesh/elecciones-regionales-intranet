@@ -76,7 +76,7 @@ export const startLogin = (body: ILogin, history: RouteComponentProps['history']
 				dispatch<any>(startSetNavigation(result.data.usuario, result.data.permisos, result.data.modulos));
 
 				// Redireccionamos al inicio de la aplicación
-				history.replace('/usuario/perfil');
+				history.replace('/elecciones');
 
 				// Establecemos los datos del usuario
 				dispatch(login(result.data.token, result.data.usuario, result.data.permisos));
@@ -91,7 +91,7 @@ export const startLogin = (body: ILogin, history: RouteComponentProps['history']
 export const startLogout = () => {
 	return async (dispatch: Dispatch) => {
 		// Guardamos la sesión del usuario
-		await fetchData(`monitor/sesiones`, { isTokenReq: true }, 'PUT', {
+		await fetchData(`admin/sesiones`, { isTokenReq: true }, 'PUT', {
 			estado: 'offline'
 		});
 		// Eliminamos el token

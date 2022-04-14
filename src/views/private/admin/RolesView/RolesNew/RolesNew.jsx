@@ -32,6 +32,7 @@ const RolesNew = () => {
 
 	// Estado inicial del formulario
 	const initialForm = {
+		codigo: 1,
 		nombre: '',
 		descripcion: ''
 	};

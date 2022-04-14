@@ -12,12 +12,28 @@ import PermisosTable from './PermisosTable';
 const RolesNewForm = props => {
 	// Obtenemos las propiedades del componente
 	const { formValues, handleInputChange } = props;
-	const { nombre, descripcion } = formValues;
+	const { codigo, nombre, descripcion } = formValues;
 
 	// Renderizamos el componente
 	return (
 		<div className="flex flex-col justify-center w-full p-16 sm:p-24">
 			<div className="grid grid-cols-12 gap-24 mt-16 mb-16">
+				<TextFieldFormsy
+					className="col-span-12 sm:col-span-1"
+					type="number"
+					name="codigo"
+					label="Codigo"
+					accept="onlyNumber"
+					value={codigo}
+					onChange={handleInputChange}
+					variant="outlined"
+					inputProps={{
+						maxLength: 2,
+						min: 1,
+						max: 99
+					}}
+					required
+				/>
 				<TextFieldFormsy
 					className="col-span-12 sm:col-span-2"
 					type="text"
@@ -29,7 +45,7 @@ const RolesNewForm = props => {
 					required
 				/>
 				<TextFieldFormsy
-					className="col-span-12 sm:col-span-10"
+					className="col-span-12 sm:col-span-9"
 					name="descripcion"
 					label="Descripción"
 					multiline

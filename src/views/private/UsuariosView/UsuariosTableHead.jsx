@@ -8,7 +8,7 @@ import { TableCell, TableHead, TableRow, TableSortLabel, Tooltip } from '@materi
 /*******************************************************************************************************/
 // Columnas cabecera de la Tabla //
 /*******************************************************************************************************/
-const headers = [
+let headers = [
 	{
 		id: 'id',
 		align: 'left',
@@ -38,13 +38,6 @@ const headers = [
 		sort: true
 	},
 	{
-		id: 'email',
-		align: 'left',
-		disablePadding: false,
-		label: 'Correo',
-		sort: false
-	},
-	{
 		id: 'dni',
 		align: 'left',
 		disablePadding: false,
@@ -52,10 +45,31 @@ const headers = [
 		sort: false
 	},
 	{
+		id: 'celular',
+		align: 'left',
+		disablePadding: false,
+		label: 'Celular',
+		sort: false
+	},
+	{
+		id: 'email',
+		align: 'left',
+		disablePadding: false,
+		label: 'Correo',
+		sort: false
+	},
+	{
 		id: 'rol',
 		align: 'left',
 		disablePadding: false,
-		label: 'ROL',
+		label: 'Tipo Usuario',
+		sort: false
+	},
+	{
+		id: 'departamento',
+		align: 'left',
+		disablePadding: false,
+		label: 'Departamento',
 		sort: false
 	},
 	{
@@ -75,50 +89,60 @@ const headers = [
 ];
 
 /*******************************************************************************************************/
-// Definimos la Vista del componente Admin - Usuarios Table Head //
+// Definimos la Vista del componente Usuarios Table Head //
 /*******************************************************************************************************/
 const UsuariosTableHead = props => {
 	// Obtenemos las propiedades del componente
-	const { order, onRequestSort } = props;
+	const { order, onRequestSort, superUser } = props;
 
 	// Función para crear un ordenamiento de la columna
 	const createSortHandler = property => event => {
 		onRequestSort(event, property);
 	};
-
 	// Renderizamos el componente
 	return (
 		<TableHead>
 			<TableRow className="h-64">
-				{headers.map(col => {
-					return (
-						<TableCell
-							key={col.id}
-							align={col.align}
-							padding={col.disablePadding ? 'none' : 'normal'}
-							className="font-extrabold"
-							sortDirection={order.id === col.id ? order.direction : false}
-						>
-							{col.sort ? (
-								<Tooltip
-									title="Ordenar"
-									placement={col.align === 'right' ? 'bottom-end' : 'bottom-start'}
-									enterDelay={300}
-								>
-									<TableSortLabel
-										active={order.id === col.id}
-										direction={order.direction}
-										onClick={createSortHandler(col.id)}
+				{headers
+					.filter(ele => {
+						// Si es un superusuario moostramos todo
+						if (superUser) {
+							return ele;
+						}
+						// Caso contrario excluimos el departamento
+						else {
+							return ele.id !== 'departamento';
+						}
+					})
+					.map(col => {
+						return (
+							<TableCell
+								key={col.id}
+								align={col.align}
+								padding={col.disablePadding ? 'none' : 'normal'}
+								className="font-extrabold"
+								sortDirection={order.id === col.id ? order.direction : false}
+							>
+								{col.sort ? (
+									<Tooltip
+										title="Ordenar"
+										placement={col.align === 'right' ? 'bottom-end' : 'bottom-start'}
+										enterDelay={300}
 									>
-										{col.label}
-									</TableSortLabel>
-								</Tooltip>
-							) : (
-								col.label
-							)}
-						</TableCell>
-					);
-				}, this)}
+										<TableSortLabel
+											active={order.id === col.id}
+											direction={order.direction}
+											onClick={createSortHandler(col.id)}
+										>
+											{col.label}
+										</TableSortLabel>
+									</Tooltip>
+								) : (
+									col.label
+								)}
+							</TableCell>
+						);
+					}, this)}
 			</TableRow>
 		</TableHead>
 	);
@@ -129,7 +153,8 @@ const UsuariosTableHead = props => {
 /*******************************************************************************************************/
 UsuariosTableHead.propTypes = {
 	order: PropTypes.object.isRequired,
-	onRequestSort: PropTypes.func.isRequired
+	onRequestSort: PropTypes.func.isRequired,
+	superUser: PropTypes.bool.isRequired
 };
 
 /*******************************************************************************************************/

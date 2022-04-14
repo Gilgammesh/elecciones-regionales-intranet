@@ -77,7 +77,7 @@ const UserNavbarHeader = () => {
 				{`${usuario.nombres.trim().split(' ')[0]} ${usuario.apellidos.trim().split(' ')[0]}`}
 			</Typography>
 			<Typography className="email text-13 mt-8 opacity-50 whitespace-no-wrap" color="inherit">
-				{usuario.dni}
+				{`DNI: ${usuario.dni}`}
 			</Typography>
 			<Avatar
 				className={clsx(styles.avatar, 'avatar')}

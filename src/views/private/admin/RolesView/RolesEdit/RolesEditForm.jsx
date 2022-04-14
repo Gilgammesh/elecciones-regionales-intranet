@@ -22,7 +22,7 @@ const RolesEditForm = props => {
 
 	// Obtenemos las propiedades del componente
 	const { formValues, handleInputChange, setForm } = props;
-	const { nombre, descripcion } = formValues;
+	const { codigo, nombre, descripcion } = formValues;
 
 	// Estado si el rol es de super usuario
 	const [superRol, setSuperRol] = useState(null);
@@ -41,6 +41,7 @@ const RolesEditForm = props => {
 				const { rol } = result.data;
 				// Guardamos los datos del formulario
 				setForm({
+					codigo: rol.codigo,
 					nombre: rol.nombre,
 					descripcion: rol.descripcion
 				});
@@ -66,6 +67,22 @@ const RolesEditForm = props => {
 		<div className="flex flex-col justify-center w-full p-16 sm:p-24">
 			<div className="grid grid-cols-12 gap-24 mt-16 mb-16">
 				<TextFieldFormsy
+					className="col-span-12 sm:col-span-1"
+					type="number"
+					name="codigo"
+					label="Codigo"
+					accept="onlyNumber"
+					value={codigo}
+					onChange={handleInputChange}
+					variant="outlined"
+					inputProps={{
+						maxLength: 2,
+						min: 1,
+						max: 99
+					}}
+					required
+				/>
+				<TextFieldFormsy
 					className="col-span-12 sm:col-span-2"
 					type="text"
 					name="nombre"
@@ -76,7 +93,7 @@ const RolesEditForm = props => {
 					required
 				/>
 				<TextFieldFormsy
-					className="col-span-12 sm:col-span-10"
+					className="col-span-12 sm:col-span-9"
 					name="descripcion"
 					label="Descripción"
 					multiline

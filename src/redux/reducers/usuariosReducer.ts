@@ -2,8 +2,6 @@
 // Importamos las dependencias //
 /*******************************************************************************************************/
 import types from 'configs/types';
-import { getToken } from 'helpers/authToken';
-import { IPermisoModReducer } from './permisosReducer';
 
 /*******************************************************************************************************/
 // Interface de Action //
@@ -16,75 +14,33 @@ interface IAction {
 /*******************************************************************************************************/
 // Interface del Reducer //
 /*******************************************************************************************************/
-export interface IAuthUsuarioReducer {
-	_id: string;
-	nombres: string;
-	apellidos: string;
-	dni: string;
-	genero: string;
-	img?: string;
-	rol: {
-		_id: string;
-		super: boolean;
-	};
-	departamento?: {
-		_id: string;
-		codigo: string;
-		nombre: string;
-	};
-}
-export interface IAuthLoggedUsuarioReducer extends IAuthUsuarioReducer {
-	isLogged: boolean;
-}
-export interface IAuthReducer {
-	token: string;
-	usuario: IAuthLoggedUsuarioReducer;
-	permisos: Array<IPermisoModReducer>;
+export interface IUsuariosReducer {
+	rol: string;
+	departamento: string;
 }
 
 /*******************************************************************************************************/
 // Estado inicial del Reducer //
 /*******************************************************************************************************/
-const initialState: IAuthReducer = {
-	token: getToken(), // Token del usuario
-	usuario: {
-		isLogged: false,
-		_id: '',
-		nombres: '',
-		apellidos: '',
-		dni: '',
-		genero: '',
-		rol: {
-			_id: '',
-			super: false
-		}
-	}, // Datos del usuario logueado
-	permisos: [] // Permisos del usuario
+const initialState: IUsuariosReducer = {
+	rol: 'todos',
+	departamento: 'todos'
 };
 
 /*******************************************************************************************************/
 // Definimos el reducer y sus métodos //
 /*******************************************************************************************************/
-const authReducer = (state = initialState, { type, payload }: IAction) => {
+const usuariosReducer = (state = initialState, { type, payload }: IAction) => {
 	switch (type) {
-		case types.setAuth:
+		case types.setUsuariosRol:
 			return {
 				...state,
-				usuario: { isLogged: true, ...payload.usuario },
-				permisos: payload.permisos
+				rol: payload
 			};
-		case types.login:
+		case types.setUsuariosDepartamentos:
 			return {
 				...state,
-				token: payload.token,
-				usuario: { isLogged: true, ...payload.usuario },
-				permisos: payload.permisos
-			};
-		case types.logout:
-			return {
-				token: '',
-				usuario: { isLogged: false },
-				permisos: []
+				departamento: payload
 			};
 		default:
 			return state;
@@ -94,4 +50,4 @@ const authReducer = (state = initialState, { type, payload }: IAction) => {
 /*******************************************************************************************************/
 // Exportamos el reducer //
 /*******************************************************************************************************/
-export default authReducer;
+export default usuariosReducer;

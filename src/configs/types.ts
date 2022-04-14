@@ -29,12 +29,9 @@ export interface ITypes {
 	resetSubmodulos: string;
 	setPermisos: string;
 	resetPermisos: string;
-	setEFactProcess: string;
-	setEFactFile: string;
-	setEFactResumen: string;
-	setEFactResumenStatus: string;
-	setEFactResumenFinish: string;
 	setSocketIO: string;
+	setUsuariosRol: string;
+	setUsuariosDepartamentos: string;
 }
 
 /*******************************************************************************************************/
@@ -68,12 +65,9 @@ const types: ITypes = {
 	resetSubmodulos: '[submodulos] reset',
 	setPermisos: '[permisos] set',
 	resetPermisos: '[permisos] reset',
-	setEFactProcess: '[efacturacion] process',
-	setEFactFile: '[efacturacion] file',
-	setEFactResumen: '[efacturacion] resumen',
-	setEFactResumenStatus: '[efacturacion] resumen status',
-	setEFactResumenFinish: '[efacturacion] resumen finish',
-	setSocketIO: '[socketio] socket'
+	setSocketIO: '[socketio] socket',
+	setUsuariosRol: '[usuarios] set rol',
+	setUsuariosDepartamentos: '[usuarios] set departamento'
 };
 
 /*******************************************************************************************************/

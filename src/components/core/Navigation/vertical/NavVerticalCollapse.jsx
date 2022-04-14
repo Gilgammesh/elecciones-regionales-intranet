@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
 	root: {
 		padding: 0,
 		'&.open': {
-			backgroundColor: theme.palette.type === 'dark' ? 'rgba(255,255,255,.015)' : 'rgba(0,0,0,.025)'
+			backgroundColor: theme.palette.type === 'dark' ? 'rgba(255,255,255,.065)' : 'rgba(0,0,0,.065)'
 		}
 	},
 	item: props => ({

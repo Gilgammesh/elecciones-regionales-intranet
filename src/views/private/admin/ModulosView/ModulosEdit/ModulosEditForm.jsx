@@ -208,7 +208,7 @@ const ModulosEditForm = props => {
 					onChange={handleInputChange}
 					variant="outlined"
 					inputProps={{
-						maxLength: 20
+						maxLength: 30
 					}}
 					required
 				/>
@@ -222,7 +222,7 @@ const ModulosEditForm = props => {
 					onChange={handleInputChange}
 					variant="outlined"
 					inputProps={{
-						maxLength: 26
+						maxLength: 30
 					}}
 					required
 				/>

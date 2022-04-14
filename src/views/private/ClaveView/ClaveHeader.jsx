@@ -1,33 +1,60 @@
 /*******************************************************************************************************/
 // Importamos las dependencias //
 /*******************************************************************************************************/
-import React, { memo } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles, CircularProgress } from '@material-ui/core';
+import { Button, Icon, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
+import SaveIcon from '@material-ui/icons/Save';
+import Animate from 'components/core/Animate';
 
 /*******************************************************************************************************/
 // Definimos los estilos del componente //
 /*******************************************************************************************************/
 const useStyles = makeStyles(theme => ({
 	root: {
-		width: '100%',
-		'& > * + *': {
-			marginLeft: theme.spacing(2)
+		'& .Mui-disabled': {
+			backgroundColor: '#e0e0e0'
 		}
 	}
 }));
 
 /*******************************************************************************************************/
-// Definimos el componente de Carga Circular //
+// Definimos la Vista del componente Usuario - Cambiar Clave Header //
 /*******************************************************************************************************/
-const ProgressCircle = props => {
+const ClaveHeader = props => {
+	// Obtenemos las propiedades
+	const { isFormValid } = props;
+
 	// Instanciamos los estilos
 	const styles = useStyles();
 
 	// Renderizamos el componente
 	return (
-		<div className={styles.root}>
-			<CircularProgress {...props} />
+		<div className={clsx('flex flex-1 w-full items-center justify-between', styles.root)}>
+			<div className="flex items-center">
+				<Animate animation="transition.expandIn" delay={300}>
+					<Icon className="text-32">lock_open</Icon>
+				</Animate>
+				<Animate animation="transition.slideLeftIn" delay={300}>
+					<Typography className="hidden sm:flex mx-0 sm:mx-12" variant="h6">
+						Cambiar Clave
+					</Typography>
+				</Animate>
+			</div>
+			<div className="flex flex-1 items-center justify-center px-12"></div>
+			<Animate animation="transition.slideRightIn" delay={300}>
+				<Button
+					type="submit"
+					className="whitespace-no-wrap normal-case"
+					variant="contained"
+					disabled={!isFormValid}
+					startIcon={<SaveIcon />}
+				>
+					Guardar
+				</Button>
+			</Animate>
 		</div>
 	);
 };
@@ -35,22 +62,11 @@ const ProgressCircle = props => {
 /*******************************************************************************************************/
 // Definimos los tipos de propiedades del componente //
 /*******************************************************************************************************/
-ProgressCircle.propTypes = {
-	variant: PropTypes.string,
-	color: PropTypes.string,
-	size: PropTypes.number,
-	thickness: PropTypes.number,
-	value: PropTypes.number,
-};
-
-/*******************************************************************************************************/
-// Declaramos las propiedades por defecto del componente //
-/*******************************************************************************************************/
-ProgressCircle.defaultProps = {
-	color: 'secondary'
+ClaveHeader.propTypes = {
+	isFormValid: PropTypes.bool.isRequired
 };
 
 /*******************************************************************************************************/
 // Exportamos el componente //
 /*******************************************************************************************************/
-export default memo(ProgressCircle);
+export default ClaveHeader;

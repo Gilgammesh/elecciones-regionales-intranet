@@ -28,7 +28,11 @@ const PrivateRouter = () => {
 		// Recorremos las rutas declaradas
 		rutas_ = Object.values(routes).map((ele: IRoutesModulo) => {
 			if (ele.component) {
-				return <Route key={ele.path} exact path={ele.path} component={ele.component} />;
+				if (ele.children && ele.children.length > 0) {
+					return <Route key={ele.path} path={ele.path} render={() => <ChildrenRouter rutas={ele} />} />;
+				} else {
+					return <Route key={ele.path} exact path={ele.path} component={ele.component} />;
+				}
 			} else {
 				if (ele.rutas) {
 					const submodulos = Object.values(ele.rutas).map((ele_: IRoutesSubModulo) => {
@@ -55,10 +59,20 @@ const PrivateRouter = () => {
 			// Si existe el módulo declarado en las rutas generales
 			if (routes[ele.modulo]) {
 				// Renderizamos los módulos permitidos
-				const { path, component, rutas }: IRoutesModulo = routes[ele.modulo];
+				const { path, component, rutas, children }: IRoutesModulo = routes[ele.modulo];
 				// Si es del tipo item y cuenta con un componente
 				if (component) {
-					return <Route key={ele._id} exact path={path} component={component} />;
+					if (children && children.length > 0) {
+						return (
+							<Route
+								key={path}
+								path={path}
+								render={() => <ChildrenRouter rutas={routes[ele.modulo]} />}
+							/>
+						);
+					} else {
+						return <Route key={path} exact path={path} component={component} />;
+					}
 				}
 				// Caso contario es del tipo collapse, mostramos sus hijos
 				else {
@@ -116,7 +130,7 @@ const PrivateRouter = () => {
 				<Route exact path="/" component={Building} />
 				<Route exact path="/chat" component={Building} />
 				{rutas_}
-				<Redirect to="/" />
+				<Redirect to="/reportes" />
 			</Switch>
 		</Layout>
 	);

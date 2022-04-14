@@ -3,6 +3,7 @@
 /*******************************************************************************************************/
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import { Icon, IconButton, InputAdornment, makeStyles, MenuItem, TextField, Tooltip } from '@material-ui/core';
 import clsx from 'clsx';
 import TextFieldFormsy from 'components/core/Formsy/TextFieldFormsy';
@@ -51,15 +52,18 @@ const useStyles = makeStyles(theme => ({
 }));
 
 /*******************************************************************************************************/
-// Definimos la Vista del componente Admin - Usuario Nuevo Formulario //
+// Definimos la Vista del componente Usuario Nuevo Formulario //
 /*******************************************************************************************************/
 const UsuariosNewForm = props => {
+	// Obtenemos lso datos del Usuario logueado
+	const usuario = useSelector(state => state.auth.usuario);
+
 	// Instanciamos los estilos
 	const styles = useStyles();
 
 	// Obtenemos las propiedades del componente
 	const { formValues, handleInputChange, setForm } = props;
-	const { nombres, apellido_paterno, apellido_materno, email, dni, genero, password, rol } = formValues;
+	const { nombres, apellidos, dni, celular, email, genero, password, rol, departamento } = formValues;
 
 	// Estado para mostrar la contraseña
 	const [showPassword, setShowPassword] = useState(false);
@@ -67,23 +71,50 @@ const UsuariosNewForm = props => {
 	// Estado inicial de los roles
 	const [roles, setRoles] = useState([]);
 
+	// Estado inicial de los departamentos
+	const [departamentos, setDepartamentos] = useState([]);
+
 	// Estado inicial de la imagen
 	const [image, setImage] = useState({
 		url: '',
 		type: ''
 	});
 
-	// Efecto para obtener los roles de usuario
+	// Efecto para obtener los roles de usuario y departamentos
 	useEffect(() => {
 		// Estado inicial de montaje
 		let mounted = true;
 		// Función para obtener la lista de roles
 		const getRoles = async () => {
 			// Obtenemos los roles con fetch
-			const result = await fetchData('admin/roles?page=1&pageSize=500', { isTokenReq: true });
+			const result = await fetchData('usuarios/roles?page=1&pageSize=50', { isTokenReq: true });
 			// Si existe un resultado y el status es positivo
 			if (result && mounted && result.data.status) {
 				// Recorremos la lista de roles
+				const promises = result.data.list.map(ele => {
+					if (!ele.super) {
+						// Retornamos el elemento construido
+						return (
+							<MenuItem key={ele._id} value={ele._id}>
+								{ele.nombre}
+							</MenuItem>
+						);
+					} else {
+						return null;
+					}
+				});
+				const listRoles = await Promise.all(promises);
+				// Establecemos los roles
+				setRoles(listRoles);
+			}
+		};
+		// Función para obtener la lista de departamentos
+		const getDepartamentos = async () => {
+			// Obtenemos los roles con fetch
+			const result = await fetchData('ubigeo/departamentos?page=1&pageSize=50', { isTokenReq: true });
+			// Si existe un resultado y el status es positivo
+			if (result && mounted && result.data.status) {
+				// Recorremos la lista de departamentos
 				const promises = result.data.list.map(ele => {
 					// Retornamos el elemento construido
 					return (
@@ -92,13 +123,18 @@ const UsuariosNewForm = props => {
 						</MenuItem>
 					);
 				});
-				const listRoles = await Promise.all(promises);
-				// Establecemos los roles
-				setRoles(listRoles);
+				const listDepartamentos = await Promise.all(promises);
+				// Establecemos los departamentos
+				setDepartamentos(listDepartamentos);
 			}
 		};
 		// Obtenemos los roles
 		getRoles();
+		// Si es un superusuario
+		if (usuario.rol.super) {
+			// Obtenemos los departamentos
+			getDepartamentos();
+		}
 		// Limpiamos el montaje
 		return () => {
 			mounted = false;
@@ -180,51 +216,18 @@ const UsuariosNewForm = props => {
 					required
 				/>
 				<TextFieldFormsy
-					className="col-span-12 sm:col-span-4"
+					className="col-span-12 sm:col-span-5"
 					type="text"
-					name="apellido_paterno"
-					label="Apellido Paterno"
+					name="apellidos"
+					label="Apellidos"
 					accept="onlyLetterAndSpace"
-					value={apellido_paterno}
+					value={apellidos}
 					onChange={handleInputChange}
 					variant="outlined"
 					required
 				/>
 				<TextFieldFormsy
-					className="col-span-12 sm:col-span-4"
-					type="text"
-					name="apellido_materno"
-					label="Apellido Materno"
-					accept="onlyLetterAndSpace"
-					value={apellido_materno}
-					onChange={handleInputChange}
-					variant="outlined"
-					required
-				/>
-			</div>
-			<div className="grid grid-cols-12 gap-16 mt-16 mb-16">
-				<TextFieldFormsy
-					className="col-span-12 sm:col-span-4"
-					type="text"
-					name="email"
-					label="Correo Electrónico"
-					value={email}
-					onChange={handleInputChange}
-					validations="isEmail"
-					validationError="No es un correo válido"
-					InputProps={{
-						endAdornment: (
-							<InputAdornment position="end">
-								<Icon className="text-20" color="action">
-									email
-								</Icon>
-							</InputAdornment>
-						)
-					}}
-					variant="outlined"
-				/>
-				<TextFieldFormsy
-					className="col-span-12 sm:col-span-4"
+					className="col-span-12 sm:col-span-3"
 					type="text"
 					name="dni"
 					label="DNI"
@@ -254,8 +257,71 @@ const UsuariosNewForm = props => {
 					variant="outlined"
 					required
 				/>
+			</div>
+			<div className="grid grid-cols-12 gap-16 mt-16 mb-16">
 				<TextFieldFormsy
-					className="col-span-12 sm:col-span-4"
+					className="col-span-12 sm:col-span-2"
+					type="text"
+					name="celular"
+					label="Celular"
+					accept="onlyNumber"
+					value={celular}
+					onChange={handleInputChange}
+					validations={{
+						minLength: 9,
+						maxLength: 9
+					}}
+					validationErrors={{
+						minLength: 'El celular debe tener 09 dígitos',
+						maxLength: 'El celular debe tener 09 dígitos'
+					}}
+					inputProps={{
+						maxLength: 9
+					}}
+					InputProps={{
+						endAdornment: (
+							<InputAdornment position="end">
+								<Icon className="text-20" color="action">
+									smartphone
+								</Icon>
+							</InputAdornment>
+						)
+					}}
+					variant="outlined"
+				/>
+				<TextFieldFormsy
+					className="col-span-12 sm:col-span-5"
+					type="email"
+					name="email"
+					label="Correo"
+					value={email}
+					onChange={handleInputChange}
+					InputProps={{
+						endAdornment: (
+							<InputAdornment position="end">
+								<Icon className="text-20" color="action">
+									mail
+								</Icon>
+							</InputAdornment>
+						)
+					}}
+					variant="outlined"
+				/>
+				<TextField
+					select
+					className="col-span-12 sm:col-span-2"
+					name="genero"
+					label="Género"
+					value={genero}
+					onChange={handleInputChange}
+					variant="outlined"
+					required
+				>
+					<MenuItem value="M">Masculino </MenuItem>
+					<MenuItem value="F">Femenino </MenuItem>
+				</TextField>
+				<TextFieldFormsy
+					className="col-span-12 sm:col-span-3"
 					type="text"
 					name="password"
 					label="Contraseña"
@@ -329,31 +395,32 @@ const UsuariosNewForm = props => {
 						)}
 					</div>
 				</div>
-				<TextField
-					select
-					className="col-span-12 sm:col-span-4"
-					name="genero"
-					label="Género"
-					value={genero}
-					onChange={handleInputChange}
-					variant="outlined"
-					required
-				>
-					<MenuItem value="M">Masculino </MenuItem>
-					<MenuItem value="F">Femenino </MenuItem>
-				</TextField>
 				{roles && (
 					<TextField
 						select
-						className="col-span-12 sm:col-span-4"
+						className="col-span-12 sm:col-span-3"
 						name="rol"
-						label="Rol"
+						label="Tipo de Usuario"
 						value={rol}
 						onChange={handleInputChange}
 						variant="outlined"
 						required
 					>
 						{roles}
+					</TextField>
+				)}
+				{usuario.rol.super && departamentos && (
+					<TextField
+						select
+						className="col-span-12 sm:col-span-5"
+						name="departamento"
+						label="Departamento"
+						value={departamento}
+						onChange={handleInputChange}
+						variant="outlined"
+						required
+					>
+						{departamentos}
 					</TextField>
 				)}
 			</div>

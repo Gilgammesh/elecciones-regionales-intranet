@@ -1,71 +1,59 @@
 /*******************************************************************************************************/
 // Importamos las dependencias //
 /*******************************************************************************************************/
-import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Formsy from 'formsy-react';
 import PageCarded from 'components/core/PageCarded';
-import RolesEditHeader from './RolesEditHeader';
-import RolesEditForm from './RolesEditForm';
+import ClaveHeader from './ClaveHeader';
+import ClaveForm from './ClaveForm';
 import useForm from 'hooks/useForm';
 import { fetchData } from 'services/fetch';
 import { validateFetchData } from 'helpers/validateFetchData';
 import { Toast } from 'configs/settings';
-import { startResetPermisos } from 'redux/actions/permisos';
+import { startLogout } from 'redux/actions/auth';
 
 /*******************************************************************************************************/
-// Definimos la Vista del componente Admin - Rol Editar //
+// Definimos la Vista del componente Usuario - Cambiar Clave //
 /*******************************************************************************************************/
-const RolesEdit = () => {
-	// Llamamos al history de las rutas
-	const history = useHistory();
-
-	// Obtenemos el id del rol de los parámetros de la ruta
-	const { id } = useParams();
+const Clave = () => {
+	// Recuperamos el state de authentication de usuario
+	const usuario = useSelector(state => state.auth.usuario);
 
 	// Llamamos al dispatch de redux
 	const dispatch = useDispatch();
-
-	// Obtenemos la lista de permisos del Rol
-	const permisos = useSelector(state => state.permisos);
 
 	// Estado inicial si el formulario es válido
 	const [isFormValid, setIsFormValid] = useState(false);
 
 	// Estado inicial del formulario
 	const initialForm = {
-		codigo: '',
-		nombre: '',
-		descripcion: ''
+		password: '',
+		newPassword: '',
+		newPassword_: ''
 	};
 
 	// Usamos el Hook personalizado de formularios
-	const [formValues, handleInputChange, resetForm, setForm] = useForm(initialForm);
-
-	// Efecto para limpiar los submodulos de redux
-	useEffect(() => {
-		dispatch(startResetPermisos());
-	}, [dispatch]);
+	const [formValues, handleInputChange] = useForm(initialForm);
 
 	// Función que se ejecuta cuando se envia el formulario
 	const handleSubmit = async () => {
-		// Actualizamos la data del rol
-		const result = await fetchData(`admin/roles/${id}`, { isTokenReq: true }, 'PUT', {
-			...formValues,
-			permisos
-		});
+		// Actualizamos la clave del usuario
+		const result = await fetchData('usuario/cambiar-clave', { isTokenReq: true }, 'PUT', formValues);
 		// Validamos el resultado
 		if (validateFetchData(result)) {
-			// Reseteamos el formulario
-			resetForm(initialForm);
 			// Avisamos con un toast alert
 			Toast.fire({
 				icon: 'success',
 				title: result.data.msg
 			});
-			// Redireccionamos a lista de roles
-			history.push('/admin/roles');
+			// Cerramos sesión y redireccionamos a login
+			dispatch(startLogout());
+			// Avisamos con un toast alert
+			Toast.fire({
+				icon: 'success',
+				title: 'Inicie sesión nuevamente!!'
+			});
 		}
 	};
 
@@ -87,15 +75,15 @@ const RolesEdit = () => {
 					toolbar: 'p-0',
 					header: 'min-h-72 h-72 sm:h-136 sm:min-h-136'
 				}}
-				header={<RolesEditHeader isFormValid={isFormValid} />}
+				header={<ClaveHeader isFormValid={isFormValid} />}
 				contentToolbar={
 					<div className="px-16 sm:px-24">
-						<h2>Rol</h2>
+						<h2>
+							{`Usuario:  ${usuario.nombres.trim()} ${usuario.apellido_paterno.trim()} ${usuario.apellido_materno.trim()}`}
+						</h2>
 					</div>
 				}
-				content={
-					<RolesEditForm formValues={formValues} handleInputChange={handleInputChange} setForm={setForm} />
-				}
+				content={<ClaveForm formValues={formValues} handleInputChange={handleInputChange} />}
 				innerScroll
 			/>
 		</Formsy>
@@ -105,4 +93,4 @@ const RolesEdit = () => {
 /*******************************************************************************************************/
 // Exportamos el componente //
 /*******************************************************************************************************/
-export default RolesEdit;
+export default Clave;

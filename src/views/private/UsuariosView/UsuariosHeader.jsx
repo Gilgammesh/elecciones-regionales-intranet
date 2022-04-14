@@ -11,10 +11,10 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Animate from 'components/core/Animate';
 import { selectContrastMainTheme } from 'configs/themes';
 import { normalizar } from 'helpers/texts';
-import { startGetAccionesSubModulo } from 'redux/actions/auth';
+import { startGetAccionesModulo } from 'redux/actions/auth';
 
 /*******************************************************************************************************/
-// Definimos la Vista del componente Admin - Usuarios Header //
+// Definimos la Vista del componente Usuarios Header //
 /*******************************************************************************************************/
 const UsuariosHeader = props => {
 	// Obtenemos las propiedades del componente
@@ -35,12 +35,12 @@ const UsuariosHeader = props => {
 	// Estado inicial de la caja de búsqueda
 	const [searchText, setSearchText] = useState('');
 
-	// Array de Permisos de Acciones del SubMódulo
+	// Array de Permisos de Acciones del Módulo
 	const [accionesPerm, setAccionesPerm] = useState(null);
 
-	// Efecto para obtener las acciones del submódulo
+	// Efecto para obtener las acciones del módulo
 	useEffect(() => {
-		dispatch(startGetAccionesSubModulo('admin', 'usuarios')).then(res => setAccionesPerm(res));
+		dispatch(startGetAccionesModulo('usuarios')).then(res => setAccionesPerm(res));
 	}, [dispatch]);
 
 	// Si hay un cambio en la lista de usuarios
@@ -63,9 +63,7 @@ const UsuariosHeader = props => {
 			.filter(ele => {
 				return (
 					normalizar(ele.nombres).includes(value_) ||
-					normalizar(ele.apellido_paterno).includes(value_) ||
-					normalizar(ele.apellido_materno).includes(value_) ||
-					normalizar(ele.email).includes(value_) ||
+					normalizar(ele.apellidos).includes(value_) ||
 					normalizar(ele.dni).includes(value_)
 				);
 			});
@@ -112,7 +110,7 @@ const UsuariosHeader = props => {
 				<Animate animation="transition.slideRightIn" delay={300}>
 					<Button
 						component={Link}
-						to="/admin/usuarios/nuevo"
+						to="/usuarios/nuevo"
 						className="whitespace-no-wrap normal-case"
 						variant="contained"
 						startIcon={<AddCircleIcon />}

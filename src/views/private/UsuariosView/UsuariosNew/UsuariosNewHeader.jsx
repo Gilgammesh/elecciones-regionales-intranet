@@ -10,7 +10,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import Animate from 'components/core/Animate';
 import clsx from 'clsx';
-import { startGetAccionesSubModulo } from 'redux/actions/auth';
+import { startGetAccionesModulo } from 'redux/actions/auth';
 
 /*******************************************************************************************************/
 // Definimos los estilos del componente //
@@ -24,9 +24,9 @@ const useStyles = makeStyles(theme => ({
 }));
 
 /*******************************************************************************************************/
-// Definimos la Vista del componente Admin - Usuario Editar Header //
+// Definimos la Vista del componente Usuario Nuevo Header //
 /*******************************************************************************************************/
-const UsuariosEditHeader = props => {
+const UsuariosNewHeader = props => {
 	// Obtenemos las propiedades
 	const { isFormValid } = props;
 
@@ -42,12 +42,12 @@ const UsuariosEditHeader = props => {
 	// Instanciamos los estilos
 	const styles = useStyles();
 
-	// Array de Permisos de Acciones del SubMódulo
+	// Array de Permisos de Acciones del Módulo
 	const [accionesPerm, setAccionesPerm] = useState(null);
 
-	// Efecto para obtener las acciones del submódulo
+	// Efecto para obtener las acciones del módulo
 	useEffect(() => {
-		dispatch(startGetAccionesSubModulo('admin', 'usuarios')).then(res => setAccionesPerm(res));
+		dispatch(startGetAccionesModulo('usuarios')).then(res => setAccionesPerm(res));
 	}, [dispatch]);
 
 	// Renderizamos el componente
@@ -59,7 +59,7 @@ const UsuariosEditHeader = props => {
 						className="normal-case flex items-center sm:mb-12"
 						component={Link}
 						role="button"
-						to="/admin/usuarios"
+						to="/usuarios"
 						color="inherit"
 					>
 						<Icon className="text-20">{theme.direction === 'ltr' ? 'arrow_back' : 'arrow_forward'}</Icon>
@@ -73,12 +73,12 @@ const UsuariosEditHeader = props => {
 					</Animate>
 					<div className="flex flex-col min-w-0 mx-8 sm:mc-16">
 						<Animate animation="transition.slideLeftIn" delay={300}>
-							<Typography className="text-16 sm:text-20 truncate">Editar Usuario</Typography>
+							<Typography className="text-16 sm:text-20 truncate">Nuevo Usuario</Typography>
 						</Animate>
 					</div>
 				</div>
 			</div>
-			{(rol.super || (accionesPerm && accionesPerm.indexOf('editar') !== -1)) && (
+			{(rol.super || (accionesPerm && accionesPerm.indexOf('crear') !== -1)) && (
 				<Animate animation="transition.slideRightIn" delay={300}>
 					<Button
 						type="submit"
@@ -98,11 +98,11 @@ const UsuariosEditHeader = props => {
 /*******************************************************************************************************/
 // Definimos los tipos de propiedades del componente //
 /*******************************************************************************************************/
-UsuariosEditHeader.propTypes = {
+UsuariosNewHeader.propTypes = {
 	isFormValid: PropTypes.bool.isRequired
 };
 
 /*******************************************************************************************************/
 // Exportamos el componente //
 /*******************************************************************************************************/
-export default UsuariosEditHeader;
+export default UsuariosNewHeader;

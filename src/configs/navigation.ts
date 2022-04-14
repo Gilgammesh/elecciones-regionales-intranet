@@ -26,7 +26,7 @@ interface IDefaultNavigationItem {
 // Definimos la navegación de la aplicación por defecto //
 /*******************************************************************************************************/
 const defaultNavigation: Array<IDefaultNavigationItem> = [
-	{
+	/* {
 		orden: 1,
 		id: 'interfaz-usuario',
 		type: 'group',
@@ -51,7 +51,7 @@ const defaultNavigation: Array<IDefaultNavigationItem> = [
 		orden: 2,
 		id: 'divider-1',
 		type: 'divider'
-	}
+	} */
 ];
 
 /*******************************************************************************************************/

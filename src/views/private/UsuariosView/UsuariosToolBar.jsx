@@ -2,34 +2,29 @@
 // Importamos las dependencias //
 /*******************************************************************************************************/
 import React from 'react';
-import { Redirect, Switch } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import PublicRoute from 'components/core/Route/PublicRoute';
-import PrivateRoute from 'components/core/Route/PrivateRoute';
-import PrivateRouter from './PrivateRouter';
-import PublicRouter from './PublicRouter';
-import { IRootReducers } from '../redux/store';
+import UsuariosToolBarRoles from './UsuariosToolBarRoles';
+import UsuariosToolBarDepartamentos from './UsuariosToolBarDepartamentos';
 
 /*******************************************************************************************************/
-// Definimos las Rutas de la Aplicación //
+// Definimos la Vista del componente Usuarios ToolBar //
 /*******************************************************************************************************/
-const AppRouter = () => {
-	// Llamamos al state global de auth
-	const auth = useSelector((state: IRootReducers) => state.auth);
-	// Obtenemos si el usuario esta logueado
-	const { isLogged } = auth.usuario;
+const VolumenesToolBar = () => {
+	// Obtenemos el Rol de Usuario
+	const { rol } = useSelector(state => state.auth.usuario);
 
 	// Renderizamos el componente
 	return (
-		<Switch>
-			<PublicRoute path="/auth" component={PublicRouter} />
-			<PrivateRoute path="/" component={PrivateRouter} />
-			{isLogged ? <Redirect to="/reportes" /> : <Redirect to="/auth/login" />}
-		</Switch>
+		<div className="flex flex-col justify-center w-full px-16 sm:px-24">
+			<div className="grid grid-cols-12 gap-24 mt-16 mb-16">
+				{rol.super && <UsuariosToolBarDepartamentos />}
+				<UsuariosToolBarRoles />
+			</div>
+		</div>
 	);
 };
 
 /*******************************************************************************************************/
 // Exportamos el componente //
 /*******************************************************************************************************/
-export default AppRouter;
+export default VolumenesToolBar;

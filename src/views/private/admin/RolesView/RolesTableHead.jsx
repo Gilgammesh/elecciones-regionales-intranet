@@ -16,12 +16,20 @@ const headers = [
 		label: '#'
 	},
 	{
+		id: 'codigo',
+		align: 'left',
+		disablePadding: false,
+		label: 'Código',
+		sort: true
+	},
+	{
 		id: 'nombre',
 		align: 'left',
 		disablePadding: false,
 		label: 'Nombre',
 		sort: true
 	},
+
 	{
 		id: 'descripcion',
 		align: 'left',

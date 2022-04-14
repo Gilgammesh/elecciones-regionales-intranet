@@ -13,6 +13,7 @@ import quickPanelReducer, { IQuickPanelReducer } from './reducers/quickPanelRedu
 import settingsReducer, { ISettingsReducer } from './reducers/settingsReducer';
 import submodulosReducer, { ISubmoduloReducer } from './reducers/submodulosReducer';
 import permisosReducer, { IPermisoModReducer } from './reducers/permisosReducer';
+import usuariosReducer, { IUsuariosReducer } from './reducers/usuariosReducer';
 import socketioReducer from './reducers/socketioReducer';
 import { Socket } from 'socket.io-client';
 
@@ -30,6 +31,7 @@ export interface IRootReducers {
 	quickPanel: IQuickPanelReducer;
 	submodulos: Array<ISubmoduloReducer>;
 	permisos: Array<IPermisoModReducer>;
+	usuarios: IUsuariosReducer;
 	socketio: Socket | null;
 }
 
@@ -47,6 +49,7 @@ const reducers = combineReducers({
 	quickPanel: quickPanelReducer,
 	submodulos: submodulosReducer,
 	permisos: permisosReducer,
+	usuarios: usuariosReducer,
 	socketio: socketioReducer
 });
 

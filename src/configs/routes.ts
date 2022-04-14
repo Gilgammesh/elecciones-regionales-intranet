@@ -22,9 +22,9 @@ import AdminSesionesView from 'views/private/admin/SesionesView';
 //////////////////////////////////////////////////////////////////////////////////////////////
 //---- MÓDULO USUARIOS ---------------------------------------------------------------------//
 //////////////////////////////////////////////////////////////////////////////////////////////
-// import AdminUsuariosView from 'views/private/usuarios/UsuariosView';
-// import AdminUsuariosNewView from 'views/private/usuarios/UsuariosView/UsuariosNew';
-// import AdminUsuariosEditView from 'views/private/usuarios/UsuariosView/UsuariosEdit';
+import UsuariosView from 'views/private/UsuariosView';
+import UsuariosNewView from 'views/private/UsuariosView/UsuariosNew';
+import UsuariosEditView from 'views/private/UsuariosView/UsuariosEdit';
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 //---- MÓDULO ORGANIZACIONES POLÍTICAS -----------------------------------------------------//
@@ -66,6 +66,7 @@ export interface IRoutesModulo {
 	path: string;
 	component?: React.ComponentType;
 	rutas?: IRoutesSubModulos;
+	children?: Array<IRoutesChildren>;
 }
 export interface IRoutesModulos {
 	[key: string]: IRoutesModulo;
@@ -75,10 +76,6 @@ export interface IRoutesModulos {
 // Definimos las rutas de navegación de la aplicación //
 /*******************************************************************************************************/
 const routes: IRoutesModulos = {
-	chat: {
-		path: '/chat',
-		component: Building
-	},
 	admin: {
 		path: '/admin',
 		rutas: {
@@ -125,14 +122,48 @@ const routes: IRoutesModulos = {
 				]
 			},
 			sesiones: {
-				path: '/monitor/sesiones',
+				path: '/admin/sesiones',
 				component: AdminSesionesView
 			},
 			logs: {
-				path: '/monitor/logs',
+				path: '/admin/logs',
 				component: Building
 			}
 		}
+	},
+	elecciones: {
+		path: '/elecciones',
+		component: Building
+	},
+	usuarios: {
+		path: '/usuarios',
+		component: UsuariosView,
+		children: [
+			{
+				path: '/usuarios/nuevo',
+				component: UsuariosNewView
+			},
+			{
+				path: '/usuarios/editar/:id',
+				component: UsuariosEditView
+			}
+		]
+	},
+	'organizaciones-politicas': {
+		path: '/organizaciones-politicas',
+		component: Building
+	},
+	'centros-votacion': {
+		path: '/centros-votacion',
+		component: Building
+	},
+	monitoreo: {
+		path: '/monitoreo',
+		component: Building
+	},
+	reportes: {
+		path: '/reportes',
+		component: Building
 	}
 };
 

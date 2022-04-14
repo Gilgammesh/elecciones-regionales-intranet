@@ -3,6 +3,7 @@
 /*******************************************************************************************************/
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
 	FormControlLabel,
@@ -15,6 +16,7 @@ import {
 	Tooltip
 } from '@material-ui/core';
 import clsx from 'clsx';
+import ProgressCircle from 'components/core/Progress/ProgressCircle';
 import TextFieldFormsy from 'components/core/Formsy/TextFieldFormsy';
 import IosSwitch from 'components/core/Switches/IosSwitch';
 import Animate from 'components/core/Animate';
@@ -69,18 +71,30 @@ const UsuariosEditForm = props => {
 	// Obtenemos el id del usuario de los parámetros de la ruta
 	const { id } = useParams();
 
+	// Obtenemos lso datos del Usuario logueado
+	const usuario = useSelector(state => state.auth.usuario);
+
 	// Instanciamos los estilos
 	const styles = useStyles();
 
 	// Obtenemos las propiedades del componente
 	const { setFileState, formValues, handleInputChange, setForm } = props;
-	const { nombres, apellido_paterno, apellido_materno, email, dni, genero, password, rol, estado } = formValues;
+	const { nombres, apellidos, dni, celular, email, genero, password, rol, departamento, estado } = formValues;
 
 	// Estado inicial para mostrar la contraseña
 	const [showPassword, setShowPassword] = useState(false);
 
 	// Estado inicial de los roles
 	const [roles, setRoles] = useState([]);
+
+	// Estado inicial de los departamentos
+	const [departamentos, setDepartamentos] = useState([]);
+
+	// Estado para indicar si el rol es de superusuario
+	const [superUser, setSuperUser] = useState(false);
+
+	// Estado de carga de los datos de usuario
+	const [loading, setLoading] = useState(true);
 
 	// Estado inicial de la imagen
 	const [image, setImage] = useState({
@@ -95,10 +109,34 @@ const UsuariosEditForm = props => {
 		// Función para obtener la lista de roles
 		const getRoles = async () => {
 			// Obtenemos los roles con fetch
-			const result = await fetchData('admin/roles?page=1&pageSize=500', { isTokenReq: true });
+			const result = await fetchData('usuarios/roles?page=1&pageSize=50', { isTokenReq: true });
 			// Si existe un resultado y el status es positivo
 			if (result && mounted && result.data.status) {
 				// Recorremos la lista de roles
+				const promises = result.data.list.map(ele => {
+					if (!ele.super) {
+						// Retornamos el elemento construido
+						return (
+							<MenuItem key={ele._id} value={ele._id}>
+								{ele.nombre}
+							</MenuItem>
+						);
+					} else {
+						return null;
+					}
+				});
+				const listRoles = await Promise.all(promises);
+				// Establecemos los roles
+				setRoles(listRoles);
+			}
+		};
+		// Función para obtener la lista de departamentos
+		const getDepartamentos = async () => {
+			// Obtenemos los roles con fetch
+			const result = await fetchData('ubigeo/departamentos?page=1&pageSize=50', { isTokenReq: true });
+			// Si existe un resultado y el status es positivo
+			if (result && mounted && result.data.status) {
+				// Recorremos la lista de departamentos
 				const promises = result.data.list.map(ele => {
 					// Retornamos el elemento construido
 					return (
@@ -107,13 +145,18 @@ const UsuariosEditForm = props => {
 						</MenuItem>
 					);
 				});
-				const listRoles = await Promise.all(promises);
-				// Establecemos los roles
-				setRoles(listRoles);
+				const listDepartamentos = await Promise.all(promises);
+				// Establecemos los departamentos
+				setDepartamentos(listDepartamentos);
 			}
 		};
 		// Obtenemos los roles
 		getRoles();
+		// Si es un superusuario
+		if (usuario.rol.super) {
+			// Obtenemos los departamentos
+			getDepartamentos();
+		}
 		// Limpiamos el montaje
 		return () => {
 			mounted = false;
@@ -127,7 +170,7 @@ const UsuariosEditForm = props => {
 		// Función para obtener los datos de un usuario
 		const getUsuario = async () => {
 			// Obtenemos los datos de un usuario con fetch
-			const result = await fetchData(`admin/usuarios/${id}`, { isTokenReq: true });
+			const result = await fetchData(`usuarios/${id}`, { isTokenReq: true });
 			// Si existe un resultado y el status es positivo
 			if (result && mounted && result.data.status) {
 				// Obtenemos el usuario
@@ -139,19 +182,26 @@ const UsuariosEditForm = props => {
 						type: ''
 					});
 				}
+				// Si el rol es de superusuario
+				if (usuario.rol.super) {
+					setSuperUser(true);
+				}
 				// Guardamos los datos del formulario
 				setForm({
 					nombres: usuario.nombres,
-					apellido_paterno: usuario.apellido_paterno,
-					apellido_materno: usuario.apellido_materno,
-					email: usuario.email,
+					apellidos: usuario.apellidos,
 					dni: usuario.dni,
+					celular: usuario.celular,
+					email: usuario.email,
 					password: null,
 					genero: usuario.genero,
 					rol: usuario.rol._id,
+					departamento: usuario.departamento ? usuario.departamento._id : '',
 					estado: usuario.estado,
 					file: null
 				});
+				// Finalizamos el estado de carga de los datos del usuario
+				setLoading(false);
 			}
 		};
 		// Si existe un id y el array de roles es mayor que cero
@@ -227,6 +277,18 @@ const UsuariosEditForm = props => {
 		setFileState('removed');
 	};
 
+	// Si los datos del usuario están cargando
+	if (loading) {
+		// Renderizamos el componente
+		return (
+			<div className="flex justify-center align-center w-full">
+				<div className="px-20 py-60">
+					<ProgressCircle />
+				</div>
+			</div>
+		);
+	}
+
 	// Renderizamos el componente
 	return (
 		<div className="flex flex-col justify-center w-full p-16 sm:p-24">
@@ -243,51 +305,18 @@ const UsuariosEditForm = props => {
 					required
 				/>
 				<TextFieldFormsy
-					className="col-span-12 sm:col-span-4"
+					className="col-span-12 sm:col-span-5"
 					type="text"
-					name="apellido_paterno"
-					label="Apellido Paterno"
+					name="apellidos"
+					label="Apellidos"
 					accept="onlyLetterAndSpace"
-					value={apellido_paterno}
+					value={apellidos}
 					onChange={handleInputChange}
 					variant="outlined"
 					required
 				/>
 				<TextFieldFormsy
-					className="col-span-12 sm:col-span-4"
-					type="text"
-					name="apellido_materno"
-					label="Apellido Materno"
-					accept="onlyLetterAndSpace"
-					value={apellido_materno}
-					onChange={handleInputChange}
-					variant="outlined"
-					required
-				/>
-			</div>
-			<div className="grid grid-cols-12 gap-16 mt-16 mb-16">
-				<TextFieldFormsy
-					className="col-span-12 sm:col-span-4"
-					type="text"
-					name="email"
-					label="Correo Electrónico"
-					value={email}
-					onChange={handleInputChange}
-					validations="isEmail"
-					validationError="No es un correo válido"
-					InputProps={{
-						endAdornment: (
-							<InputAdornment position="end">
-								<Icon className="text-20" color="action">
-									email
-								</Icon>
-							</InputAdornment>
-						)
-					}}
-					variant="outlined"
-				/>
-				<TextFieldFormsy
-					className="col-span-12 sm:col-span-4"
+					className="col-span-12 sm:col-span-3"
 					type="text"
 					name="dni"
 					label="DNI"
@@ -317,8 +346,73 @@ const UsuariosEditForm = props => {
 					variant="outlined"
 					required
 				/>
+			</div>
+			<div className="grid grid-cols-12 gap-16 mt-16 mb-16">
 				<TextFieldFormsy
-					className="col-span-12 sm:col-span-4"
+					className="col-span-12 sm:col-span-2"
+					type="text"
+					name="celular"
+					label="Celular"
+					accept="onlyNumber"
+					value={celular}
+					onChange={handleInputChange}
+					validations={{
+						minLength: 9,
+						maxLength: 9
+					}}
+					validationErrors={{
+						minLength: 'El celular debe tener 09 dígitos',
+						maxLength: 'El celular debe tener 09 dígitos'
+					}}
+					inputProps={{
+						maxLength: 9
+					}}
+					InputProps={{
+						endAdornment: (
+							<InputAdornment position="end">
+								<Icon className="text-20" color="action">
+									smartphone
+								</Icon>
+							</InputAdornment>
+						)
+					}}
+					variant="outlined"
+				/>
+				<TextFieldFormsy
+					className="col-span-12 sm:col-span-5"
+					type="email"
+					name="email"
+					label="Correo"
+					value={email}
+					onChange={handleInputChange}
+					validations="isEmail"
+					validationError="No es un formato válido de correo"
+					InputProps={{
+						endAdornment: (
+							<InputAdornment position="end">
+								<Icon className="text-20" color="action">
+									mail
+								</Icon>
+							</InputAdornment>
+						)
+					}}
+					variant="outlined"
+				/>
+				<TextField
+					select
+					className="col-span-12 sm:col-span-2"
+					name="genero"
+					label="Género"
+					value={genero}
+					onChange={handleInputChange}
+					variant="outlined"
+					required
+				>
+					<MenuItem value="M">Masculino </MenuItem>
+					<MenuItem value="F">Femenino </MenuItem>
+				</TextField>
+				<TextFieldFormsy
+					className="col-span-12 sm:col-span-3"
 					type="text"
 					name="password"
 					label="Contraseña"
@@ -347,7 +441,7 @@ const UsuariosEditForm = props => {
 				/>
 			</div>
 			<div className="grid grid-cols-12 gap-16 mt-16 mb-16">
-				<div className="flex flex-col col-span-12 sm:col-span-4">
+				<div className="flex flex-col col-span-12 sm:col-span-3">
 					<label className="ml-6">Imagen</label>
 					<div className="flex justify-center sm:justify-start flex-wrap -mx-8">
 						<Tooltip title="Añadir imagen" aria-label="add" arrow>
@@ -390,38 +484,35 @@ const UsuariosEditForm = props => {
 						)}
 					</div>
 				</div>
-				<div className="flex flex-col col-span-12 sm:col-span-8">
-					<div className="grid grid-cols-12 gap-16 mb-16">
-						{genero && (
-							<TextField
-								select
-								className="col-span-12 sm:col-span-6"
-								name="genero"
-								label="Género"
-								value={genero}
-								onChange={handleInputChange}
-								variant="outlined"
-								required
-							>
-								<MenuItem value="M">Masculino </MenuItem>
-								<MenuItem value="F">Femenino </MenuItem>
-							</TextField>
-						)}
-						{rol && roles?.length > 0 && (
-							<TextField
-								select
-								className="col-span-12 sm:col-span-6"
-								name="rol"
-								label="Rol"
-								value={rol}
-								onChange={handleInputChange}
-								variant="outlined"
-								required
-							>
-								{roles}
-							</TextField>
-						)}
-					</div>
+				{!superUser && (
+					<TextField
+						select
+						className="col-span-12 sm:col-span-3"
+						name="rol"
+						label="Tipo de Usuario"
+						value={rol}
+						onChange={handleInputChange}
+						variant="outlined"
+						required
+					>
+						{roles}
+					</TextField>
+				)}
+				{usuario.rol.super && !superUser && (
+					<TextField
+						select
+						className="col-span-12 sm:col-span-4"
+						name="departamento"
+						label="Departamento"
+						value={departamento}
+						onChange={handleInputChange}
+						variant="outlined"
+						required
+					>
+						{departamentos}
+					</TextField>
+				)}
+				<div className="flex flex-col col-span-12 sm:col-span-2">
 					<div className="grid grid-cols-12 gap-16 mt-16">
 						<FormControlLabel
 							className="ml-0 mr-0 col-span-12 sm:col-span-3"

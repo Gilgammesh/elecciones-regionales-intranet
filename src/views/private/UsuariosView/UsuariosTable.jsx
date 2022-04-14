@@ -25,12 +25,12 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import ProgressLinear from 'components/core/Progress/ProgressLinear';
 import { Swal, Toast } from 'configs/settings';
 import { validateFetchData } from 'helpers/validateFetchData';
-import { startGetAccionesSubModulo } from 'redux/actions/auth';
+import { startGetAccionesModulo } from 'redux/actions/auth';
 import male from 'assets/images/avatars/male.jpg';
 import female from 'assets/images/avatars/female.jpg';
 
 /*******************************************************************************************************/
-// Definimos la Vista del componente Admin - Usuarios Table //
+// Definimos la Vista del componente Usuarios Table //
 /*******************************************************************************************************/
 const UsuariosTable = props => {
 	// Obtenemos las propiedades del componente
@@ -43,7 +43,10 @@ const UsuariosTable = props => {
 	const socket = useSelector(state => state.socketio);
 
 	// Obtenemos el Rol de Usuario
-	const { rol } = useSelector(state => state.auth.usuario);
+	const usuario = useSelector(state => state.auth.usuario);
+
+	// Obtenemos los datos de la lista de usuarios
+	const { departamento, rol } = useSelector(state => state.usuarios);
 
 	// Estado para definir el número de página de la tabla
 	const [page, setPage] = useState(0);
@@ -65,12 +68,12 @@ const UsuariosTable = props => {
 	// Estado de cambio de la data
 	const [estado, setEstado] = useState('');
 
-	// Array de Permisos de Acciones del SubMódulo
+	// Array de Permisos de Acciones del Módulo
 	const [accionesPerm, setAccionesPerm] = useState(null);
 
-	// Efecto para obtener las acciones del submódulo
+	// Efecto para obtener las acciones del módulo
 	useEffect(() => {
-		dispatch(startGetAccionesSubModulo('admin', 'usuarios')).then(res => setAccionesPerm(res));
+		dispatch(startGetAccionesModulo('usuarios')).then(res => setAccionesPerm(res));
 	}, [dispatch]);
 
 	// Efecto para obtener la lista de los Usuarios
@@ -82,9 +85,12 @@ const UsuariosTable = props => {
 			// Iniciamos carga de la tabla
 			setLoading(true);
 			// Obtenemos la lista de los usuarios con fetch
-			const result = await fetchData(`admin/usuarios?page=${page + 1}&pageSize=${rowsPerPage}`, {
-				isTokenReq: true
-			});
+			const result = await fetchData(
+				`usuarios?departamento=${departamento}&rol=${rol}&page=${page + 1}&pageSize=${rowsPerPage}`,
+				{
+					isTokenReq: true
+				}
+			);
 			// Si existe un resultado y el status es positivo
 			if (result && mounted && result.data.status) {
 				// Actualizamos el total de registros de la lista
@@ -101,17 +107,17 @@ const UsuariosTable = props => {
 			// Obtenemos los usuarios
 			getUsuarios();
 			// Si un usuario fue creado
-			socket.on('admin-usuario-creado', () => getUsuarios());
+			socket.on('usuario-creado', () => getUsuarios());
 			// Si un usuario fue actualizado
-			socket.on('admin-usuario-actualizado', () => getUsuarios());
+			socket.on('usuario-actualizado', () => getUsuarios());
 			// Si un usuario fue eliminado
-			socket.on('admin-usuario-eliminado', () => getUsuarios());
+			socket.on('usuario-eliminado', () => getUsuarios());
 		}
 		// Limpiamos el montaje
 		return () => {
 			mounted = false;
 		};
-	}, [socket, estado, page, rowsPerPage, setList, setData]);
+	}, [socket, estado, page, rowsPerPage, setList, setData, departamento, rol]);
 
 	// Función para ordenar una columna
 	const handleRequestSort = (event, property) => {
@@ -153,7 +159,7 @@ const UsuariosTable = props => {
 		}).then(async result => {
 			if (result.isConfirmed) {
 				// Eliminamos el usuario
-				const result = await fetchData(`admin/usuarios/${id}`, { isTokenReq: true }, 'DELETE');
+				const result = await fetchData(`usuarios/${id}`, { isTokenReq: true }, 'DELETE');
 				// Validamos el resultado
 				if (validateFetchData(result)) {
 					// Cambiamos el estado de cambio de la data
@@ -173,25 +179,10 @@ const UsuariosTable = props => {
 		<div className="w-full flex flex-col">
 			<Scrollbars className="flex-grow overflow-x-auto">
 				<Table stickyHeader className="min-w-xl" aria-labelledby="tableTitle">
-					<UsuariosTableHead order={order} onRequestSort={handleRequestSort} />
+					<UsuariosTableHead order={order} onRequestSort={handleRequestSort} superUser={usuario.rol.super} />
 					{!loading && data && (
 						<TableBody>
-							{_.orderBy(
-								data,
-								[
-									o => {
-										switch (order.id) {
-											case 'apellidos': {
-												return o['apellido_paterno'];
-											}
-											default: {
-												return o[order.id];
-											}
-										}
-									}
-								],
-								[order.direction]
-							).map((row, index) => {
+							{_.orderBy(data, [o => o[order.id]], [order.direction]).map((row, index) => {
 								return (
 									<TableRow className="h-32" hover tabIndex={-1} key={row._id}>
 										<TableCell className="py-2" component="th" scope="row">
@@ -207,17 +198,25 @@ const UsuariosTable = props => {
 											{row.nombres}
 										</TableCell>
 										<TableCell className="py-2" component="th" scope="row">
-											{`${row.apellido_paterno} ${row.apellido_materno}`}
-										</TableCell>
-										<TableCell className="py-2" component="th" scope="row">
-											{row.email}
+											{row.apellidos}
 										</TableCell>
 										<TableCell className="py-2" component="th" scope="row">
 											{row.dni}
 										</TableCell>
 										<TableCell className="py-2" component="th" scope="row">
+											{row.celular}
+										</TableCell>
+										<TableCell className="py-2" component="th" scope="row">
+											{row.email}
+										</TableCell>
+										<TableCell className="py-2" component="th" scope="row">
 											{row.rol.nombre}
 										</TableCell>
+										{usuario.rol.super && (
+											<TableCell className="py-2" component="th" scope="row">
+												{row.rol.super ? 'TODOS' : row.departamento.nombre}
+											</TableCell>
+										)}
 										<TableCell className="py-2 pr-40" component="th" scope="row" align="center">
 											{row.estado ? (
 												<Icon className="text-green text-20">check_circle</Icon>
@@ -233,8 +232,9 @@ const UsuariosTable = props => {
 											width={140}
 											height={54}
 										>
-											{(rol.super || (accionesPerm && accionesPerm.indexOf('editar') !== -1)) && (
-												<Link to={`/admin/usuarios/editar/${row._id}`}>
+											{(usuario.rol.super ||
+												(accionesPerm && accionesPerm.indexOf('editar') !== -1)) && (
+												<Link to={`/usuarios/editar/${row._id}`}>
 													<Tooltip title="Editar" placement="bottom-start" enterDelay={100}>
 														<IconButton color="primary" aria-label="editar usuario">
 															<EditIcon />
@@ -242,7 +242,7 @@ const UsuariosTable = props => {
 													</Tooltip>
 												</Link>
 											)}
-											{(rol.super ||
+											{(usuario.rol.super ||
 												(accionesPerm && accionesPerm.indexOf('eliminar') !== -1)) && (
 												<Tooltip title="Eliminar" placement="bottom-start" enterDelay={100}>
 													<IconButton
@@ -280,7 +280,7 @@ const UsuariosTable = props => {
 					}}
 					nextIconButtonProps={{
 						'aria-label': 'Next Page'
-					}}					
+					}}
 					onPageChange={handleChangePage}
 					onRowsPerPageChange={handleChangeRowsPerPage}
 				/>

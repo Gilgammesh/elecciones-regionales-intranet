@@ -78,9 +78,9 @@ export const defaultThemes: any = {
 				dark: '#02438B'
 			},
 			secondary: {
-				light: '#F44336',
-				main: '#F44336',
-				dark: '#F44336'
+				light: '#E93E35',
+				main: '#E93E35',
+				dark: '#E93E35'
 			},
 			background: {
 				paper: '#FFFFFF',
@@ -104,8 +104,8 @@ export const defaultThemes: any = {
 			},
 			secondary: {
 				light: '#F4CFCA',
-				main: '#F44336',
-				dark: '#F44336',
+				main: '#E93E35',
+				dark: '#E93E35',
 				contrastText: '#FFFFFF'
 			},
 			background: {

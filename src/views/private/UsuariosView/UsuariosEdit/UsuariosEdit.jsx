@@ -2,36 +2,48 @@
 // Importamos las dependencias //
 /*******************************************************************************************************/
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
 import Formsy from 'formsy-react';
 import PageCarded from 'components/core/PageCarded';
-import UsuariosNewHeader from './UsuariosNewHeader';
-import UsuariosNewForm from './UsuariosNewForm';
+import UsuariosEditHeader from './UsuariosEditHeader';
+import UsuariosEditForm from './UsuariosEditForm';
 import useForm from 'hooks/useForm';
 import { fetchData } from 'services/fetch';
 import { validateFetchData } from 'helpers/validateFetchData';
 import { Toast } from 'configs/settings';
 
 /*******************************************************************************************************/
-// Definimos la Vista del componente Admin - Usuario Nuevo //
+// Definimos la Vista del componente Admin - Usuario Editar //
 /*******************************************************************************************************/
-const UsuariosNew = () => {
+const UsuariosEdit = () => {
 	// Llamamos al history de las rutas
 	const history = useHistory();
+
+	// Obtenemos los datos de Usuario
+	const usuario = useSelector(state => state.auth.usuario);
+
+	// Obtenemos el id del usuario de los parámetros de la ruta
+	const { id } = useParams();
 
 	// Estado inicial si el formulario es válido
 	const [isFormValid, setIsFormValid] = useState(false);
 
+	// Estado del archivo de imagen
+	const [fileState, setFileState] = useState('none');
+
 	// Estado inicial del formulario
 	const initialForm = {
 		nombres: '',
-		apellido_paterno: '',
-		apellido_materno: '',
-		email: '',
+		apellidos: '',
 		dni: '',
-		password: '',
+		celular: '',
+		email: '',
+		password: null,
 		genero: '',
 		rol: '',
+		departamento: usuario.departamento ? usuario.departamento._id : '',
+		estado: true,
 		file: null
 	};
 
@@ -46,11 +58,11 @@ const UsuariosNew = () => {
 		Object.keys(formValues).forEach(key => {
 			formData.append(key, formValues[key]);
 		});
-		// Guardamos la data del usuario
+		// Actualizamos la data del usuario
 		const result = await fetchData(
-			'admin/usuarios',
+			`usuarios/${id}?fileState=${fileState}`,
 			{ isTokenReq: true, contentType: 'multipart/form-data' },
-			'POST',
+			'PUT',
 			formData
 		);
 		// Validamos el resultado
@@ -63,7 +75,7 @@ const UsuariosNew = () => {
 				title: result.data.msg
 			});
 			// Redireccionamos a lista de usuarios
-			history.push('/admin/usuarios');
+			history.push('/usuarios');
 		}
 	};
 
@@ -85,14 +97,19 @@ const UsuariosNew = () => {
 					toolbar: 'p-0',
 					header: 'min-h-72 h-72 sm:h-136 sm:min-h-136'
 				}}
-				header={<UsuariosNewHeader isFormValid={isFormValid} />}
+				header={<UsuariosEditHeader isFormValid={isFormValid} />}
 				contentToolbar={
 					<div className="px-16 sm:px-24">
-						<h2>Registro</h2>
+						<h2>Usuario</h2>
 					</div>
 				}
 				content={
-					<UsuariosNewForm formValues={formValues} handleInputChange={handleInputChange} setForm={setForm} />
+					<UsuariosEditForm
+						setFileState={setFileState}
+						formValues={formValues}
+						handleInputChange={handleInputChange}
+						setForm={setForm}
+					/>
 				}
 				innerScroll
 			/>
@@ -103,4 +120,4 @@ const UsuariosNew = () => {
 /*******************************************************************************************************/
 // Exportamos el componente //
 /*******************************************************************************************************/
-export default UsuariosNew;
+export default UsuariosEdit;

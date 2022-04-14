@@ -50,7 +50,7 @@ export const fetchData = async (
 	// Intentamos obtener la IPv4 del usuario
 	let ipv4: string = '';
 	try {
-		const resGeo = await fetch('https://geolocation-db.com/json/');
+		const resGeo = await fetch('http://geolocation-db.com/json/');
 		const dataGeo = await resGeo.json();
 		ipv4 = dataGeo.IPv4;
 	} catch (error) {

@@ -46,7 +46,7 @@ const SesionesTable = props => {
 			// Iniciamos carga de la tabla
 			setLoading(true);
 			// Obtenemos la lista de las sesiones con fetch
-			const result = await fetchData(`monitor/sesiones?page=${page + 1}&pageSize=${rowsPerPage}`, {
+			const result = await fetchData(`admin/sesiones?page=${page + 1}&pageSize=${rowsPerPage}`, {
 				isTokenReq: true
 			});
 			// Si existe un resultado y el status es positivo
@@ -119,9 +119,7 @@ const SesionesTable = props => {
 											{index + 1 + page * rowsPerPage}
 										</TableCell>
 										<TableCell className="py-2" component="th" scope="row">
-											{row.usuario.apellido_paterno} {row.usuario.apellido_materno}
-											{', '}
-											{row.usuario.nombres}
+											{`${row.usuario.apellidos}, ${row.usuario.nombres}`}
 										</TableCell>
 										<TableCell className="py-2" component="th" scope="row">
 											{row.ultimo_ingreso}

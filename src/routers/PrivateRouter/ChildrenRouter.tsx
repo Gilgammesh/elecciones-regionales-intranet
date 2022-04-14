@@ -3,13 +3,13 @@
 /*******************************************************************************************************/
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import { IRoutesSubModulo, IRoutesChildren } from 'configs/routes';
+import { IRoutesModulo, IRoutesChildren } from 'configs/routes';
 
 /*******************************************************************************************************/
 // Props para el componente //
 /*******************************************************************************************************/
 type Props = {
-	rutas: IRoutesSubModulo;
+	rutas: IRoutesModulo;
 };
 
 /*******************************************************************************************************/
