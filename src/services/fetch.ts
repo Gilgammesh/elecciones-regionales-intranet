@@ -2,7 +2,7 @@
 // Importamos las dependencias //
 /*******************************************************************************************************/
 import { browserName, isDesktop, isMobile, isTablet } from 'react-device-detect';
-import { appBaseUrl, apiBaseUrl } from 'configs/settings';
+import { appBaseUrl, apiBaseUrl, apiGeolocUrl } from 'configs/settings';
 import { getToken } from 'helpers/authToken';
 
 /*******************************************************************************************************/
@@ -50,7 +50,7 @@ export const fetchData = async (
 	// Intentamos obtener la IPv4 del usuario
 	let ipv4: string = '';
 	try {
-		const resGeo = await fetch('http://geolocation-db.com/json/');
+		const resGeo = await fetch(apiGeolocUrl);
 		const dataGeo = await resGeo.json();
 		ipv4 = dataGeo.IPv4;
 	} catch (error) {

@@ -26,6 +26,8 @@ export interface IInitTheme {
 export const appBaseUrl: string = process.env.REACT_APP_ELEC_URL || 'http://localhost:3000';
 // Url Base de la API o endpoint de los servicios
 export const apiBaseUrl: string = process.env.REACT_APP_API_ELEC_URL || 'http://localhost:4000';
+// Url de la Api de Geolocation DB
+export const apiGeolocUrl: string = process.env.REACT_APP_GEOLOC_URL || '';
 // Nombres de las variables de LocalStorage
 export const store_lastpath: string = 'ELECI-lastPath';
 export const store_changepath: string = 'ELECI-changePath';
