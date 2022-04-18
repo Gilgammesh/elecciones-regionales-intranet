@@ -4,27 +4,30 @@
 //////////////////////////////////////////////////////////////////////////////////////////////
 //---- MÓDULO ADMINISTRATIVO ---------------------------------------------------------------//
 //////////////////////////////////////////////////////////////////////////////////////////////
-import AdminAccionesView from 'views/private/admin/AccionesView';
-import AdminAccionesNewView from 'views/private/admin/AccionesView/AccionesNew';
-import AdminAccionesEditView from 'views/private/admin/AccionesView/AccionesEdit';
-import AdminRolesView from 'views/private/admin/RolesView';
-import AdminRolesNewView from 'views/private/admin/RolesView/RolesNew';
-import AdminRolesEditView from 'views/private/admin/RolesView/RolesEdit';
-import AdminModulosView from 'views/private/admin/ModulosView';
-import AdminModulosNewView from 'views/private/admin/ModulosView/ModulosNew';
-import AdminModulosEditView from 'views/private/admin/ModulosView/ModulosEdit';
-import AdminSesionesView from 'views/private/admin/SesionesView';
+import AdminAccionesView from 'views/private/admin/acciones';
+import AdminAccionesNewView from 'views/private/admin/acciones/accionesNew';
+import AdminAccionesEditView from 'views/private/admin/acciones/accionesEdit';
+import AdminRolesView from 'views/private/admin/roles';
+import AdminRolesNewView from 'views/private/admin/roles/rolesNew';
+import AdminRolesEditView from 'views/private/admin/roles/rolesEdit';
+import AdminModulosView from 'views/private/admin/modulos';
+import AdminModulosNewView from 'views/private/admin/modulos/modulosNew';
+import AdminModulosEditView from 'views/private/admin/modulos/modulosEdit';
+import AdminSesionesView from 'views/private/admin/sesiones';
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 //---- MÓDULO ELECCIONES -------------------------------------------------------------------//
 //////////////////////////////////////////////////////////////////////////////////////////////
+import EleccionesView from 'views/private/elecciones';
+import EleccionesNewView from 'views/private/elecciones/eleccionesNew';
+import EleccionesEditView from 'views/private/elecciones/eleccionesEdit';
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 //---- MÓDULO USUARIOS ---------------------------------------------------------------------//
 //////////////////////////////////////////////////////////////////////////////////////////////
-import UsuariosView from 'views/private/UsuariosView';
-import UsuariosNewView from 'views/private/UsuariosView/UsuariosNew';
-import UsuariosEditView from 'views/private/UsuariosView/UsuariosEdit';
+import UsuariosView from 'views/private/usuarios';
+import UsuariosNewView from 'views/private/usuarios/usuariosNew';
+import UsuariosEditView from 'views/private/usuarios/usuariosEdit';
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 //---- MÓDULO ORGANIZACIONES POLÍTICAS -----------------------------------------------------//
@@ -33,6 +36,7 @@ import UsuariosEditView from 'views/private/UsuariosView/UsuariosEdit';
 //////////////////////////////////////////////////////////////////////////////////////////////
 //---- MÓDULO CENTROS DE VOTACIÓN ----------------------------------------------------------//
 //////////////////////////////////////////////////////////////////////////////////////////////
+import CentrosVotacionView from 'views/private/centrosVotacion';
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 //---- MÓDULO MONITOREO --------------------------------------------------------------------//
@@ -133,7 +137,17 @@ const routes: IRoutesModulos = {
 	},
 	elecciones: {
 		path: '/elecciones',
-		component: Building
+		component: EleccionesView,
+		children: [
+			{
+				path: '/elecciones/nuevo',
+				component: EleccionesNewView
+			},
+			{
+				path: '/elecciones/editar/:id',
+				component: EleccionesEditView
+			}
+		]
 	},
 	usuarios: {
 		path: '/usuarios',
@@ -155,7 +169,7 @@ const routes: IRoutesModulos = {
 	},
 	'centros-votacion': {
 		path: '/centros-votacion',
-		component: Building
+		component: CentrosVotacionView
 	},
 	monitoreo: {
 		path: '/monitoreo',

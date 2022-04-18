@@ -31,7 +31,13 @@ export interface ITypes {
 	resetPermisos: string;
 	setSocketIO: string;
 	setUsuariosRol: string;
-	setUsuariosDepartamentos: string;
+	setUsuariosDepartamento: string;
+	setCentrosVotacionDepartamento: string;
+	setCentrosVotacionProvincia: string;
+	setCentrosVotacionDistrito: string;
+	setCentrosVotacionLocal: string;
+	setCentrosVotacionMesa: string;
+	setCentrosVotacionPersonero: string;
 }
 
 /*******************************************************************************************************/
@@ -67,7 +73,13 @@ const types: ITypes = {
 	resetPermisos: '[permisos] reset',
 	setSocketIO: '[socketio] socket',
 	setUsuariosRol: '[usuarios] set rol',
-	setUsuariosDepartamentos: '[usuarios] set departamento'
+	setUsuariosDepartamento: '[usuarios] set departamento',
+	setCentrosVotacionDepartamento: '[usuarios] set departamento',
+	setCentrosVotacionProvincia: '[usuarios] set provincia',
+	setCentrosVotacionDistrito: '[usuarios] set distrito',
+	setCentrosVotacionLocal: '[usuarios] set local',
+	setCentrosVotacionMesa: '[usuarios] set mesa',
+	setCentrosVotacionPersonero: '[usuarios] set personero'
 };
 
 /*******************************************************************************************************/

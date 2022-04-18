@@ -10,6 +10,7 @@ import clsx from 'clsx';
 // import ChatPanelToggleButton from 'components/layouts/shared-components/chatPanel/ChatPanelToggleButton';
 import NavbarMobileToggleButton from 'components/layouts/shared-components/NavbarMobileToggleButton';
 // import QuickPanelToggleButton from 'components/layouts/shared-components/quickPanel/QuickPanelToggleButton';
+import Title from 'components/core/Title';
 import UserMenu from 'components/layouts/shared-components/UserMenu';
 import { getToolbarTheme } from 'configs/themes';
 
@@ -52,7 +53,11 @@ const ToolbarVertical = props => {
 						</Hidden>
 					)}
 
-					<div className="flex flex-1"></div>
+					<div className="flex flex-1">
+						<Hidden mdDown>
+							<Title className="px-16" />
+						</Hidden>
+					</div>
 
 					<div className="flex items-center px-8">
 						{/* <Search /> */}

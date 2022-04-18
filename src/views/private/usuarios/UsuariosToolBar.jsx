@@ -2,24 +2,29 @@
 // Importamos las dependencias //
 /*******************************************************************************************************/
 import React from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
-import LoginView from 'views/public/login';
+import { useSelector } from 'react-redux';
+import UsuariosToolBarRoles from './UsuariosToolBarRoles';
+import UsuariosToolBarDptos from './UsuariosToolBarDptos';
 
 /*******************************************************************************************************/
-// Definimos las Rutas Públicas de la Aplicación //
+// Definimos la Vista del componente Usuarios ToolBar //
 /*******************************************************************************************************/
-const PublicRouter = () => {
+const VolumenesToolBar = () => {
+	// Obtenemos el Rol de Usuario
+	const { rol } = useSelector(state => state.auth.usuario);
+
+	// Renderizamos el componente
 	return (
-		<>
-			<Switch>
-				<Route exact path="/auth/login" component={LoginView} />
-				<Redirect to="/auth/login" />
-			</Switch>
-		</>
+		<div className="flex flex-col justify-center w-full px-16 sm:px-24">
+			<div className="grid grid-cols-12 gap-24 mt-16 mb-16">
+				{rol.super && <UsuariosToolBarDptos />}
+				<UsuariosToolBarRoles />
+			</div>
+		</div>
 	);
 };
 
 /*******************************************************************************************************/
 // Exportamos el componente //
 /*******************************************************************************************************/
-export default PublicRouter;
+export default VolumenesToolBar;

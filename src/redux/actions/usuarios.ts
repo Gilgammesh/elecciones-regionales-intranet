@@ -16,9 +16,9 @@ export const startSetUsuariosRol = (rol: string) => {
 /*******************************************************************************************************/
 // Función para iniciar establecer el departamento de la lista de usuarios //
 /*******************************************************************************************************/
-export const startSetUsuariosDepartamentos = (departamento: string) => {
+export const startSetUsuariosDepartamento = (departamento: string) => {
 	return (dispatch: Dispatch) => {
-		dispatch(setUsuariosDepartamentos(departamento));
+		dispatch(setUsuariosDepartamento(departamento));
 	};
 };
 
@@ -35,9 +35,9 @@ export const setUsuariosRol = (rol: string) => {
 /*******************************************************************************************************/
 // Acción para establecer el departamento de la lista de usuarios //
 /*******************************************************************************************************/
-export const setUsuariosDepartamentos = (departamento: string) => {
+export const setUsuariosDepartamento = (departamento: string) => {
 	return {
-		type: types.setUsuariosDepartamentos,
+		type: types.setUsuariosDepartamento,
 		payload: departamento
 	};
 };
