@@ -3,7 +3,7 @@
 /*******************************************************************************************************/
 import React, { forwardRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button, Icon, Dialog, DialogActions, DialogContent, Paper, Slide, Tooltip } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -14,7 +14,7 @@ import { fetchData } from 'services/fetch';
 import clsx from 'clsx';
 import { validateFetchData } from 'helpers/validateFetchData';
 import { apiBaseUrl } from 'configs/settings';
-import { startSetCentrosVotacionProvincia } from 'redux/actions/centrosVotacion';
+import { startSetCentrosVotacionDepartamento, startSetCentrosVotacionProvincia } from 'redux/actions/centrosVotacion';
 
 /*******************************************************************************************************/
 // Definimos los estilos del componente //
@@ -60,10 +60,13 @@ const Transition = forwardRef(function Transition(props, ref) {
 /*******************************************************************************************************/
 const CentrosVotacionDialogUpdate = props => {
 	// Obtenemos las propiedades del componente
-	const { open, setOpen } = props;
+	const { open, setOpen, setErrors, setOpenErrors } = props;
 
 	// Llamamos al dispatch de redux
 	const dispatch = useDispatch();
+
+	// Obtenemos el Rol de Usuario
+	const { rol } = useSelector(state => state.auth.usuario);
 
 	// Instanciamos los estilos
 	const styles = useStyles();
@@ -151,13 +154,27 @@ const CentrosVotacionDialogUpdate = props => {
 			'POST',
 			formData
 		);
-		console.log(result);
 		// Validamos el resultado
 		if (validateFetchData(result)) {
+			if (result.data.errores.length > 0) {
+				setErrors(result.data.errores);
+				setOpenErrors(true);
+			}
+			// Finalizamos el proceso
 			setProcesando(false);
+			// Habilitamos los botones
 			setDisabled(false);
-			dispatch(startSetCentrosVotacionProvincia('', ''));
-			dispatch(startSetCentrosVotacionProvincia('todos', 'todos'));
+			// Si es un super usario
+			if (rol.super) {
+				// Reseteamos los datos del departamento, provincia y distritro para recargar la tabla
+				dispatch(startSetCentrosVotacionDepartamento('', '', ''));
+				dispatch(startSetCentrosVotacionDepartamento('todos', 'todos', 'todos'));
+			} else {
+				// Reseteamos los datos del provincia y distritro para recargar la tabla
+				dispatch(startSetCentrosVotacionProvincia('', ''));
+				dispatch(startSetCentrosVotacionProvincia('todos', 'todos'));
+			}
+			// Cerramos el modal de carga
 			setOpen(false);
 		}
 	};
@@ -291,7 +308,9 @@ const CentrosVotacionDialogUpdate = props => {
 /*******************************************************************************************************/
 CentrosVotacionDialogUpdate.propTypes = {
 	open: PropTypes.bool.isRequired,
-	setOpen: PropTypes.func.isRequired
+	setOpen: PropTypes.func.isRequired,
+	setErrors: PropTypes.func.isRequired,
+	setOpenErrors: PropTypes.func.isRequired
 };
 
 /*******************************************************************************************************/

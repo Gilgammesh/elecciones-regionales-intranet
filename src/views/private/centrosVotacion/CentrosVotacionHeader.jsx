@@ -11,6 +11,7 @@ import Animate from 'components/core/Animate';
 import { startGetAccionesModulo } from 'redux/actions/auth';
 import AnimateGroup from 'components/core/AnimateGroup';
 import CentrosVotacionDialogUpdate from './CentrosVotacionDialogUpdate';
+import CentrosVotacionDialogErrores from './CentrosVotacionDialogErrores';
 
 /*******************************************************************************************************/
 // Definimos la Vista del componente Centros de Votación Header //
@@ -24,6 +25,12 @@ const CentrosVotacionHeader = () => {
 
 	// Estado de apoertura del Modal
 	const [openMod, setOpenMod] = useState(false);
+
+	// Estado del array de errores al importar el excel
+	const [errors, setErrors] = useState([]);
+
+	// Estado de apertura del modal de errores
+	const [openErrors, setOpenErrors] = useState(false);
 
 	// Array de Permisos de Acciones del Módulo
 	const [accionesPerm, setAccionesPerm] = useState(null);
@@ -74,7 +81,15 @@ const CentrosVotacionHeader = () => {
 					</Button>
 				</AnimateGroup>
 			)}
-			{openMod && <CentrosVotacionDialogUpdate open={openMod} setOpen={setOpenMod} />}
+			{openMod && (
+				<CentrosVotacionDialogUpdate
+					open={openMod}
+					setOpen={setOpenMod}
+					setErrors={setErrors}
+					setOpenErrors={setOpenErrors}
+				/>
+			)}
+			{openErrors && <CentrosVotacionDialogErrores open={openErrors} setOpen={setOpenErrors} errors={errors} />}
 		</div>
 	);
 };

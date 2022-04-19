@@ -63,14 +63,14 @@ const headers = [
 		align: 'left',
 		disablePadding: false,
 		label: 'Personero Local',
-		sort: true
+		sort: false
 	},
 	{
 		id: 'personero_mesa',
 		align: 'left',
 		disablePadding: false,
 		label: 'Personero Mesa',
-		sort: true
+		sort: false
 	},
 	{
 		id: 'botones',

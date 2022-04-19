@@ -5,17 +5,39 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { IconButton, Table, TableBody, TableCell, TablePagination, TableRow, Tooltip } from '@material-ui/core';
+import {
+	IconButton,
+	Table,
+	TableBody,
+	TableCell,
+	TablePagination,
+	TableRow,
+	Tooltip,
+	Typography
+} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { red } from '@material-ui/core/colors';
 import Scrollbars from 'components/core/Scrollbars';
 import CentrosVotacionTableHead from './CentrosVotacionTableHead';
+import clsx from 'clsx';
 import _ from 'lodash';
 import { fetchData } from 'services/fetch';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import ProgressLinear from 'components/core/Progress/ProgressLinear';
 import { Swal, Toast } from 'configs/settings';
 import { validateFetchData } from 'helpers/validateFetchData';
 import { startGetAccionesModulo } from 'redux/actions/auth';
+
+/*******************************************************************************************************/
+// Definimos los estilos del componente //
+/*******************************************************************************************************/
+const useStyles = makeStyles(theme => ({
+	red: {
+		color: red[500]
+	}
+}));
 
 /*******************************************************************************************************/
 // Definimos la Vista del componente Centros de Votación Table //
@@ -26,6 +48,9 @@ const CentrosVotacionTable = props => {
 
 	// Llamamos al dispatch de redux
 	const dispatch = useDispatch();
+
+	// Instanciamos los estilos
+	const styles = useStyles();
 
 	// Obtenemos el socket de conexión con la Api
 	const socket = useSelector(state => state.socketio);
@@ -199,10 +224,48 @@ const CentrosVotacionTable = props => {
 											{row.mesa}
 										</TableCell>
 										<TableCell className="py-2" component="th" scope="row">
-											{row.personero_local}
+											<div className="flex flex-row items-center">
+												{row.personero_local ? (
+													<Typography className="mr-10">
+														row.personero_local.nombres row.personero_local.apellidos
+													</Typography>
+												) : (
+													<Typography className={clsx(styles.red, 'mr-10')}>
+														--Sin asignar--
+													</Typography>
+												)}
+												<Tooltip
+													title={row.personero_local ? 'Cambiar' : 'Añadir'}
+													placement="bottom-start"
+													enterDelay={100}
+												>
+													<IconButton color="default" aria-label="editar personero">
+														<PersonAddIcon />
+													</IconButton>
+												</Tooltip>
+											</div>
 										</TableCell>
 										<TableCell className="py-2" component="th" scope="row">
-											{row.personero_mesa}
+											<div className="flex flex-row items-center">
+												{row.personero_mesa ? (
+													<Typography className="mr-10">
+														row.personero_mesa.nombres row.personero_mesa.apellidos
+													</Typography>
+												) : (
+													<Typography className={clsx(styles.red, 'mr-10')}>
+														--Sin asignar--
+													</Typography>
+												)}
+												<Tooltip
+													title={row.personero_mesa ? 'Cambiar' : 'Añadir'}
+													placement="bottom-start"
+													enterDelay={100}
+												>
+													<IconButton color="default" aria-label="editar personero">
+														<PersonAddIcon />
+													</IconButton>
+												</Tooltip>
+											</div>
 										</TableCell>
 										<TableCell
 											className="py-2"
