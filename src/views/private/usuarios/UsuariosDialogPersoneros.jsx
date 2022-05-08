@@ -3,7 +3,7 @@
 /*******************************************************************************************************/
 import React, { forwardRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button, Icon, Dialog, DialogActions, DialogContent, Paper, Slide, Tooltip } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -14,7 +14,7 @@ import { fetchData } from 'services/fetch';
 import clsx from 'clsx';
 import { validateFetchData } from 'helpers/validateFetchData';
 import { apiBaseUrl } from 'configs/settings';
-import { startSetCentrosVotacionDepartamento, startSetCentrosVotacionProvincia } from 'redux/actions/centrosVotacion';
+import { startSetUsuariosDepartamento, startSetUsuariosRol } from 'redux/actions/usuarios';
 
 /*******************************************************************************************************/
 // Definimos los estilos del componente //
@@ -56,9 +56,9 @@ const Transition = forwardRef(function Transition(props, ref) {
 });
 
 /*******************************************************************************************************/
-// Definimos la Vista del componente Centros de Votación - Importar Excel //
+// Definimos la Vista del componente Usuarios - Importar Personeros //
 /*******************************************************************************************************/
-const CentrosVotacionDialogUpdate = props => {
+const UsuariosDialogPersoneros = props => {
 	// Obtenemos las propiedades del componente
 	const { open, setOpen, setErrors, setOpenErrors } = props;
 
@@ -67,6 +67,9 @@ const CentrosVotacionDialogUpdate = props => {
 
 	// Obtenemos el Rol de Usuario
 	const { rol } = useSelector(state => state.auth.usuario);
+
+	// Obtenemos el departamento de la lista de usuarios
+	const { departamento } = useSelector(state => state.usuarios);
 
 	// Instanciamos los estilos
 	const styles = useStyles();
@@ -141,15 +144,19 @@ const CentrosVotacionDialogUpdate = props => {
 		// Creamos la data como un FormData
 		let formData = new FormData();
 		formData.append('file', file.file);
+		// Si es un super usuario, añadimos el departamento
+		if (rol.super) {
+			formData.append('departamento', departamento);
+		}
 
 		// Iniciamos el proceso
 		setProcesando(true);
 		// Deshabilitamos los botones
 		setDisabled(true);
 
-		// Importamos los centros de votación
+		// Importamos los usuarios personeros
 		const result = await fetchData(
-			'centros-votacion/import-excel',
+			'usuarios/import-excel',
 			{ isTokenReq: true, contentType: 'multipart/form-data' },
 			'POST',
 			formData
@@ -166,13 +173,12 @@ const CentrosVotacionDialogUpdate = props => {
 			setDisabled(false);
 			// Si es un super usario
 			if (rol.super) {
-				// Reseteamos los datos del departamento, provincia y distrito para recargar la tabla
-				dispatch(startSetCentrosVotacionDepartamento('', '', '', '', ''));
-				dispatch(startSetCentrosVotacionDepartamento('todos', 'todos', 'todos', 'todos', 'todos'));
+				// Reseteamos los datos del departamento y tipo de usuario
+				dispatch(startSetUsuariosDepartamento('todos'));
+				dispatch(startSetUsuariosRol('todos'));
 			} else {
-				// Reseteamos los datos del provincia y distrito para recargar la tabla
-				dispatch(startSetCentrosVotacionProvincia('', '', '', ''));
-				dispatch(startSetCentrosVotacionProvincia('todos', 'todos', 'todos', 'todos'));
+				// Reseteamos los datos del tipo de usuario
+				dispatch(startSetUsuariosRol('todos'));
 			}
 			// Cerramos el modal de carga
 			setOpen(false);
@@ -198,8 +204,7 @@ const CentrosVotacionDialogUpdate = props => {
 								<b>Primero:</b> Descargue la plantilla de excel.
 							</p>
 							<p className="mt-6">
-								<b>Segundo:</b> Llene la información de la plantilla con los datos de los centros de
-								votación y sus mesas.
+								<b>Segundo:</b> Llene la información de la plantilla con los datos de los personeros.
 							</p>
 							<p className="mt-6">
 								<b>Tercero:</b> Adjunte la plantilla llena y procese la información.
@@ -227,7 +232,7 @@ const CentrosVotacionDialogUpdate = props => {
 											styles.downloadTemplate,
 											'flex items-center justify-center relative min-w-128 h-128 rounded-8 ml-8 mr-36 mb-16 overflow-hidden cursor-pointer shadow-1 hover:shadow-5'
 										)}
-										to={{ pathname: `${apiBaseUrl}/uploads/centros-votacion/template.xlsx` }}
+										to={{ pathname: `${apiBaseUrl}/uploads/usuarios/template.xlsx` }}
 										target="_blank"
 										download
 									>
@@ -306,7 +311,7 @@ const CentrosVotacionDialogUpdate = props => {
 /*******************************************************************************************************/
 // Definimos los tipos de propiedades del componente //
 /*******************************************************************************************************/
-CentrosVotacionDialogUpdate.propTypes = {
+UsuariosDialogPersoneros.propTypes = {
 	open: PropTypes.bool.isRequired,
 	setOpen: PropTypes.func.isRequired,
 	setErrors: PropTypes.func.isRequired,
@@ -316,4 +321,4 @@ CentrosVotacionDialogUpdate.propTypes = {
 /*******************************************************************************************************/
 // Exportamos el componente //
 /*******************************************************************************************************/
-export default CentrosVotacionDialogUpdate;
+export default UsuariosDialogPersoneros;

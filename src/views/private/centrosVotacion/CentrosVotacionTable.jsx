@@ -58,8 +58,8 @@ const CentrosVotacionTable = props => {
 	// Obtenemos el Rol de Usuario
 	const { rol } = useSelector(state => state.auth.usuario);
 
-	// Obtenemos el departamento, provincia y distrito por defecto de los centros de votación
-	const { departamento, provincia, distrito } = useSelector(state => state.centros_votacion);
+	// Obtenemos los datos por defecto de los centros de votación
+	const { departamento, provincia, distrito, local, mesa } = useSelector(state => state.centros_votacion);
 
 	// Estado para definir el número de página de la tabla
 	const [page, setPage] = useState(0);
@@ -98,7 +98,7 @@ const CentrosVotacionTable = props => {
 			setLoading(true);
 			// Obtenemos la lista de los centros de votación con fetch
 			const result = await fetchData(
-				`centros-votacion?departamento=${departamento}&provincia=${provincia}&distrito=${distrito}&page=${
+				`centros-votacion?departamento=${departamento}&provincia=${provincia}&distrito=${distrito}&local=${local}&mesa=${mesa}&page=${
 					page + 1
 				}&pageSize=${rowsPerPage}`,
 				{
@@ -132,7 +132,7 @@ const CentrosVotacionTable = props => {
 		return () => {
 			mounted = false;
 		};
-	}, [socket, departamento, provincia, distrito, estado, page, rowsPerPage, setData]);
+	}, [socket, departamento, provincia, distrito, local, mesa, estado, page, rowsPerPage, setData]);
 
 	// Función para ordenar una columna
 	const handleRequestSort = (event, property) => {

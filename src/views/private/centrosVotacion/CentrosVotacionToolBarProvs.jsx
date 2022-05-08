@@ -17,7 +17,7 @@ const CentrosVotacionToolBarProvs = () => {
 	// Obtenemos el rol del usuario logueado
 	const usuario = useSelector(state => state.auth.usuario);
 
-	// Obtenemos el departamento y provincia por defecto de los centros de votación
+	// Obtenemos los datos por defecto de los centros de votación
 	const { departamento, provincia } = useSelector(state => state.centros_votacion);
 
 	// Estado inicial de la lista de provincias
@@ -30,7 +30,7 @@ const CentrosVotacionToolBarProvs = () => {
 		// Función para obtener las provincias
 		const getProvincias = async dpto => {
 			// Obtenemos las provincias con fetch
-			const result = await fetchData(`ubigeo/provincias?departamento=${dpto}&page=1&pageSize=50`, {
+			const result = await fetchData(`ubigeo/provincias?departamento=${dpto}&page=1&pageSize=100`, {
 				isTokenReq: true
 			});
 			// Si existe un resultado y el status es positivo
@@ -62,7 +62,7 @@ const CentrosVotacionToolBarProvs = () => {
 	// Función para actualizar el valor de la provincia
 	const handleChange = evt => {
 		const { value } = evt.target;
-		dispatch(startSetCentrosVotacionProvincia(value, 'todos'));
+		dispatch(startSetCentrosVotacionProvincia(value, 'todos', 'todos', 'todos'));
 	};
 
 	// Renderizamos el componente

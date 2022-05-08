@@ -23,7 +23,7 @@ const CentrosVotacionHeader = () => {
 	// Obtenemos el Rol de Usuario
 	const { rol } = useSelector(state => state.auth.usuario);
 
-	// Estado de apoertura del Modal
+	// Estado de apertura del Modal
 	const [openMod, setOpenMod] = useState(false);
 
 	// Estado del array de errores al importar el excel

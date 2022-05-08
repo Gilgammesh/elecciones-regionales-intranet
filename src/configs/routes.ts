@@ -37,6 +37,7 @@ import UsuariosEditView from 'views/private/usuarios/usuariosEdit';
 //---- MÓDULO CENTROS DE VOTACIÓN ----------------------------------------------------------//
 //////////////////////////////////////////////////////////////////////////////////////////////
 import CentrosVotacionView from 'views/private/centrosVotacion';
+import CentrosVotacionNewView from 'views/private/centrosVotacion/centrosVotacionNew';
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 //---- MÓDULO MONITOREO --------------------------------------------------------------------//
@@ -169,7 +170,17 @@ const routes: IRoutesModulos = {
 	},
 	'centros-votacion': {
 		path: '/centros-votacion',
-		component: CentrosVotacionView
+		component: CentrosVotacionView,
+		children: [
+			{
+				path: '/centros-votacion/nuevo',
+				component: CentrosVotacionNewView
+			},
+			{
+				path: '/centros-votacion/editar/:id',
+				component: CentrosVotacionNewView
+			}
+		]
 	},
 	monitoreo: {
 		path: '/monitoreo',

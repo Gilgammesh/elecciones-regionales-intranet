@@ -13,7 +13,7 @@ import { validateFetchData } from 'helpers/validateFetchData';
 import { Toast } from 'configs/settings';
 
 /*******************************************************************************************************/
-// Definimos la Vista del componente Admin - Acción Nuevo //
+// Definimos la Vista del componente Centros de Votación - Nuevo //
 /*******************************************************************************************************/
 const CentrosVotacionNew = () => {
 	// Llamamos al history de las rutas
@@ -29,7 +29,7 @@ const CentrosVotacionNew = () => {
 		distrito: '',
 		nombre: '',
 		mesa: '',
-		votantes: ''
+		votantes: 1
 	};
 
 	// Usamos el Hook personalizado de formularios

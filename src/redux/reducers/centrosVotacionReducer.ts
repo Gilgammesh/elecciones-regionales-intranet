@@ -30,8 +30,8 @@ const initialState: ICentrosVotacionReducer = {
 	departamento: 'todos',
 	provincia: 'todos',
 	distrito: 'todos',
-	local: '',
-	mesa: '',
+	local: 'todos',
+	mesa: 'todos',
 	personero: ''
 };
 

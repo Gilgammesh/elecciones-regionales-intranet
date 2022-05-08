@@ -112,6 +112,8 @@ const UsuariosTable = props => {
 			socket.on('usuario-actualizado', () => getUsuarios());
 			// Si un usuario fue eliminado
 			socket.on('usuario-eliminado', () => getUsuarios());
+			// Si un usuario fue eliminado
+			socket.on('usuarios-importados', () => getUsuarios());
 		}
 		// Limpiamos el montaje
 		return () => {

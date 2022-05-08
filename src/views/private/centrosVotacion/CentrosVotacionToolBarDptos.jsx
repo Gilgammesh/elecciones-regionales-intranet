@@ -14,7 +14,7 @@ const CentrosVotacionToolBarDptos = () => {
 	// Llamamos al dispatch de redux
 	const dispatch = useDispatch();
 
-	// Obtenemos el departamento por defecto de los centros de votación
+	// Obtenemos los datos por defecto de los centros de votación
 	const { departamento } = useSelector(state => state.centros_votacion);
 
 	// Estado inicial de la lista de departamentos
@@ -27,7 +27,7 @@ const CentrosVotacionToolBarDptos = () => {
 		// Función para obtener los departamentos
 		const getDepartamentos = async () => {
 			// Obtenemos los departamentos con fetch
-			const result = await fetchData('ubigeo/departamentos?page=1&pageSize=50', { isTokenReq: true });
+			const result = await fetchData('ubigeo/departamentos?page=1&pageSize=100', { isTokenReq: true });
 			// Si existe un resultado y el status es positivo
 			if (result && mounted && result.data.status) {
 				// Establecemos los departamentos
@@ -45,7 +45,7 @@ const CentrosVotacionToolBarDptos = () => {
 	// Función para actualizar el valor del departamento
 	const handleChange = evt => {
 		const { value } = evt.target;
-		dispatch(setCentrosVotacionDepartamento(value, 'todos', 'todos'));
+		dispatch(setCentrosVotacionDepartamento(value, 'todos', 'todos', 'todos', 'todos'));
 	};
 
 	// Renderizamos el componente

@@ -7,27 +7,33 @@ import { Dispatch } from 'redux';
 /*******************************************************************************************************/
 // Función para iniciar establecer el departamento de los centros de votación //
 /*******************************************************************************************************/
-export const startSetCentrosVotacionDepartamento = (departamento: string, provincia: string, distrito: string) => {
+export const startSetCentrosVotacionDepartamento = (
+	departamento: string,
+	provincia: string,
+	distrito: string,
+	local: string,
+	mesa: string
+) => {
 	return (dispatch: Dispatch) => {
-		dispatch(setCentrosVotacionDepartamento(departamento, provincia, distrito));
+		dispatch(setCentrosVotacionDepartamento(departamento, provincia, distrito, local, mesa));
 	};
 };
 
 /*******************************************************************************************************/
 // Función para iniciar establecer la provincia de los centros de votación //
 /*******************************************************************************************************/
-export const startSetCentrosVotacionProvincia = (provincia: string, distrito: string) => {
+export const startSetCentrosVotacionProvincia = (provincia: string, distrito: string, local: string, mesa: string) => {
 	return (dispatch: Dispatch) => {
-		dispatch(setCentrosVotacionProvincia(provincia, distrito));
+		dispatch(setCentrosVotacionProvincia(provincia, distrito, local, mesa));
 	};
 };
 
 /*******************************************************************************************************/
 // Función para iniciar establecer el distrito de los centros de votación //
 /*******************************************************************************************************/
-export const startSetCentrosVotacionDistrito = (distrito: string) => {
+export const startSetCentrosVotacionDistrito = (distrito: string, local: string, mesa: string) => {
 	return (dispatch: Dispatch) => {
-		dispatch(setCentrosVotacionDistrito(distrito));
+		dispatch(setCentrosVotacionDistrito(distrito, local, mesa));
 	};
 };
 
@@ -61,28 +67,34 @@ export const startSetCentrosVotacionPersonero = (personero: string) => {
 /*******************************************************************************************************/
 // Acción para establecer el departamento de los centros de votación //
 /*******************************************************************************************************/
-export const setCentrosVotacionDepartamento = (departamento: string, provincia: string, distrito: string) => {
+export const setCentrosVotacionDepartamento = (
+	departamento: string,
+	provincia: string,
+	distrito: string,
+	local: string,
+	mesa: string
+) => {
 	return {
 		type: types.setCentrosVotacionDepartamento,
-		payload: { departamento, provincia, distrito }
+		payload: { departamento, provincia, distrito, local, mesa }
 	};
 };
 /*******************************************************************************************************/
 // Acción para establecer la provincia de los centros de votación //
 /*******************************************************************************************************/
-export const setCentrosVotacionProvincia = (provincia: string, distrito: string) => {
+export const setCentrosVotacionProvincia = (provincia: string, distrito: string, local: string, mesa: string) => {
 	return {
 		type: types.setCentrosVotacionProvincia,
-		payload: { provincia, distrito }
+		payload: { provincia, distrito, local, mesa }
 	};
 };
 /*******************************************************************************************************/
 // Acción para establecer el distrito de los centros de votación //
 /*******************************************************************************************************/
-export const setCentrosVotacionDistrito = (distrito: string) => {
+export const setCentrosVotacionDistrito = (distrito: string, local: string, mesa: string) => {
 	return {
 		type: types.setCentrosVotacionDistrito,
-		payload: { distrito }
+		payload: { distrito, local, mesa }
 	};
 };
 /*******************************************************************************************************/

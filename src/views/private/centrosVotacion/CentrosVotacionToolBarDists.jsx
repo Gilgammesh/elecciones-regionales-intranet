@@ -17,7 +17,7 @@ const CentrosVotacionToolBarDists = () => {
 	// Obtenemos el rol del usuario logueado
 	const usuario = useSelector(state => state.auth.usuario);
 
-	// Obtenemos el departamento, provincia y distrito por defecto de los centros de votación
+	// Obtenemos los datos por defecto de los centros de votación
 	const { departamento, provincia, distrito } = useSelector(state => state.centros_votacion);
 
 	// Estado inicial de la lista de distritos
@@ -31,7 +31,7 @@ const CentrosVotacionToolBarDists = () => {
 		const getDistritos = async (dpto, prov) => {
 			// Obtenemos los distritos con fetch
 			const result = await fetchData(
-				`ubigeo/distritos?departamento=${dpto}&provincia=${prov}&page=1&pageSize=50`,
+				`ubigeo/distritos?departamento=${dpto}&provincia=${prov}&page=1&pageSize=100`,
 				{
 					isTokenReq: true
 				}
@@ -48,11 +48,11 @@ const CentrosVotacionToolBarDists = () => {
 			if (departamento === 'todos' || provincia === 'todos') {
 				setListDistritos([]);
 			} else {
-				// Obtenemos la lista de provincias con el departamento y provincia
+				// Obtenemos la lista de distritos con el departamento y provincia
 				getDistritos(departamento, provincia);
 			}
 		} else {
-			// Obtenemos la lista de provincias con el departamento y provincia
+			// Obtenemos la lista de distritos con el departamento y provincia
 			getDistritos(usuario.departamento.codigo, provincia);
 		}
 		return () => {
@@ -64,7 +64,7 @@ const CentrosVotacionToolBarDists = () => {
 	// Función para actualizar el valor del distrito
 	const handleChange = evt => {
 		const { value } = evt.target;
-		dispatch(startSetCentrosVotacionDistrito(value));
+		dispatch(startSetCentrosVotacionDistrito(value, 'todos', 'todos'));
 	};
 
 	// Renderizamos el componente

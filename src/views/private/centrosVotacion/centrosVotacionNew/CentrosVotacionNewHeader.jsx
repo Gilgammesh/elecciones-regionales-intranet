@@ -10,7 +10,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import AssistantIcon from '@material-ui/icons/Assistant';
 import Animate from 'components/core/Animate';
 import clsx from 'clsx';
-import { startGetAccionesSubModulo } from 'redux/actions/auth';
+import { startGetAccionesModulo } from 'redux/actions/auth';
 
 /*******************************************************************************************************/
 // Definimos los estilos del componente //
@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 /*******************************************************************************************************/
-// Definimos la Vista del componente Admin - Acción Nuevo Header //
+// Definimos la Vista del componente Centros de Votación - Nuevo Header //
 /*******************************************************************************************************/
 const CentrosVotacionNewHeader = props => {
 	// Obtenemos las propiedades
@@ -42,12 +42,12 @@ const CentrosVotacionNewHeader = props => {
 	// Instanciamos los estilos
 	const styles = useStyles();
 
-	// Array de Permisos de Acciones del SubMódulo
+	// Array de Permisos de Acciones del Módulo
 	const [accionesPerm, setAccionesPerm] = useState(null);
 
-	// Efecto para obtener las acciones del submódulo
+	// Efecto para obtener las acciones del módulo
 	useEffect(() => {
-		dispatch(startGetAccionesSubModulo('admin', 'acciones')).then(res => setAccionesPerm(res));
+		dispatch(startGetAccionesModulo('centros-votacion')).then(res => setAccionesPerm(res));
 	}, [dispatch]);
 
 	// Renderizamos el componente
@@ -59,11 +59,11 @@ const CentrosVotacionNewHeader = props => {
 						className="normal-case flex items-center sm:mb-12"
 						component={Link}
 						role="button"
-						to="/admin/acciones"
+						to="/centros-votacion"
 						color="inherit"
 					>
 						<Icon className="text-20">{theme.direction === 'ltr' ? 'arrow_back' : 'arrow_forward'}</Icon>
-						<span className="mx-4">Acciones</span>
+						<span className="mx-4">Centros de Votación</span>
 					</Typography>
 				</Animate>
 
@@ -73,7 +73,7 @@ const CentrosVotacionNewHeader = props => {
 					</Animate>
 					<div className="flex flex-col min-w-0 mx-8 sm:mc-16">
 						<Animate animation="transition.slideLeftIn" delay={300}>
-							<Typography className="text-16 sm:text-20 truncate">Nueva Acción</Typography>
+							<Typography className="text-16 sm:text-20 truncate">Nuevo Centro de Votación</Typography>
 						</Animate>
 					</div>
 				</div>

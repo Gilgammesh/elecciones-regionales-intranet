@@ -48,7 +48,7 @@ const headers = [
 		id: 'nombre',
 		align: 'left',
 		disablePadding: false,
-		label: 'Nombre',
+		label: 'Local',
 		sort: false
 	},
 	{

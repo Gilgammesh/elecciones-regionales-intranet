@@ -8,10 +8,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Icon, Input, Paper, Typography, useTheme } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core/styles';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import Animate from 'components/core/Animate';
+import AnimateGroup from 'components/core/AnimateGroup';
 import { selectContrastMainTheme } from 'configs/themes';
 import { normalizar } from 'helpers/texts';
 import { startGetAccionesModulo } from 'redux/actions/auth';
+import UsuariosDialogPersoneros from './UsuariosDialogPersoneros';
+import UsuariosDialogPersonerosErrores from './UsuariosDialogPersonerosErrores';
 
 /*******************************************************************************************************/
 // Definimos la Vista del componente Usuarios Header //
@@ -26,6 +30,9 @@ const UsuariosHeader = props => {
 	// Obtenemos el Rol de Usuario
 	const { rol } = useSelector(state => state.auth.usuario);
 
+	// Obtenemos el departamento de la lista de usuarios
+	const { departamento } = useSelector(state => state.usuarios);
+
 	// Obtenemos el tema de la app
 	const theme = useTheme();
 
@@ -34,6 +41,15 @@ const UsuariosHeader = props => {
 
 	// Estado inicial de la caja de búsqueda
 	const [searchText, setSearchText] = useState('');
+
+	// Estado de apertura del Modal
+	const [openMod, setOpenMod] = useState(false);
+
+	// Estado del array de errores al importar el excel de personeros
+	const [errors, setErrors] = useState([]);
+
+	// Estado de apertura del modal de errores
+	const [openErrors, setOpenErrors] = useState(false);
 
 	// Array de Permisos de Acciones del Módulo
 	const [accionesPerm, setAccionesPerm] = useState(null);
@@ -72,6 +88,11 @@ const UsuariosHeader = props => {
 		setData(filter);
 	};
 
+	// Función para abrir el Modal
+	const handleOpenMod = () => {
+		setOpenMod(true);
+	};
+
 	// Renderizamos el componente
 	return (
 		<div className="flex flex-1 w-full items-center justify-between">
@@ -107,18 +128,39 @@ const UsuariosHeader = props => {
 				</ThemeProvider>
 			</div>
 			{(rol.super || (accionesPerm && accionesPerm.indexOf('crear') !== -1)) && (
-				<Animate animation="transition.slideRightIn" delay={300}>
+				<AnimateGroup animation="transition.slideRightIn" delay={300}>
+					<Button
+						className="whitespace-no-wrap normal-case"
+						variant="contained"
+						startIcon={<PersonAddIcon />}
+						onClick={handleOpenMod}
+						disabled={rol.super ? (departamento === 'todos' ? true : false) : false}
+					>
+						<span className="hidden sm:flex">Importar Personeros</span>
+						<span className="flex sm:hidden">Importar</span>
+					</Button>
 					<Button
 						component={Link}
 						to="/usuarios/nuevo"
-						className="whitespace-no-wrap normal-case"
+						className="whitespace-no-wrap normal-case ml-16"
 						variant="contained"
 						startIcon={<AddCircleIcon />}
 					>
 						<span className="hidden sm:flex">Añadir Nuevo Usuario</span>
 						<span className="flex sm:hidden">Nuevo</span>
 					</Button>
-				</Animate>
+				</AnimateGroup>
+			)}
+			{openMod && (
+				<UsuariosDialogPersoneros
+					open={openMod}
+					setOpen={setOpenMod}
+					setErrors={setErrors}
+					setOpenErrors={setOpenErrors}
+				/>
+			)}
+			{openErrors && (
+				<UsuariosDialogPersonerosErrores open={openErrors} setOpen={setOpenErrors} errors={errors} />
 			)}
 		</div>
 	);

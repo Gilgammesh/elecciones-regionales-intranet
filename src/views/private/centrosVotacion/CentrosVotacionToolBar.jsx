@@ -6,6 +6,8 @@ import { useSelector } from 'react-redux';
 import CentrosVotacionToolBarDptos from './CentrosVotacionToolBarDptos';
 import CentrosVotacionToolBarProvs from './CentrosVotacionToolBarProvs';
 import CentrosVotacionToolBarDists from './CentrosVotacionToolBarDists';
+import CentrosVotacionToolBarLocal from './CentrosVotacionToolBarLocal';
+import CentrosVotacionToolBarMesa from './CentrosVotacionToolBarMesa';
 
 /*******************************************************************************************************/
 // Definimos la Vista del componente Centros de Votación ToolBar //
@@ -21,6 +23,8 @@ const CentrosVotacionToolBar = () => {
 				{rol.super && <CentrosVotacionToolBarDptos />}
 				<CentrosVotacionToolBarProvs />
 				<CentrosVotacionToolBarDists />
+				<CentrosVotacionToolBarLocal />
+				<CentrosVotacionToolBarMesa />
 			</div>
 		</div>
 	);
