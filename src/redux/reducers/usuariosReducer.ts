@@ -1,53 +1,53 @@
 /*******************************************************************************************************/
 // Importamos las dependencias //
 /*******************************************************************************************************/
-import types from 'configs/types';
+import types from 'configs/types'
 
 /*******************************************************************************************************/
 // Interface de Action //
 /*******************************************************************************************************/
 interface IAction {
-	type: string;
-	payload: any;
+  type: string
+  payload: any
 }
 
 /*******************************************************************************************************/
 // Interface del Reducer //
 /*******************************************************************************************************/
 export interface IUsuariosReducer {
-	rol: string;
-	departamento: string;
+  rol: string
+  departamento: string
 }
 
 /*******************************************************************************************************/
 // Estado inicial del Reducer //
 /*******************************************************************************************************/
 const initialState: IUsuariosReducer = {
-	rol: 'todos',
-	departamento: 'todos'
-};
+  rol: 'todos',
+  departamento: 'todos'
+}
 
 /*******************************************************************************************************/
 // Definimos el reducer y sus métodos //
 /*******************************************************************************************************/
 const usuariosReducer = (state = initialState, { type, payload }: IAction) => {
-	switch (type) {
-		case types.setUsuariosRol:
-			return {
-				...state,
-				rol: payload
-			};
-		case types.setUsuariosDepartamento:
-			return {
-				...state,
-				departamento: payload
-			};
-		default:
-			return state;
-	}
-};
+  switch (type) {
+    case types.setUsuariosRol:
+      return {
+        ...state,
+        rol: payload
+      }
+    case types.setUsuariosDepartamento:
+      return {
+        ...state,
+        departamento: payload
+      }
+    default:
+      return state
+  }
+}
 
 /*******************************************************************************************************/
 // Exportamos el reducer //
 /*******************************************************************************************************/
-export default usuariosReducer;
+export default usuariosReducer

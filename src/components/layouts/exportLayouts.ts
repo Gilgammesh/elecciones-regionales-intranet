@@ -1,26 +1,26 @@
 /*******************************************************************************************************/
 // Importamos las dependencias //
 /*******************************************************************************************************/
-import vertical from './layout-vertical/Vertical';
-import horizontal from './layout-horizontal/Horizontal';
+import vertical from './layout-vertical/Vertical'
+import horizontal from './layout-horizontal/Horizontal'
 
 /*******************************************************************************************************/
 // Interface de Layouts //
 /*******************************************************************************************************/
 interface ILayouts {
-	vertical: React.ReactNode;
-	horizontal: React.ReactNode;
+  vertical: React.ReactNode
+  horizontal: React.ReactNode
 }
 
 /*******************************************************************************************************/
 // Guardamos los layouts en un objeto //
 /*******************************************************************************************************/
 const exportLayouts: ILayouts = {
-	vertical,
-	horizontal
-};
+  vertical,
+  horizontal
+}
 
 /*******************************************************************************************************/
 // Exportamos los layouts //
 /*******************************************************************************************************/
-export default exportLayouts;
+export default exportLayouts

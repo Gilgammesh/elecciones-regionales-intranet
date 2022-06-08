@@ -2,31 +2,31 @@
 // Interface del Item de Navegación por Defecto //
 /*******************************************************************************************************/
 interface IChildrenItem {
-	id: string;
-	title: string;
-	type: string;
-	icon: string;
-	url: string;
-	badge?: {
-		title: number;
-		bg: string;
-		fg: string;
-	};
+  id: string
+  title: string
+  type: string
+  icon: string
+  url: string
+  badge?: {
+    title: number
+    bg: string
+    fg: string
+  }
 }
 interface IDefaultNavigationItem {
-	orden: number;
-	id: string;
-	type: string;
-	title?: string;
-	icon?: string;
-	children?: Array<IChildrenItem>;
+  orden: number
+  id: string
+  type: string
+  title?: string
+  icon?: string
+  children?: Array<IChildrenItem>
 }
 
 /*******************************************************************************************************/
 // Definimos la navegación de la aplicación por defecto //
 /*******************************************************************************************************/
 const defaultNavigation: Array<IDefaultNavigationItem> = [
-	/* {
+  /* {
 		orden: 1,
 		id: 'interfaz-usuario',
 		type: 'group',
@@ -52,9 +52,9 @@ const defaultNavigation: Array<IDefaultNavigationItem> = [
 		id: 'divider-1',
 		type: 'divider'
 	} */
-];
+]
 
 /*******************************************************************************************************/
 // Exportamos la navegación por defecto //
 /*******************************************************************************************************/
-export default defaultNavigation;
+export default defaultNavigation

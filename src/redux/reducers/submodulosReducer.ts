@@ -1,50 +1,53 @@
 /*******************************************************************************************************/
 // Importamos las dependencias //
 /*******************************************************************************************************/
-import types from 'configs/types';
+import types from 'configs/types'
 
 /*******************************************************************************************************/
 // Interface de Action //
 /*******************************************************************************************************/
 interface IAction {
-	type: string;
-	payload: any;
+  type: string
+  payload: any
 }
 
 /*******************************************************************************************************/
 // Interface del Reducer //
 /*******************************************************************************************************/
 export interface ISubmoduloReducer {
-	_id: string;
-	orden: number;
-	tag: string;
-	nombre: string;
-	descripcion: string;
-	type: string;
-	url: string;
-	estado: boolean;
+  _id: string
+  orden: number
+  tag: string
+  nombre: string
+  descripcion: string
+  type: string
+  url: string
+  estado: boolean
 }
 
 /*******************************************************************************************************/
 // Estado inicial del Reducer //
 /*******************************************************************************************************/
-const initialState: Array<ISubmoduloReducer> = [];
+const initialState: Array<ISubmoduloReducer> = []
 
 /*******************************************************************************************************/
 // Definimos el reducer y sus métodos //
 /*******************************************************************************************************/
-const submodulosReducer = (state = initialState, { type, payload }: IAction) => {
-	switch (type) {
-		case types.setSubmodulos:
-			return payload;
-		case types.resetSubmodulos:
-			return initialState;
-		default:
-			return state;
-	}
-};
+const submodulosReducer = (
+  state = initialState,
+  { type, payload }: IAction
+) => {
+  switch (type) {
+    case types.setSubmodulos:
+      return payload
+    case types.resetSubmodulos:
+      return initialState
+    default:
+      return state
+  }
+}
 
 /*******************************************************************************************************/
 // Exportamos el reducer //
 /*******************************************************************************************************/
-export default submodulosReducer;
+export default submodulosReducer

@@ -1,78 +1,90 @@
 /*******************************************************************************************************/
 // Importamos las dependencias //
 /*******************************************************************************************************/
-import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
-import thunk from 'redux-thunk';
-import authReducer, { IAuthReducer } from './reducers/authReducer';
-import chatPanelReducer, { IChatPanelReducer } from './reducers/chatPanelReducer';
-import dialogReducer, { IDialogReducer } from './reducers/dialogReducer';
-import messageReducer, { IMessageReducer } from './reducers/messageReducer';
-import navbarReducer, { INavbarReducer } from './reducers/navbarReducer';
-import navigationReducer, { INavigationReducer } from './reducers/navigationReducer';
-import quickPanelReducer, { IQuickPanelReducer } from './reducers/quickPanelReducer';
-import settingsReducer, { ISettingsReducer } from './reducers/settingsReducer';
-import submodulosReducer, { ISubmoduloReducer } from './reducers/submodulosReducer';
-import permisosReducer, { IPermisoModReducer } from './reducers/permisosReducer';
-import usuariosReducer, { IUsuariosReducer } from './reducers/usuariosReducer';
-import centrosVotacionReducer, { ICentrosVotacionReducer } from './reducers/centrosVotacionReducer';
-import socketioReducer from './reducers/socketioReducer';
-import { Socket } from 'socket.io-client';
+import { createStore, combineReducers, applyMiddleware, compose } from 'redux'
+import thunk from 'redux-thunk'
+import authReducer, { IAuthReducer } from './reducers/authReducer'
+import chatPanelReducer, {
+  IChatPanelReducer
+} from './reducers/chatPanelReducer'
+import dialogReducer, { IDialogReducer } from './reducers/dialogReducer'
+import messageReducer, { IMessageReducer } from './reducers/messageReducer'
+import navbarReducer, { INavbarReducer } from './reducers/navbarReducer'
+import navigationReducer, {
+  INavigationReducer
+} from './reducers/navigationReducer'
+import quickPanelReducer, {
+  IQuickPanelReducer
+} from './reducers/quickPanelReducer'
+import settingsReducer, { ISettingsReducer } from './reducers/settingsReducer'
+import submodulosReducer, {
+  ISubmoduloReducer
+} from './reducers/submodulosReducer'
+import permisosReducer, { IPermisoModReducer } from './reducers/permisosReducer'
+import usuariosReducer, { IUsuariosReducer } from './reducers/usuariosReducer'
+import centrosVotacionReducer, {
+  ICentrosVotacionReducer
+} from './reducers/centrosVotacionReducer'
+import socketioReducer from './reducers/socketioReducer'
+import { Socket } from 'socket.io-client'
 
 /*******************************************************************************************************/
 // Interface de los reducers //
 /*******************************************************************************************************/
 export interface IRootReducers {
-	auth: IAuthReducer;
-	navigation: INavigationReducer;
-	settings: ISettingsReducer;
-	dialog: IDialogReducer;
-	message: IMessageReducer;
-	chatPanel: IChatPanelReducer;
-	navbar: INavbarReducer;
-	quickPanel: IQuickPanelReducer;
-	submodulos: Array<ISubmoduloReducer>;
-	permisos: Array<IPermisoModReducer>;
-	usuarios: IUsuariosReducer;
-	centros_votacion: ICentrosVotacionReducer;
-	socketio: Socket | null;
+  auth: IAuthReducer
+  navigation: INavigationReducer
+  settings: ISettingsReducer
+  dialog: IDialogReducer
+  message: IMessageReducer
+  chatPanel: IChatPanelReducer
+  navbar: INavbarReducer
+  quickPanel: IQuickPanelReducer
+  submodulos: Array<ISubmoduloReducer>
+  permisos: Array<IPermisoModReducer>
+  usuarios: IUsuariosReducer
+  centros_votacion: ICentrosVotacionReducer
+  socketio: Socket | null
 }
 
 /*******************************************************************************************************/
 // Combinamos los reducers de la App //
 /*******************************************************************************************************/
 const reducers = combineReducers({
-	auth: authReducer,
-	navigation: navigationReducer,
-	settings: settingsReducer,
-	dialog: dialogReducer,
-	message: messageReducer,
-	chatPanel: chatPanelReducer,
-	navbar: navbarReducer,
-	quickPanel: quickPanelReducer,
-	submodulos: submodulosReducer,
-	permisos: permisosReducer,
-	usuarios: usuariosReducer,
-	centros_votacion: centrosVotacionReducer,
-	socketio: socketioReducer
-});
+  auth: authReducer,
+  navigation: navigationReducer,
+  settings: settingsReducer,
+  dialog: dialogReducer,
+  message: messageReducer,
+  chatPanel: chatPanelReducer,
+  navbar: navbarReducer,
+  quickPanel: quickPanelReducer,
+  submodulos: submodulosReducer,
+  permisos: permisosReducer,
+  usuarios: usuariosReducer,
+  centros_votacion: centrosVotacionReducer,
+  socketio: socketioReducer
+})
 
 /*******************************************************************************************************/
 // Cargamos la extensión de Redux para el navegador //
 /*******************************************************************************************************/
 const composeEnhancers =
-	(typeof window !== 'undefined' && (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
+  (typeof window !== 'undefined' &&
+    (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
+  compose
 
 /*******************************************************************************************************/
 // Aplicamos el Middleware Redux-Thunk, para el manejo de las peticiones asíncronas (Api's) //
 /*******************************************************************************************************/
-const enhancer = composeEnhancers(applyMiddleware(thunk));
+const enhancer = composeEnhancers(applyMiddleware(thunk))
 
 /*******************************************************************************************************/
 // Creamos el Store de nuestra App //
 /*******************************************************************************************************/
-const store = createStore(reducers, enhancer);
+const store = createStore(reducers, enhancer)
 
 /*******************************************************************************************************/
 // Exportamos el store //
 /*******************************************************************************************************/
-export default store;
+export default store

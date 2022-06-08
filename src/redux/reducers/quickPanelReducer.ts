@@ -1,58 +1,61 @@
 /*******************************************************************************************************/
 // Importamos las dependencias //
 /*******************************************************************************************************/
-import types from 'configs/types';
+import types from 'configs/types'
 
 /*******************************************************************************************************/
 // Interface de Action //
 /*******************************************************************************************************/
 interface IAction {
-	type: string;
-	payload: any;
+  type: string
+  payload: any
 }
 
 /*******************************************************************************************************/
 // Interface del Reducer //
 /*******************************************************************************************************/
 export interface IQuickPanelReducer {
-	state: boolean;
-	data?: any;
+  state: boolean
+  data?: any
 }
 
 /*******************************************************************************************************/
 // Estado inicial del Reducer //
 /*******************************************************************************************************/
 const initialState: IQuickPanelReducer = {
-	state: false,
-	data: {}
-};
+  state: false,
+  data: {}
+}
 
 /*******************************************************************************************************/
 // Definimos el reducer y sus métodos //
 /*******************************************************************************************************/
-const quickPanelReducer = (state = initialState, { type, payload }: IAction) => {
-	switch (type) {
-		case types.toggleQuickPanel:
-			return {
-				...state,
-				state: !state
-			};
-		case types.openQuickPanel:
-			return {
-				...state,
-				state: true
-			};
-		case types.closeQuickPanel:
-			return {
-				...state,
-				state: false
-			};
-		default:
-			return state;
-	}
-};
+const quickPanelReducer = (
+  state = initialState,
+  { type, payload }: IAction
+) => {
+  switch (type) {
+    case types.toggleQuickPanel:
+      return {
+        ...state,
+        state: !state
+      }
+    case types.openQuickPanel:
+      return {
+        ...state,
+        state: true
+      }
+    case types.closeQuickPanel:
+      return {
+        ...state,
+        state: false
+      }
+    default:
+      return state
+  }
+}
 
 /*******************************************************************************************************/
 // Exportamos el reducer //
 /*******************************************************************************************************/
-export default quickPanelReducer;
+export default quickPanelReducer

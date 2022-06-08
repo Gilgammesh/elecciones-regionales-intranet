@@ -1,4 +1,4 @@
 /*******************************************************************************************************/
 // Exportamos el componente por defecto //
 /*******************************************************************************************************/
-export { default } from './exportLayoutConfigs';
+export { default } from './exportLayoutConfigs'

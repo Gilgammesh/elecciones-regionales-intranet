@@ -1,15 +1,17 @@
 /*******************************************************************************************************/
 // Importamos las dependencias //
 /*******************************************************************************************************/
-import React, { forwardRef } from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { forwardRef } from 'react'
+import { NavLink } from 'react-router-dom'
 
 /*******************************************************************************************************/
 // Definimos el componente de Adaptador de NavLink de la Aplicación //
 /*******************************************************************************************************/
-const NavLinkAdapter = forwardRef((props, ref) => <NavLink innerRef={ref} {...props} />);
+const NavLinkAdapter = forwardRef((props, ref) => (
+  <NavLink innerRef={ref} {...props} />
+))
 
 /*******************************************************************************************************/
 // Exportamos el componente //
 /*******************************************************************************************************/
-export default NavLinkAdapter;
+export default NavLinkAdapter

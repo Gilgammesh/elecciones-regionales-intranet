@@ -1,57 +1,57 @@
 /*******************************************************************************************************/
 // Importamos las dependencias //
 /*******************************************************************************************************/
-import types from 'configs/types';
+import types from 'configs/types'
 
 /*******************************************************************************************************/
 // Interface de Action //
 /*******************************************************************************************************/
 interface IAction {
-	type: string;
-	payload: any;
+  type: string
+  payload: any
 }
 
 /*******************************************************************************************************/
 // Interface del Reducer //
 /*******************************************************************************************************/
 export interface IDialogOptionsReducer {
-	children: string;
+  children: string
 }
 export interface IDialogReducer {
-	state: boolean;
-	options: IDialogOptionsReducer;
+  state: boolean
+  options: IDialogOptionsReducer
 }
 
 /*******************************************************************************************************/
 // Estado inicial del Reducer //
 /*******************************************************************************************************/
 const initialState: IDialogReducer = {
-	state: false,
-	options: {
-		children: 'Mensaje de diálogo'
-	}
-};
+  state: false,
+  options: {
+    children: 'Mensaje de diálogo'
+  }
+}
 
 /*******************************************************************************************************/
 // Definimos el reducer y sus métodos //
 /*******************************************************************************************************/
 const dialogReducer = (state = initialState, { type, payload }: IAction) => {
-	switch (type) {
-		case types.openDialog:
-			return {
-				state: true,
-				options: payload
-			};
-		case types.closeDialog:
-			return {
-				state: false
-			};
-		default:
-			return state;
-	}
-};
+  switch (type) {
+    case types.openDialog:
+      return {
+        state: true,
+        options: payload
+      }
+    case types.closeDialog:
+      return {
+        state: false
+      }
+    default:
+      return state
+  }
+}
 
 /*******************************************************************************************************/
 // Exportamos el reducer //
 /*******************************************************************************************************/
-export default dialogReducer;
+export default dialogReducer

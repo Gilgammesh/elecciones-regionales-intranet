@@ -1,203 +1,229 @@
 /*******************************************************************************************************/
 // Importamos las dependencias //
 /*******************************************************************************************************/
-import types from 'configs/types';
-import { RouteComponentProps } from 'react-router-dom';
-import { deleteToken, setToken, getToken } from 'helpers/authToken';
-import { fetchData } from 'services/fetch';
-import { validateFetchData } from 'helpers/validateFetchData';
-import { startResetNavigation, startSetNavigation } from './navigation';
-import { apiBaseUrl } from 'configs/settings';
-import { io } from 'socket.io-client';
-import { startSetSocketIO } from './socketio';
-import { Dispatch } from 'redux';
-import { IAuthUsuarioReducer } from 'redux/reducers/authReducer';
-import { IPermisoModReducer } from 'redux/reducers/permisosReducer';
-import { IModuloReducer } from 'redux/reducers/navigationReducer';
-import { IRootReducers } from 'redux/store';
+import types from 'configs/types'
+import { RouteComponentProps } from 'react-router-dom'
+import { deleteToken, setToken, getToken } from 'helpers/authToken'
+import { fetchData } from 'services/fetch'
+import { validateFetchData } from 'helpers/validateFetchData'
+import { startResetNavigation, startSetNavigation } from './navigation'
+import { apiBaseUrl } from 'configs/settings'
+import { io } from 'socket.io-client'
+import { startSetSocketIO } from './socketio'
+import { Dispatch } from 'redux'
+import { IAuthUsuarioReducer } from 'redux/reducers/authReducer'
+import { IPermisoModReducer } from 'redux/reducers/permisosReducer'
+import { IModuloReducer } from 'redux/reducers/navigationReducer'
+import { IRootReducers } from 'redux/store'
 
 /*******************************************************************************************************/
 // Interfac de Login //
 /*******************************************************************************************************/
 interface ILogin {
-	dni: string;
-	password: string;
+  dni: string
+  password: string
 }
 
 /*******************************************************************************************************/
 // Función para iniciar el evento Establecer los datos de Autenticación //
 /*******************************************************************************************************/
 export const startSetAuth = (
-	usuario: IAuthUsuarioReducer,
-	permisos: Array<IPermisoModReducer>,
-	modulos: Array<IModuloReducer>
+  usuario: IAuthUsuarioReducer,
+  permisos: Array<IPermisoModReducer>,
+  modulos: Array<IModuloReducer>
 ) => {
-	return async (dispatch: Dispatch) => {
-		// Establecemos el socket de conexión con el api
-		const socket = io(apiBaseUrl, {
-			auth: { token: getToken() }
-		});
-		// Si establecimos conexión, guardamos el socket en el store
-		socket.on('connect', async () => {
-			dispatch<any>(startSetSocketIO(socket));
-		});
+  return async (dispatch: Dispatch) => {
+    // Establecemos el socket de conexión con el api
+    const socket = io(apiBaseUrl, {
+      auth: { token: getToken() }
+    })
+    // Si establecimos conexión, guardamos el socket en el store
+    socket.on('connect', async () => {
+      dispatch<any>(startSetSocketIO(socket))
+    })
 
-		// Establecemos la navegacion
-		dispatch<any>(startSetNavigation(usuario, permisos, modulos));
+    // Establecemos la navegacion
+    dispatch<any>(startSetNavigation(usuario, permisos, modulos))
 
-		// Establecemos los datos del usuario
-		dispatch(setAuth(usuario, permisos));
-	};
-};
+    // Establecemos los datos del usuario
+    dispatch(setAuth(usuario, permisos))
+  }
+}
 
 /*******************************************************************************************************/
 // Función para el evento Iniciar Login //
 /*******************************************************************************************************/
-export const startLogin = (body: ILogin, history: RouteComponentProps['history']) => {
-	return async (dispatch: Dispatch) => {
-		// Hacemos la petición al servidor con los datos del usuario
-		const result = await fetchData('auth/login', { isTokenReq: false }, 'POST', body);
-		// Validamos el resultado de la petición
-		if (validateFetchData(result)) {
-			// Si existe un data en el resultado
-			if (result.data) {
-				// Establecemos el socket de conexión con el api
-				const socket = io(apiBaseUrl, {
-					auth: { token: result.data.token }
-				});
-				// Si establecimos conexión, guardamos el socket en el store
-				socket.on('connect', () => {
-					dispatch<any>(startSetSocketIO(socket));
-				});
-				// Establecemos el token
-				setToken(result.data.token);
+export const startLogin = (
+  body: ILogin,
+  history: RouteComponentProps['history']
+) => {
+  return async (dispatch: Dispatch) => {
+    // Hacemos la petición al servidor con los datos del usuario
+    const result = await fetchData(
+      'auth/login',
+      { isTokenReq: false },
+      'POST',
+      body
+    )
+    // Validamos el resultado de la petición
+    if (validateFetchData(result)) {
+      // Si existe un data en el resultado
+      if (result.data) {
+        // Establecemos el socket de conexión con el api
+        const socket = io(apiBaseUrl, {
+          auth: { token: result.data.token }
+        })
+        // Si establecimos conexión, guardamos el socket en el store
+        socket.on('connect', () => {
+          dispatch<any>(startSetSocketIO(socket))
+        })
+        // Establecemos el token
+        setToken(result.data.token)
 
-				// Establecemos la navegación
-				dispatch<any>(startSetNavigation(result.data.usuario, result.data.permisos, result.data.modulos));
+        // Establecemos la navegación
+        dispatch<any>(
+          startSetNavigation(
+            result.data.usuario,
+            result.data.permisos,
+            result.data.modulos
+          )
+        )
 
-				// Redireccionamos al inicio de la aplicación
-				history.replace('/elecciones');
+        // Redireccionamos al inicio de la aplicación
+        history.replace('/elecciones')
 
-				// Establecemos los datos del usuario
-				dispatch(login(result.data.token, result.data.usuario, result.data.permisos));
-			}
-		}
-	};
-};
+        // Establecemos los datos del usuario
+        dispatch(
+          login(result.data.token, result.data.usuario, result.data.permisos)
+        )
+      }
+    }
+  }
+}
 
 /*******************************************************************************************************/
 // Función para el evento Iniciar Logout //
 /*******************************************************************************************************/
 export const startLogout = () => {
-	return async (dispatch: Dispatch) => {
-		// Guardamos la sesión del usuario
-		await fetchData(`admin/sesiones`, { isTokenReq: true }, 'PUT', {
-			estado: 'offline'
-		});
-		// Eliminamos el token
-		deleteToken();
+  return async (dispatch: Dispatch) => {
+    // Guardamos la sesión del usuario
+    await fetchData(`admin/sesiones`, { isTokenReq: true }, 'PUT', {
+      estado: 'offline'
+    })
+    // Eliminamos el token
+    deleteToken()
 
-		// Reseteamos los módulos del usuario
-		dispatch<any>(startResetNavigation());
-		// Limpiamos el socket de conexión
-		dispatch<any>(startSetSocketIO(null));
+    // Reseteamos los módulos del usuario
+    dispatch<any>(startResetNavigation())
+    // Limpiamos el socket de conexión
+    dispatch<any>(startSetSocketIO(null))
 
-		// Eliminamos los datos del usuario
-		dispatch(logout());
-	};
-};
+    // Eliminamos los datos del usuario
+    dispatch(logout())
+  }
+}
 
 /*******************************************************************************************************/
 // Función para el evento Iniciar Obtener acciones de un módulo //
 /*******************************************************************************************************/
 export const startGetAccionesModulo = (modulo: string) => {
-	return async (dispatch: Dispatch, getState: () => IRootReducers) => {
-		// Obtenemos los permisos del Rol de usuario
-		const { permisos } = getState().auth;
+  return async (dispatch: Dispatch, getState: () => IRootReducers) => {
+    // Obtenemos los permisos del Rol de usuario
+    const { permisos } = getState().auth
 
-		// Recorremos los permisos para ubicar el módulo
-		let acciones: string[] = [];
-		// Recorremos los permisos del módulo
-		const promises = permisos.map((ele: IPermisoModReducer) => {
-			// Si el módulo coincide con el módulo seleccionado
-			if (ele.modulo === modulo) {
-				// Retornamos las acciones del módulo
-				acciones = ele.acciones;
-			}
-			return null;
-		});
-		await Promise.all(promises);
+    // Recorremos los permisos para ubicar el módulo
+    let acciones: string[] = []
+    // Recorremos los permisos del módulo
+    const promises = permisos.map((ele: IPermisoModReducer) => {
+      // Si el módulo coincide con el módulo seleccionado
+      if (ele.modulo === modulo) {
+        // Retornamos las acciones del módulo
+        acciones = ele.acciones
+      }
+      return null
+    })
+    await Promise.all(promises)
 
-		// Retornamos las acciones del módulo
-		return acciones;
-	};
-};
+    // Retornamos las acciones del módulo
+    return acciones
+  }
+}
 
 /*******************************************************************************************************/
 // Función para el evento Iniciar Obtener acciones de un submódulo de un Módulo //
 /*******************************************************************************************************/
-export const startGetAccionesSubModulo = (modulo: string, submodulo: string) => {
-	return async (dispatch: Dispatch, getState: () => IRootReducers) => {
-		// Obtenemos los permisos del Rol de usuario
-		const { permisos } = getState().auth;
+export const startGetAccionesSubModulo = (
+  modulo: string,
+  submodulo: string
+) => {
+  return async (dispatch: Dispatch, getState: () => IRootReducers) => {
+    // Obtenemos los permisos del Rol de usuario
+    const { permisos } = getState().auth
 
-		// Recorremos los permisos para ubicar el módulo y el submódulo
-		let acciones: string[] = [];
-		// Recorremos los permisos del módulo
-		const promises = permisos.map((ele: IPermisoModReducer) => {
-			// Si el módulo coincide con el módulo seleccionado
-			if (ele.modulo === modulo) {
-				// Recorremos los permisos del submódulo
-				ele.permisos.map(ele_ => {
-					// Si el submódulo coincide con el submódulo seleccionado
-					if (ele_.submodulo === submodulo) {
-						// Retornamos las acciones del submódulo
-						acciones = ele_.acciones;
-					}
-					return null;
-				});
-			}
-			return null;
-		});
-		await Promise.all(promises);
+    // Recorremos los permisos para ubicar el módulo y el submódulo
+    let acciones: string[] = []
+    // Recorremos los permisos del módulo
+    const promises = permisos.map((ele: IPermisoModReducer) => {
+      // Si el módulo coincide con el módulo seleccionado
+      if (ele.modulo === modulo) {
+        // Recorremos los permisos del submódulo
+        ele.permisos.map(ele_ => {
+          // Si el submódulo coincide con el submódulo seleccionado
+          if (ele_.submodulo === submodulo) {
+            // Retornamos las acciones del submódulo
+            acciones = ele_.acciones
+          }
+          return null
+        })
+      }
+      return null
+    })
+    await Promise.all(promises)
 
-		// Retornamos las acciones del submnódulo
-		return acciones;
-	};
-};
+    // Retornamos las acciones del submnódulo
+    return acciones
+  }
+}
 
 /*******************************************************************************************************/
 // Acción para el evento Establecer los datos de Autenticación //
 /*******************************************************************************************************/
-export const setAuth = (usuario: IAuthUsuarioReducer, permisos: Array<IPermisoModReducer>) => {
-	return {
-		type: types.setAuth,
-		payload: {
-			usuario,
-			permisos
-		}
-	};
-};
+export const setAuth = (
+  usuario: IAuthUsuarioReducer,
+  permisos: Array<IPermisoModReducer>
+) => {
+  return {
+    type: types.setAuth,
+    payload: {
+      usuario,
+      permisos
+    }
+  }
+}
 
 /*******************************************************************************************************/
 // Accion para el evento login //
 /*******************************************************************************************************/
-export const login = (token: string, usuario: IAuthUsuarioReducer, permisos: Array<IPermisoModReducer>) => {
-	return {
-		type: types.login,
-		payload: {
-			token,
-			usuario,
-			permisos
-		}
-	};
-};
+export const login = (
+  token: string,
+  usuario: IAuthUsuarioReducer,
+  permisos: Array<IPermisoModReducer>
+) => {
+  return {
+    type: types.login,
+    payload: {
+      token,
+      usuario,
+      permisos
+    }
+  }
+}
 
 /*******************************************************************************************************/
 // Accion para el evento logout //
 /*******************************************************************************************************/
 export const logout = () => {
-	return {
-		type: types.logout
-	};
-};
+  return {
+    type: types.logout
+  }
+}

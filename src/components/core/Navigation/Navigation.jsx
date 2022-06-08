@@ -1,184 +1,201 @@
 /*******************************************************************************************************/
 // Importamos las dependencias //
 /*******************************************************************************************************/
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Divider, List } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
-import NavHorizontalCollapse from './horizontal/NavHorizontalCollapse';
-import NavHorizontalGroup from './horizontal/NavHorizontalGroup';
-import NavHorizontalItem from './horizontal/NavHorizontalItem';
-import NavHorizontalLink from './horizontal/NavHorizontalLink';
-import NavVerticalCollapse from './vertical/NavVerticalCollapse';
-import NavVerticalGroup from './vertical/NavVerticalGroup';
-import NavVerticalItem from './vertical/NavVerticalItem';
-import NavVerticalLink from './vertical/NavVerticalLink';
-import NavItem, { registerComponent } from './NavItem';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { Divider, List } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
+import clsx from 'clsx'
+import NavHorizontalCollapse from './horizontal/NavHorizontalCollapse'
+import NavHorizontalGroup from './horizontal/NavHorizontalGroup'
+import NavHorizontalItem from './horizontal/NavHorizontalItem'
+import NavHorizontalLink from './horizontal/NavHorizontalLink'
+import NavVerticalCollapse from './vertical/NavVerticalCollapse'
+import NavVerticalGroup from './vertical/NavVerticalGroup'
+import NavVerticalItem from './vertical/NavVerticalItem'
+import NavVerticalLink from './vertical/NavVerticalLink'
+import NavItem, { registerComponent } from './NavItem'
 
 /*******************************************************************************************************/
 // Registramos los Componentes de Navegación //
 /*******************************************************************************************************/
-registerComponent('vertical-group', NavVerticalGroup);
-registerComponent('vertical-collapse', NavVerticalCollapse);
-registerComponent('vertical-item', NavVerticalItem);
-registerComponent('vertical-link', NavVerticalLink);
-registerComponent('horizontal-group', NavHorizontalGroup);
-registerComponent('horizontal-collapse', NavHorizontalCollapse);
-registerComponent('horizontal-item', NavHorizontalItem);
-registerComponent('horizontal-link', NavHorizontalLink);
-registerComponent('vertical-divider', () => <Divider className="my-16" />);
-registerComponent('horizontal-divider', () => <Divider className="my-16" />);
+registerComponent('vertical-group', NavVerticalGroup)
+registerComponent('vertical-collapse', NavVerticalCollapse)
+registerComponent('vertical-item', NavVerticalItem)
+registerComponent('vertical-link', NavVerticalLink)
+registerComponent('horizontal-group', NavHorizontalGroup)
+registerComponent('horizontal-collapse', NavHorizontalCollapse)
+registerComponent('horizontal-item', NavHorizontalItem)
+registerComponent('horizontal-link', NavHorizontalLink)
+registerComponent('vertical-divider', () => <Divider className="my-16" />)
+registerComponent('horizontal-divider', () => <Divider className="my-16" />)
 
 /*******************************************************************************************************/
 // Definimos los estilos del componente //
 /*******************************************************************************************************/
 const useStyles = makeStyles(theme => ({
-	navigation: {
-		'& .list-item': {
-			'&:hover': {
-				backgroundColor: theme.palette.type === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0,0,0,.04)'
-			},
-			'&:focus:not(.active)': {
-				backgroundColor: theme.palette.type === 'dark' ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0,0,0,.05)'
-			}
-		}
-	},
-	verticalNavigation: {
-		'&.active-square-list': {
-			'& .list-item, & .active.list-item': {
-				width: '100%',
-				borderRadius: '0'
-			}
-		},
-		'&.dense': {
-			'& .list-item': {
-				paddingTop: 0,
-				paddingBottom: 0,
-				height: 32
-			}
-		}
-	},
-	horizontalNavigation: {
-		'&.active-square-list': {
-			'& .list-item': {
-				borderRadius: '0'
-			}
-		},
-		'& .list-item': {
-			padding: '8px 12px 8px 12px',
-			height: 40,
-			minHeight: 40,
-			'&.level-0': {
-				height: 44,
-				minHeight: 44
-			},
-			'& .list-item-text': {
-				padding: '0 0 0 8px'
-			}
-		}
-	},
-	'@global': {
-		'.popper-navigation-list': {
-			'& .list-item': {
-				padding: '8px 12px 8px 12px',
-				height: 40,
-				minHeight: 40,
-				'& .list-item-text': {
-					padding: '0 0 0 8px'
-				}
-			},
-			'&.dense': {
-				'& .list-item': {
-					minHeight: 32,
-					height: 32,
-					'& .list-item-text': {
-						padding: '0 0 0 8px'
-					}
-				}
-			}
-		}
-	}
-}));
+  navigation: {
+    '& .list-item': {
+      '&:hover': {
+        backgroundColor:
+          theme.palette.type === 'dark'
+            ? 'rgba(255, 255, 255, 0.05)'
+            : 'rgba(0,0,0,.04)'
+      },
+      '&:focus:not(.active)': {
+        backgroundColor:
+          theme.palette.type === 'dark'
+            ? 'rgba(255, 255, 255, 0.06)'
+            : 'rgba(0,0,0,.05)'
+      }
+    }
+  },
+  verticalNavigation: {
+    '&.active-square-list': {
+      '& .list-item, & .active.list-item': {
+        width: '100%',
+        borderRadius: '0'
+      }
+    },
+    '&.dense': {
+      '& .list-item': {
+        paddingTop: 0,
+        paddingBottom: 0,
+        height: 32
+      }
+    }
+  },
+  horizontalNavigation: {
+    '&.active-square-list': {
+      '& .list-item': {
+        borderRadius: '0'
+      }
+    },
+    '& .list-item': {
+      padding: '8px 12px 8px 12px',
+      height: 40,
+      minHeight: 40,
+      '&.level-0': {
+        height: 44,
+        minHeight: 44
+      },
+      '& .list-item-text': {
+        padding: '0 0 0 8px'
+      }
+    }
+  },
+  '@global': {
+    '.popper-navigation-list': {
+      '& .list-item': {
+        padding: '8px 12px 8px 12px',
+        height: 40,
+        minHeight: 40,
+        '& .list-item-text': {
+          padding: '0 0 0 8px'
+        }
+      },
+      '&.dense': {
+        '& .list-item': {
+          minHeight: 32,
+          height: 32,
+          '& .list-item-text': {
+            padding: '0 0 0 8px'
+          }
+        }
+      }
+    }
+  }
+}))
 
 /*******************************************************************************************************/
 // Definimos el componente de Navegación o Menú de la Aplicación //
 /*******************************************************************************************************/
 const Navigation = props => {
-	// Instanciamos los estilos
-	const styles = useStyles(props);
+  // Instanciamos los estilos
+  const styles = useStyles(props)
 
-	// Obtenemos las propiedades del componente
-	const { navigation, layout, active, dense, className } = props;
+  // Obtenemos las propiedades del componente
+  const { navigation, layout, active, dense, className } = props
 
-	// Componente Vertical
-	const verticalNav = (
-		<List
-			className={clsx(
-				'navigation whitespace-no-wrap',
-				styles.navigation,
-				styles.verticalNavigation,
-				`active-${active}-list`,
-				dense && 'dense',
-				className
-			)}
-		>
-			{navigation.map(_item => (
-				<NavItem key={_item.id} type={`vertical-${_item.type}`} item={_item} nestedLevel={0} />
-			))}
-		</List>
-	);
+  // Componente Vertical
+  const verticalNav = (
+    <List
+      className={clsx(
+        'navigation whitespace-no-wrap',
+        styles.navigation,
+        styles.verticalNavigation,
+        `active-${active}-list`,
+        dense && 'dense',
+        className
+      )}
+    >
+      {navigation.map(_item => (
+        <NavItem
+          key={_item.id}
+          type={`vertical-${_item.type}`}
+          item={_item}
+          nestedLevel={0}
+        />
+      ))}
+    </List>
+  )
 
-	// Componente Horizontal
-	const horizontalNav = (
-		<List
-			className={clsx(
-				'navigation whitespace-no-wrap flex p-0',
-				styles.navigation,
-				styles.horizontalNavigation,
-				`active-${active}-list`,
-				dense && 'dense',
-				className
-			)}
-		>
-			{navigation.map(_item => (
-				<NavItem key={_item.id} type={`horizontal-${_item.type}`} item={_item} nestedLevel={0} dense={dense} />
-			))}
-		</List>
-	);
+  // Componente Horizontal
+  const horizontalNav = (
+    <List
+      className={clsx(
+        'navigation whitespace-no-wrap flex p-0',
+        styles.navigation,
+        styles.horizontalNavigation,
+        `active-${active}-list`,
+        dense && 'dense',
+        className
+      )}
+    >
+      {navigation.map(_item => (
+        <NavItem
+          key={_item.id}
+          type={`horizontal-${_item.type}`}
+          item={_item}
+          nestedLevel={0}
+          dense={dense}
+        />
+      ))}
+    </List>
+  )
 
-	// Renderizamos el componente condicionado por el layout
-	if (navigation.length > 0) {
-		switch (layout) {
-			case 'horizontal': {
-				return horizontalNav;
-			}
-			case 'vertical':
-				return verticalNav;
-			default: {
-				return verticalNav;
-			}
-		}
-	} else {
-		return null;
-	}
-};
+  // Renderizamos el componente condicionado por el layout
+  if (navigation.length > 0) {
+    switch (layout) {
+      case 'horizontal': {
+        return horizontalNav
+      }
+      case 'vertical':
+        return verticalNav
+      default: {
+        return verticalNav
+      }
+    }
+  } else {
+    return null
+  }
+}
 
 /*******************************************************************************************************/
 // Declaramos los tipos de propiedades del componente //
 /*******************************************************************************************************/
 Navigation.propTypes = {
-	navigation: PropTypes.array.isRequired
-};
+  navigation: PropTypes.array.isRequired
+}
 
 /*******************************************************************************************************/
 // Declaramos las propiedades por defecto del componente //
 /*******************************************************************************************************/
 Navigation.defaultProps = {
-	layout: 'vertical'
-};
+  layout: 'vertical'
+}
 
 /*******************************************************************************************************/
 // Exportamos el componente //
 /*******************************************************************************************************/
-export default Navigation;
+export default Navigation

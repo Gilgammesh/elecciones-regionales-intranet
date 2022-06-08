@@ -1,17 +1,17 @@
 /*******************************************************************************************************/
 // Importamos las dependencias //
 /*******************************************************************************************************/
-import { useRef } from 'react';
-import _, { DebounceSettings } from 'lodash';
+import { useRef } from 'react'
+import _, { DebounceSettings } from 'lodash'
 
 /*******************************************************************************************************/
 // Retorna la referencia de un rebote //
 /*******************************************************************************************************/
 const useDebounce = (func: any, wait: number, options: DebounceSettings) => {
-	return useRef(_.debounce(func, wait, options)).current;
-};
+  return useRef(_.debounce(func, wait, options)).current
+}
 
 /*******************************************************************************************************/
 // Exportamos el Hook //
 /*******************************************************************************************************/
-export default useDebounce;
+export default useDebounce
