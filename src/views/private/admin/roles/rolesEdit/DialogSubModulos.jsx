@@ -94,8 +94,6 @@ const DialogSubModulos = props => {
   useEffect(() => {
     // Función para obtener los submódulos permitidos
     const getSubModulosPermitidos = async () => {
-      // Iniciamos carga de la tabla
-      setLoading(true)
       // Recorremos los permisos permitidos
       const promises = permisos.map(async ele => {
         if (ele.modulo === selectMod.tag) {
@@ -137,7 +135,7 @@ const DialogSubModulos = props => {
 
     // Redefinimos el submódulo permitido
     const row_ = {
-      nombre: row.tag,
+      submodulo: row.tag,
       acciones: []
     }
 

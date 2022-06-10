@@ -22,9 +22,10 @@ import submodulosReducer, {
 } from './reducers/submodulosReducer'
 import permisosReducer, { IPermisoModReducer } from './reducers/permisosReducer'
 import usuariosReducer, { IUsuariosReducer } from './reducers/usuariosReducer'
-import centrosVotacionReducer, {
-  ICentrosVotacionReducer
-} from './reducers/centrosVotacionReducer'
+import personerosReducer, {
+  IPersonerosReducer
+} from './reducers/personerosReducer'
+import mesasReducer, { IMesasReducer } from './reducers/mesasReducer'
 import socketioReducer from './reducers/socketioReducer'
 import { Socket } from 'socket.io-client'
 
@@ -43,7 +44,8 @@ export interface IRootReducers {
   submodulos: Array<ISubmoduloReducer>
   permisos: Array<IPermisoModReducer>
   usuarios: IUsuariosReducer
-  centros_votacion: ICentrosVotacionReducer
+  personeros: IPersonerosReducer
+  mesas: IMesasReducer
   socketio: Socket | null
 }
 
@@ -62,7 +64,8 @@ const reducers = combineReducers({
   submodulos: submodulosReducer,
   permisos: permisosReducer,
   usuarios: usuariosReducer,
-  centros_votacion: centrosVotacionReducer,
+  personeros: personerosReducer,
+  mesas: mesasReducer,
   socketio: socketioReducer
 })
 

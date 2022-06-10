@@ -3,18 +3,12 @@
 /*******************************************************************************************************/
 import types from 'configs/types'
 import { Dispatch } from 'redux'
-import {
-  IPermisoModReducer,
-  IPermisoSubModReducer
-} from 'redux/reducers/permisosReducer'
+import { IPermisoModReducer, IPermisoSubModReducer } from 'redux/reducers/permisosReducer'
 
 /*******************************************************************************************************/
 // Función para iniciar el evento Añadir Permiso de un Módulo //
 /*******************************************************************************************************/
-export const startAddModulo = (
-  permisos: Array<IPermisoModReducer>,
-  row: IPermisoModReducer
-) => {
+export const startAddModulo = (permisos: Array<IPermisoModReducer>, row: IPermisoModReducer) => {
   return (dispatch: Dispatch) => {
     const array = [...permisos, row]
     dispatch(setPermisos(array))
@@ -24,14 +18,9 @@ export const startAddModulo = (
 /*******************************************************************************************************/
 // Función para iniciar el evento Remover Permiso de un Módulo //
 /*******************************************************************************************************/
-export const startRemoveModulo = (
-  permisos: Array<IPermisoModReducer>,
-  row: IPermisoModReducer
-) => {
+export const startRemoveModulo = (permisos: Array<IPermisoModReducer>, row: IPermisoModReducer) => {
   return async (dispatch: Dispatch) => {
-    const promises = permisos
-      .filter(ele => ele.modulo !== row.modulo)
-      .map(ele => ele)
+    const promises = permisos.filter(ele => ele.modulo !== row.modulo).map(ele => ele)
     const array = await Promise.all(promises)
     dispatch(setPermisos(array))
   }
@@ -40,11 +29,7 @@ export const startRemoveModulo = (
 /*******************************************************************************************************/
 // Función para iniciar el evento Añadir Permiso a un Submódulo de un Módulo //
 /*******************************************************************************************************/
-export const startAddSubModulo = (
-  permisos: Array<IPermisoModReducer>,
-  tag: string,
-  row: IPermisoSubModReducer
-) => {
+export const startAddSubModulo = (permisos: Array<IPermisoModReducer>, tag: string, row: IPermisoSubModReducer) => {
   return async (dispatch: Dispatch) => {
     const promises = permisos.map(ele => {
       if (ele.modulo === tag) {
@@ -61,17 +46,11 @@ export const startAddSubModulo = (
 /*******************************************************************************************************/
 // Función para iniciar el evento Remover Permiso a un Submódulo de un Módulo //
 /*******************************************************************************************************/
-export const startRemoveSubModulo = (
-  permisos: Array<IPermisoModReducer>,
-  tag: string,
-  row: IPermisoSubModReducer
-) => {
+export const startRemoveSubModulo = (permisos: Array<IPermisoModReducer>, tag: string, row: IPermisoSubModReducer) => {
   return async (dispatch: Dispatch) => {
     const promises = permisos.map(ele => {
       if (ele.modulo === tag) {
-        ele.permisos = ele.permisos.filter(
-          ele => ele.submodulo !== row.submodulo
-        )
+        ele.permisos = ele.permisos.filter(ele => ele.submodulo !== row.submodulo)
         return ele
       }
       return ele
@@ -84,11 +63,7 @@ export const startRemoveSubModulo = (
 /*******************************************************************************************************/
 // Función para iniciar el evento Añadir Permiso a una Acción de un Módulo //
 /*******************************************************************************************************/
-export const startAddAccionModulo = (
-  permisos: Array<IPermisoModReducer>,
-  tag: string,
-  nombre: string
-) => {
+export const startAddAccionModulo = (permisos: Array<IPermisoModReducer>, tag: string, nombre: string) => {
   return async (dispatch: Dispatch) => {
     const promises = permisos.map(ele => {
       if (ele.modulo === tag) {
@@ -105,11 +80,7 @@ export const startAddAccionModulo = (
 /*******************************************************************************************************/
 // Función para iniciar el evento Remover Permiso a una Acción de un Módulo //
 /*******************************************************************************************************/
-export const startRemoveAccionModulo = (
-  permisos: Array<IPermisoModReducer>,
-  tag: string,
-  nombre: string
-) => {
+export const startRemoveAccionModulo = (permisos: Array<IPermisoModReducer>, tag: string, nombre: string) => {
   return async (dispatch: Dispatch) => {
     const promises = permisos.map(ele => {
       if (ele.modulo === tag) {

@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux'
 import { ListSubheader, useMediaQuery } from '@material-ui/core'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 import clsx from 'clsx'
+import _ from 'lodash'
 import NavLinkAdapter from 'components/core/NavLinkAdapter'
 import NavItem from '../NavItem'
 import { startNavbarCloseMobile } from 'redux/actions/navbar'
@@ -53,30 +54,19 @@ const NavVerticalGroup = props => {
     <>
       <ListSubheader
         disableSticky
-        className={clsx(
-          styles.item,
-          'list-subheader flex items-center',
-          !item.url && 'cursor-default'
-        )}
+        className={clsx(styles.item, 'list-subheader flex items-center', !item.url && 'cursor-default')}
         onClick={() => mdDown && dispatch(startNavbarCloseMobile())}
         component={item.url ? NavLinkAdapter : 'li'}
         to={item.url}
         role="button"
       >
-        <span className="list-subheader-text uppercase text-12">
-          {item.title}
-        </span>
+        <span className="list-subheader-text uppercase text-12">{item.title}</span>
       </ListSubheader>
 
       {item.children && (
         <>
-          {item.children.map(_item => (
-            <NavItem
-              key={_item.id}
-              type={`vertical-${_item.type}`}
-              item={_item}
-              nestedLevel={nestedLevel}
-            />
+          {_.orderBy(item.children, ['orden'], ['asc']).map(_item => (
+            <NavItem key={_item.id} type={`vertical-${_item.type}`} item={_item} nestedLevel={nestedLevel} />
           ))}
         </>
       )}

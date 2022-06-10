@@ -66,7 +66,7 @@ const UsuariosTable = props => {
   const [loading, setLoading] = useState(true)
 
   // Estado de cambio de la data
-  const [estado, setEstado] = useState('')
+  const [change, setChange] = useState('')
 
   // Array de Permisos de Acciones del Módulo
   const [accionesPerm, setAccionesPerm] = useState(null)
@@ -123,7 +123,7 @@ const UsuariosTable = props => {
     return () => {
       mounted = false
     }
-  }, [socket, estado, page, rowsPerPage, setList, setData, departamento, rol])
+  }, [socket, change, page, rowsPerPage, setList, setData, departamento, rol])
 
   // Función para ordenar una columna
   const handleRequestSort = (event, property) => {
@@ -173,7 +173,7 @@ const UsuariosTable = props => {
         // Validamos el resultado
         if (validateFetchData(result)) {
           // Cambiamos el estado de cambio de la data
-          setEstado(`${new Date()}`)
+          setChange(`${new Date()}`)
           // Avisamos con un toast alert
           Toast.fire({
             icon: 'success',
@@ -193,6 +193,7 @@ const UsuariosTable = props => {
             order={order}
             onRequestSort={handleRequestSort}
             superUser={usuario.rol.super}
+            setChange={setChange}
           />
           {!loading && data && (
             <TableBody>

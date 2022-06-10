@@ -36,8 +36,11 @@ import UsuariosEditView from 'views/private/usuarios/usuariosEdit'
 //////////////////////////////////////////////////////////////////////////////////////////////
 //---- MÓDULO CENTROS DE VOTACIÓN ----------------------------------------------------------//
 //////////////////////////////////////////////////////////////////////////////////////////////
-import CentrosVotacionView from 'views/private/centrosVotacion'
-import CentrosVotacionNewView from 'views/private/centrosVotacion/centrosVotacionNew'
+import CentrosPersonerosView from 'views/private/centrosVotacion/personeros'
+import CentrosPersonerosNewView from 'views/private/centrosVotacion/personeros/personerosNew'
+import CentrosPersonerosEditView from 'views/private/centrosVotacion/personeros/personerosEdit'
+import CentrosMesasView from 'views/private/centrosVotacion/mesas'
+import CentrosMesasNewView from 'views/private/centrosVotacion/mesas/mesasNew'
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 //---- MÓDULO MONITOREO --------------------------------------------------------------------//
@@ -170,17 +173,32 @@ const routes: IRoutesModulos = {
   },
   'centros-votacion': {
     path: '/centros-votacion',
-    component: CentrosVotacionView,
-    children: [
-      {
-        path: '/centros-votacion/nuevo',
-        component: CentrosVotacionNewView
+    rutas: {
+      personeros: {
+        path: '/centros-votacion/personeros',
+        component: CentrosPersonerosView,
+        children: [
+          {
+            path: '/centros-votacion/personeros/nuevo',
+            component: CentrosPersonerosNewView
+          },
+          {
+            path: '/centros-votacion/personeros/editar/:id',
+            component: CentrosPersonerosEditView
+          }
+        ]
       },
-      {
-        path: '/centros-votacion/editar/:id',
-        component: CentrosVotacionNewView
+      mesas: {
+        path: '/centros-votacion/mesas',
+        component: CentrosMesasView,
+        children: [
+          {
+            path: '/centros-votacion/mesas/nuevo',
+            component: CentrosMesasNewView
+          }
+        ]
       }
-    ]
+    }
   },
   monitoreo: {
     path: '/monitoreo',

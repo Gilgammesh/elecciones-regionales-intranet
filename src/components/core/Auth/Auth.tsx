@@ -44,26 +44,18 @@ const Auth = (props: Props) => {
     // Si existe un token verificamos
     if (token && token !== '') {
       // Validamos el token en el servidor
-      fetchData('auth/check', { isTokenReq: false }, 'POST', { token }).then(
-        result => {
-          if (result && mounted && result.data) {
-            if (result.data.status) {
-              dispatch(
-                startSetAuth(
-                  result.data.usuario,
-                  result.data.permisos,
-                  result.data.modulos
-                )
-              )
-              history.push(localStorage.getItem(store_lastpath) || '')
-              setWaitAuthCheck(false)
-            } else {
-              dispatch(startLogout())
-              setWaitAuthCheck(false)
-            }
+      fetchData('auth/check', { isTokenReq: false }, 'POST', { token }).then(result => {
+        if (result && mounted && result.data) {
+          if (result.data.status) {
+            dispatch(startSetAuth(result.data.usuario, result.data.permisos, result.data.modulos))
+            history.push(localStorage.getItem(store_lastpath) || '')
+            setWaitAuthCheck(false)
+          } else {
+            dispatch(startLogout())
+            setWaitAuthCheck(false)
           }
         }
-      )
+      })
     } else {
       setWaitAuthCheck(false)
     }

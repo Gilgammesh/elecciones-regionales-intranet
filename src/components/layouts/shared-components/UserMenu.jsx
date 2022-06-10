@@ -4,16 +4,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  Avatar,
-  Button,
-  Icon,
-  ListItemIcon,
-  ListItemText,
-  MenuItem,
-  Popover,
-  Typography
-} from '@material-ui/core'
+import { Avatar, Button, Icon, ListItemIcon, ListItemText, MenuItem, Popover, Typography } from '@material-ui/core'
 import { startLogout } from 'redux/actions/auth'
 import male from 'assets/images/avatars/male.jpg'
 import female from 'assets/images/avatars/female.jpg'
@@ -62,17 +53,11 @@ const UserMenu = () => {
       <Button className="min-h-40" onClick={userMenuClick}>
         <div className="hidden md:flex flex-col mx-4 items-end">
           <Typography component="span" className="normal-case font-bold flex">
-            {`${usuario.nombres.trim().split(' ')[0]} ${
-              usuario.apellidos.trim().split(' ')[0]
-            }`}
+            {`${usuario.nombres.trim().split(' ')[0]} ${usuario.apellidos.trim().split(' ')[0]}`}
           </Typography>
         </div>
 
-        <Avatar
-          className="mx-4"
-          alt="foto usuario"
-          src={usuario.img ? usuario.img : userAvatar}
-        />
+        <Avatar className="mx-4" alt="foto usuario" src={usuario.img ? usuario.img : userAvatar} />
       </Button>
 
       <Popover
@@ -91,20 +76,15 @@ const UserMenu = () => {
           paper: 'py-8'
         }}
       >
-        <MenuItem
-          component={Link}
-          to="/usuario/cambiar-clave"
-          onClick={userMenuClose}
-          role="button"
-        >
+        <MenuItem component={Link} to="/usuario/cambiar-clave" onClick={userMenuClose} role="button">
           <ListItemIcon className="min-w-40">
-            <Icon>vpn_key</Icon>
+            <Icon className="text-20">vpn_key</Icon>
           </ListItemIcon>
           <ListItemText primary="Cambiar Clave" />
         </MenuItem>
         <MenuItem onClick={handleLogout}>
           <ListItemIcon className="min-w-40">
-            <Icon>exit_to_app</Icon>
+            <Icon className="text-20">exit_to_app</Icon>
           </ListItemIcon>
           <ListItemText primary="Salir" />
         </MenuItem>

@@ -14,9 +14,7 @@ import { persDark, skyBlue } from 'styles/colors'
 /*******************************************************************************************************/
 export const defaultOptions = {
   typography: {
-    fontFamily: ['Muli', 'Roboto', '"Helvetica"', 'Arial', 'sans-serif'].join(
-      ','
-    ),
+    fontFamily: ['Muli', 'Roboto', '"Helvetica"', 'Arial', 'sans-serif'].join(','),
     fontWeightLight: 300,
     fontWeightRegular: 400,
     fontWeightMedium: 600,
@@ -24,10 +22,13 @@ export const defaultOptions = {
     suppressDeprecationWarnings: true,
     htmlFontSize: 10,
     body1: {
-      fontSize: '1.4rem'
+      fontSize: '1.3rem'
     },
     body2: {
-      fontSize: '1.4rem'
+      fontSize: '1.3rem'
+    },
+    button: {
+      fontSize: '1.3rem'
     }
   }
 }
@@ -207,10 +208,7 @@ export const getMainTheme = (theme: any) => {
   // Hacemos un merge de las opciones por defecto y tema
   const data = _.merge({}, defaultOptions, themes[theme.main])
   // Creamos nuestro tema principal haciendo un merge de la data y los temas extendidos
-  const mainTheme = createTheme(
-    _.merge({}, data, { mixins: extendThemeWithMixins(data) }),
-    esES
-  )
+  const mainTheme = createTheme(_.merge({}, data, { mixins: extendThemeWithMixins(data) }), esES)
   return mainTheme
 }
 
@@ -222,10 +220,7 @@ export const getMainThemeLight = (theme: any) => {
   // Hacemos un merge de las opciones por defecto y tema
   const data = _.merge({}, defaultOptions, themes[theme.mainThemeLight])
   // Creamos nuestro tema principal haciendo un merge de la data y los temas extendidos
-  const mainThemeLight = createTheme(
-    _.merge({}, data, { mixins: extendThemeWithMixins(data) }),
-    esES
-  )
+  const mainThemeLight = createTheme(_.merge({}, data, { mixins: extendThemeWithMixins(data) }), esES)
   return mainThemeLight
 }
 
@@ -237,10 +232,7 @@ export const getMainThemeDark = (theme: any) => {
   // Hacemos un merge de las opciones por defecto y tema
   const data = _.merge({}, defaultOptions, themes[theme.mainThemeDark])
   // Creamos nuestro tema principal haciendo un merge de la data y los temas extendidos
-  const mainThemeDark = createTheme(
-    _.merge({}, data, { mixins: extendThemeWithMixins(data) }),
-    esES
-  )
+  const mainThemeDark = createTheme(_.merge({}, data, { mixins: extendThemeWithMixins(data) }), esES)
   return mainThemeDark
 }
 
@@ -252,10 +244,7 @@ export const getNavbarTheme = (theme: any) => {
   // Hacemos un merge de las opciones por defecto y tema
   const data = _.merge({}, defaultOptions, themes[theme.navbar])
   // Creamos nuestro tema principal haciendo un merge de la data y los temas extendidos
-  const navbarTheme = createTheme(
-    _.merge({}, data, { mixins: extendThemeWithMixins(data) }),
-    esES
-  )
+  const navbarTheme = createTheme(_.merge({}, data, { mixins: extendThemeWithMixins(data) }), esES)
   return navbarTheme
 }
 
@@ -267,10 +256,7 @@ export const getToolbarTheme = (theme: any) => {
   // Hacemos un merge de las opciones por defecto y tema
   const data = _.merge({}, defaultOptions, themes[theme.toolbar])
   // Creamos nuestro tema principal haciendo un merge de la data y los temas extendidos
-  const toolbarTheme = createTheme(
-    _.merge({}, data, { mixins: extendThemeWithMixins(data) }),
-    esES
-  )
+  const toolbarTheme = createTheme(_.merge({}, data, { mixins: extendThemeWithMixins(data) }), esES)
   return toolbarTheme
 }
 
@@ -282,10 +268,7 @@ export const getFooterTheme = (theme: any) => {
   // Hacemos un merge de las opciones por defecto y tema
   const data = _.merge({}, defaultOptions, themes[theme.footer])
   // Creamos nuestro tema principal haciendo un merge de la data y los temas extendidos
-  const footerTheme = createTheme(
-    _.merge({}, data, { mixins: extendThemeWithMixins(data) }),
-    esES
-  )
+  const footerTheme = createTheme(_.merge({}, data, { mixins: extendThemeWithMixins(data) }), esES)
   return footerTheme
 }
 
