@@ -22,7 +22,7 @@ const LoginLeft = () => {
       <CardContent className="flex flex-col items-center justify-center w-full py-24 max-w-360">
         <Animate delay={300}>
           <div className="flex flex-col items-center my-16">
-            <img className="logo-icon w-170 mb-10" src={logo} alt="logo" />
+            <img className="logo-icon w-180 mb-10" src={logo} alt="logo" />
             <img className="logo-icon w-192 mb-10" src={text} alt="logo-text" />
             <LoginFormulario />
           </div>
