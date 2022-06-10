@@ -7,9 +7,9 @@ import { Icon, IconButton, InputAdornment } from '@material-ui/core'
 import TextFieldFormsy from 'components/core/Formsy/TextFieldFormsy'
 
 /*******************************************************************************************************/
-// Definimos la Vista del componente Usuario - Cambiar Clave Formulario //
+// Definimos la Vista del componente Contraseña Formulario //
 /*******************************************************************************************************/
-const ClaveForm = props => {
+const ContrasenhaForm = props => {
   // Obtenemos las propiedades del componente
   const { formValues, handleInputChange } = props
 
@@ -66,9 +66,7 @@ const ClaveForm = props => {
             type: showNewPassword ? 'text' : 'password',
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton
-                  onClick={() => setShowNewPassword(!showNewPassword)}
-                >
+                <IconButton onClick={() => setShowNewPassword(!showNewPassword)}>
                   <Icon className="text-20" color="action">
                     {showNewPassword ? 'visibility' : 'visibility_off'}
                   </Icon>
@@ -97,9 +95,7 @@ const ClaveForm = props => {
             type: showNewPassword_ ? 'text' : 'password',
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton
-                  onClick={() => setShowNewPassword_(!showNewPassword_)}
-                >
+                <IconButton onClick={() => setShowNewPassword_(!showNewPassword_)}>
                   <Icon className="text-20" color="action">
                     {showNewPassword_ ? 'visibility' : 'visibility_off'}
                   </Icon>
@@ -118,7 +114,7 @@ const ClaveForm = props => {
 /*******************************************************************************************************/
 // Definimos los tipos de propiedades del componente //
 /*******************************************************************************************************/
-ClaveForm.propTypes = {
+ContrasenhaForm.propTypes = {
   formValues: PropTypes.object.isRequired,
   handleInputChange: PropTypes.func.isRequired
 }
@@ -126,4 +122,4 @@ ClaveForm.propTypes = {
 /*******************************************************************************************************/
 // Exportamos el componente //
 /*******************************************************************************************************/
-export default ClaveForm
+export default ContrasenhaForm

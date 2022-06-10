@@ -9,10 +9,8 @@ import Layout from 'components/core/Layout'
 import ChildrenRouter from './ChildrenRouter'
 import Building from 'components/core/Building'
 import { IRootReducers } from '../../redux/store'
-import {
-  IPermisoModReducer,
-  IPermisoSubModReducer
-} from '../../redux/reducers/permisosReducer'
+import { IPermisoModReducer, IPermisoSubModReducer } from '../../redux/reducers/permisosReducer'
+import Password from 'views/private/contrasenha'
 
 /*******************************************************************************************************/
 // Definimos las Rutas Privadas de la Aplicación //
@@ -32,47 +30,19 @@ const PrivateRouter = () => {
     rutas_ = Object.values(routes).map((ele: IRoutesModulo) => {
       if (ele.component) {
         if (ele.children && ele.children.length > 0) {
-          return (
-            <Route
-              key={ele.path}
-              path={ele.path}
-              render={() => <ChildrenRouter rutas={ele} />}
-            />
-          )
+          return <Route key={ele.path} path={ele.path} render={() => <ChildrenRouter rutas={ele} />} />
         } else {
-          return (
-            <Route
-              key={ele.path}
-              exact
-              path={ele.path}
-              component={ele.component}
-            />
-          )
+          return <Route key={ele.path} exact path={ele.path} component={ele.component} />
         }
       } else {
         if (ele.rutas) {
-          const submodulos = Object.values(ele.rutas).map(
-            (ele_: IRoutesSubModulo) => {
-              if (ele_.children && ele_.children.length > 0) {
-                return (
-                  <Route
-                    key={ele_.path}
-                    path={ele_.path}
-                    render={() => <ChildrenRouter rutas={ele_} />}
-                  />
-                )
-              } else {
-                return (
-                  <Route
-                    key={ele_.path}
-                    exact
-                    path={ele_.path}
-                    component={ele_.component}
-                  />
-                )
-              }
+          const submodulos = Object.values(ele.rutas).map((ele_: IRoutesSubModulo) => {
+            if (ele_.children && ele_.children.length > 0) {
+              return <Route key={ele_.path} path={ele_.path} render={() => <ChildrenRouter rutas={ele_} />} />
+            } else {
+              return <Route key={ele_.path} exact path={ele_.path} component={ele_.component} />
             }
-          )
+          })
           return submodulos
         }
       }
@@ -84,18 +54,11 @@ const PrivateRouter = () => {
       // Si existe el módulo declarado en las rutas generales
       if (routes[ele.modulo]) {
         // Renderizamos los módulos permitidos
-        const { path, component, rutas, children }: IRoutesModulo =
-          routes[ele.modulo]
+        const { path, component, rutas, children }: IRoutesModulo = routes[ele.modulo]
         // Si es del tipo item y cuenta con un componente
         if (component) {
           if (children && children.length > 0) {
-            return (
-              <Route
-                key={path}
-                path={path}
-                render={() => <ChildrenRouter rutas={routes[ele.modulo]} />}
-              />
-            )
+            return <Route key={path} path={path} render={() => <ChildrenRouter rutas={routes[ele.modulo]} />} />
           } else {
             return <Route key={path} exact path={path} component={component} />
           }
@@ -105,44 +68,23 @@ const PrivateRouter = () => {
           // Si existen ruta
           if (rutas) {
             // Renderizamos los submódulos permitidos
-            const submodulos = ele.permisos.map(
-              (ele_: IPermisoSubModReducer) => {
-                // Si existe el submódulo declarado en las rutas del módulo
-                if (rutas[ele_.submodulo]) {
-                  const rutas_ = rutas[ele_.submodulo]
-                  // Si existe rutas hijas del submódulo
-                  if (rutas_.children && rutas_.children.length > 0) {
-                    return (
-                      <Route
-                        key={ele_._id}
-                        path={rutas_.path}
-                        render={() => <ChildrenRouter rutas={rutas_} />}
-                      />
-                    )
-                  } else {
-                    return (
-                      <Route
-                        key={ele_._id}
-                        exact
-                        path={rutas_.path}
-                        component={rutas_.component}
-                      />
-                    )
-                  }
-                }
-                // Caso contrario debemos agregar el submódulo en el módulo en las rutas generales
-                else {
-                  console.log(
-                    'modulo:',
-                    ele.modulo,
-                    ' - submodulo:',
-                    ele_.submodulo,
-                    ', falta agregar a routes'
-                  )
-                  return null
+            const submodulos = ele.permisos.map((ele_: IPermisoSubModReducer) => {
+              // Si existe el submódulo declarado en las rutas del módulo
+              if (rutas[ele_.submodulo]) {
+                const rutas_ = rutas[ele_.submodulo]
+                // Si existe rutas hijas del submódulo
+                if (rutas_.children && rutas_.children.length > 0) {
+                  return <Route key={ele_._id} path={rutas_.path} render={() => <ChildrenRouter rutas={rutas_} />} />
+                } else {
+                  return <Route key={ele_._id} exact path={rutas_.path} component={rutas_.component} />
                 }
               }
-            )
+              // Caso contrario debemos agregar el submódulo en el módulo en las rutas generales
+              else {
+                console.log('modulo:', ele.modulo, ' - submodulo:', ele_.submodulo, ', falta agregar a routes')
+                return null
+              }
+            })
             return submodulos
           }
         }
@@ -161,8 +103,9 @@ const PrivateRouter = () => {
     <Layout>
       <Switch>
         <Route exact path="/" component={Building} />
+        <Route exact path="/cambiar-contraseña" component={Password} />
         {rutas_}
-        <Redirect to="/usuarios" />
+        <Redirect to="/centros-votacion/mesas" />
       </Switch>
     </Layout>
   )

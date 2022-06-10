@@ -21,9 +21,9 @@ const useStyles = makeStyles(theme => ({
 }))
 
 /*******************************************************************************************************/
-// Definimos la Vista del componente Usuario - Cambiar Clave Header //
+// Definimos la Vista del componente Contraseña Header //
 /*******************************************************************************************************/
-const ClaveHeader = props => {
+const ContrasenhaHeader = props => {
   // Obtenemos las propiedades
   const { isFormValid } = props
 
@@ -32,19 +32,14 @@ const ClaveHeader = props => {
 
   // Renderizamos el componente
   return (
-    <div
-      className={clsx(
-        'flex flex-1 w-full items-center justify-between',
-        styles.root
-      )}
-    >
+    <div className={clsx('flex flex-1 w-full items-center justify-between', styles.root)}>
       <div className="flex items-center">
         <Animate animation="transition.expandIn" delay={300}>
           <Icon className="text-32">lock_open</Icon>
         </Animate>
         <Animate animation="transition.slideLeftIn" delay={300}>
           <Typography className="hidden sm:flex mx-0 sm:mx-12" variant="h6">
-            Cambiar Clave
+            Cambiar contraseña
           </Typography>
         </Animate>
       </div>
@@ -67,11 +62,11 @@ const ClaveHeader = props => {
 /*******************************************************************************************************/
 // Definimos los tipos de propiedades del componente //
 /*******************************************************************************************************/
-ClaveHeader.propTypes = {
+ContrasenhaHeader.propTypes = {
   isFormValid: PropTypes.bool.isRequired
 }
 
 /*******************************************************************************************************/
 // Exportamos el componente //
 /*******************************************************************************************************/
-export default ClaveHeader
+export default ContrasenhaHeader
