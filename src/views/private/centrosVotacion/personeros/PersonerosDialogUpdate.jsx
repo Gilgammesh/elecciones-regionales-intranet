@@ -5,16 +5,7 @@ import React, { forwardRef, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
-import {
-  Button,
-  Icon,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  Paper,
-  Slide,
-  Tooltip
-} from '@material-ui/core'
+import { Button, Icon, Dialog, DialogActions, DialogContent, Paper, Slide, Tooltip } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import SyncIcon from '@material-ui/icons/Sync'
 import { Icon as Iconify } from '@iconify/react'
@@ -23,10 +14,7 @@ import { fetchData } from 'services/fetch'
 import clsx from 'clsx'
 import { validateFetchData } from 'helpers/validateFetchData'
 import { apiBaseUrl } from 'configs/settings'
-import {
-  startSetPersonerosDepartamento,
-  startSetPersonerosTipo
-} from 'redux/actions/personeros'
+import { startSetPersonerosDepartamento, startSetPersonerosTipo } from 'redux/actions/personeros'
 
 /*******************************************************************************************************/
 // Definimos los estilos del componente //
@@ -175,7 +163,7 @@ const PersonerosDialogUpdate = props => {
     )
     // Validamos el resultado
     if (validateFetchData(result)) {
-      if (result.data.errores.length > 0) {
+      if (result.data.errores && result.data.errores.length > 0) {
         setErrors(result.data.errores)
         setOpenErrors(true)
       }
@@ -216,12 +204,10 @@ const PersonerosDialogUpdate = props => {
                 <b>Primero:</b> Descargue la plantilla de excel.
               </p>
               <p className="mt-6">
-                <b>Segundo:</b> Llene la información de la plantilla con los
-                datos de los personeros.
+                <b>Segundo:</b> Llene la información de la plantilla con los datos de los personeros.
               </p>
               <p className="mt-6">
-                <b>Tercero:</b> Adjunte la plantilla llena y procese la
-                información.
+                <b>Tercero:</b> Adjunte la plantilla llena y procese la información.
               </p>
             </Paper>
             <div className="flex justify-center flex-wrap">
@@ -237,9 +223,7 @@ const PersonerosDialogUpdate = props => {
                       <Icon fontSize="large" color="action">
                         cloud_download
                       </Icon>
-                      <label className="font-500 mt-20">
-                        Descargar Plantilla
-                      </label>
+                      <label className="font-500 mt-20">Descargar Plantilla</label>
                     </div>
                   </label>
                 ) : (
@@ -258,9 +242,7 @@ const PersonerosDialogUpdate = props => {
                       <Icon fontSize="large" color="action">
                         cloud_download
                       </Icon>
-                      <label className="font-500 mt-20">
-                        Descargar Plantilla
-                      </label>
+                      <label className="font-500 mt-20">Descargar Plantilla</label>
                     </div>
                   </Link>
                 )}
@@ -288,12 +270,7 @@ const PersonerosDialogUpdate = props => {
                   />
                   {file.size && file.size > 0 ? (
                     <div className="flex flex-col justify-center items-center px-16">
-                      <Iconify
-                        className="mb-10"
-                        width="48"
-                        icon={fileExcel}
-                        color="#008000"
-                      />
+                      <Iconify className="mb-10" width="48" icon={fileExcel} color="#008000" />
                       <label className="font-500 mb-20">
                         {file.name} ({file.size} MB)
                       </label>
@@ -303,9 +280,7 @@ const PersonerosDialogUpdate = props => {
                       <Icon fontSize="large" color="action">
                         attach_file
                       </Icon>
-                      <label className="font-500 mt-20">
-                        Adjuntar plantilla
-                      </label>
+                      <label className="font-500 mt-20">Adjuntar plantilla</label>
                     </div>
                   )}
                 </label>
@@ -319,9 +294,7 @@ const PersonerosDialogUpdate = props => {
           <Button
             className="whitespace-no-wrap normal-case"
             variant="contained"
-            startIcon={
-              <SyncIcon className={clsx('', procesando && styles.processBtn)} />
-            }
+            startIcon={<SyncIcon className={clsx('', procesando && styles.processBtn)} />}
             color="primary"
             onClick={handleProcessFile}
             disabled={disabled}
