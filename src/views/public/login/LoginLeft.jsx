@@ -19,11 +19,11 @@ const LoginLeft = () => {
       square
       elevation={0}
     >
-      <CardContent className="flex flex-col items-center justify-center w-full py-96 max-w-400">
+      <CardContent className="flex flex-col items-center justify-center w-full py-24 max-w-360">
         <Animate delay={300}>
-          <div className="flex flex-col items-center mb-32">
-            <img className="logo-icon w-192 mb-10" src={logo} alt="logo" />
-            <img className="logo-icon w-224 mb-20" src={text} alt="logo-text" />
+          <div className="flex flex-col items-center my-16">
+            <img className="logo-icon w-170 mb-10" src={logo} alt="logo" />
+            <img className="logo-icon w-192 mb-10" src={text} alt="logo-text" />
             <LoginFormulario />
           </div>
         </Animate>

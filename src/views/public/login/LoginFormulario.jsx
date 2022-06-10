@@ -62,7 +62,7 @@ const LoginFormulario = () => {
   // Renderizamos el componente
   return (
     <div className="mt-16 text-center">
-      <Typography variant="h5" className="mb-24">
+      <Typography variant="h6" className="mb-24">
         Inicie Sesión
       </Typography>
       <Formsy
