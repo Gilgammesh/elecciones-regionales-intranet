@@ -89,8 +89,8 @@ export const startLogin = (
           )
         )
 
-        // Redireccionamos al inicio de la aplicación
-        history.replace('/elecciones')
+        // Redireccionamos 
+        history.replace('/centros-votacion/mesas')
 
         // Establecemos los datos del usuario
         dispatch(

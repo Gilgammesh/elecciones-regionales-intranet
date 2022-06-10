@@ -76,11 +76,11 @@ const UserMenu = () => {
           paper: 'py-8'
         }}
       >
-        <MenuItem component={Link} to="/usuario/cambiar-clave" onClick={userMenuClose} role="button">
+        <MenuItem component={Link} to="/cambiar-contraseña" onClick={userMenuClose} role="button">
           <ListItemIcon className="min-w-40">
             <Icon className="text-20">vpn_key</Icon>
           </ListItemIcon>
-          <ListItemText primary="Cambiar Clave" />
+          <ListItemText primary="Cambiar contraseña" />
         </MenuItem>
         <MenuItem onClick={handleLogout}>
           <ListItemIcon className="min-w-40">
