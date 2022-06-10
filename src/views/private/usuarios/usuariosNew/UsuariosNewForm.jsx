@@ -63,7 +63,7 @@ const useStyles = makeStyles(theme => ({
 // Definimos la Vista del componente Usuario Nuevo Formulario //
 /*******************************************************************************************************/
 const UsuariosNewForm = props => {
-  // Obtenemos lso datos del Usuario logueado
+  // Obtenemos los datos del Usuario logueado
   const usuario = useSelector(state => state.auth.usuario)
 
   // Instanciamos los estilos

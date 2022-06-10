@@ -89,8 +89,6 @@ const DialogAccionesSubModulo = props => {
     let mounted = true
     // Función para obtener todas las acciones
     const getAcciones = async () => {
-      // Iniciamos carga de la tabla
-      setLoading(true)
       // Inicializamos las acciones seleccionadas
       let selAccions = []
       // Recorremos los permisos del módulo

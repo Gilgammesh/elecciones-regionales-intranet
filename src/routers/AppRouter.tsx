@@ -24,7 +24,7 @@ const AppRouter = () => {
     <Switch>
       <PublicRoute path="/auth" component={PublicRouter} />
       <PrivateRoute path="/" component={PrivateRouter} />
-      {isLogged ? <Redirect to="/reportes" /> : <Redirect to="/auth/login" />}
+      {isLogged ? <Redirect to="/usuarios" /> : <Redirect to="/auth/login" />}
     </Switch>
   )
 }

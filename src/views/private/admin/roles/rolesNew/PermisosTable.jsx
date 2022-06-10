@@ -3,14 +3,7 @@
 /*******************************************************************************************************/
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  Checkbox,
-  IconButton,
-  Table,
-  TableBody,
-  TableCell,
-  TableRow
-} from '@material-ui/core'
+import { Checkbox, IconButton, Table, TableBody, TableCell, TableRow } from '@material-ui/core'
 import _ from 'lodash'
 import PermisosTableHead from './PermisosTableHead'
 import Scrollbars from 'components/core/Scrollbars'
@@ -106,7 +99,7 @@ const PermisosTable = () => {
 
   // Función para seleccionar los módulos permitidos
   const handleSelectModulo = (evt, row) => {
-    // Obtenemos el valor del checbox
+    // Obtenemos el valor del checkbox
     const { checked } = evt.target
 
     // Obtenemos el index del elemento en el array
@@ -151,38 +144,19 @@ const PermisosTable = () => {
               {_.orderBy(modulos, [{ orden: Number }], ['asc']).map(row => {
                 return (
                   <TableRow className="h-32" hover tabIndex={-1} key={row._id}>
-                    <TableCell
-                      className="py-2 pr-44"
-                      component="th"
-                      scope="row"
-                      align="left"
-                    >
+                    <TableCell className="py-2 pr-44" component="th" scope="row" align="left">
                       {row.orden}
                     </TableCell>
                     <TableCell className="py-2" component="th" scope="row">
                       {row.nombre}
                     </TableCell>
-                    <TableCell
-                      className="py-2"
-                      component="th"
-                      scope="row"
-                      align="justify"
-                    >
+                    <TableCell className="py-2" component="th" scope="row" align="justify">
                       {row.descripcion}
                     </TableCell>
-                    <TableCell
-                      className="py-2"
-                      component="th"
-                      scope="row"
-                      align="center"
-                    >
+                    <TableCell className="py-2" component="th" scope="row" align="center">
                       {row.type === 'collapse' && (
                         <IconButton
-                          style={
-                            selectedMods.indexOf(row.tag) !== -1
-                              ? { color: '#F44343' }
-                              : { color: '#FAACAC' }
-                          }
+                          style={selectedMods.indexOf(row.tag) !== -1 ? { color: '#F44343' } : { color: '#FAACAC' }}
                           aria-label="submodulos"
                           onClick={() => handleOpenSubMod(row)}
                           disabled={!(selectedMods.indexOf(row.tag) !== -1)}
@@ -191,18 +165,9 @@ const PermisosTable = () => {
                         </IconButton>
                       )}
                     </TableCell>
-                    <TableCell
-                      className="py-2"
-                      component="th"
-                      scope="row"
-                      align="center"
-                    >
+                    <TableCell className="py-2" component="th" scope="row" align="center">
                       <IconButton
-                        style={
-                          selectedMods.indexOf(row.tag) !== -1
-                            ? { color: '#283346' }
-                            : { color: '#7F8591' }
-                        }
+                        style={selectedMods.indexOf(row.tag) !== -1 ? { color: '#283346' } : { color: '#7F8591' }}
                         aria-label="acciones"
                         onClick={() => handleOpenAccion(row)}
                         disabled={!(selectedMods.indexOf(row.tag) !== -1)}
@@ -210,12 +175,7 @@ const PermisosTable = () => {
                         <AssistantIcon />
                       </IconButton>
                     </TableCell>
-                    <TableCell
-                      className="py-2"
-                      component="th"
-                      scope="row"
-                      align="center"
-                    >
+                    <TableCell className="py-2" component="th" scope="row" align="center">
                       <Checkbox
                         edge="end"
                         style={{ color: 'green' }}
@@ -236,16 +196,8 @@ const PermisosTable = () => {
           <ProgressLinear />
         </div>
       )}
-      <DialogSubModulos
-        open={openSubMod}
-        setOpen={setOpenSubMod}
-        selectMod={selectMod}
-      />
-      <DialogAccionesModulo
-        open={openAccion}
-        setOpen={setOpenAccion}
-        selectMod={selectMod}
-      />
+      <DialogSubModulos open={openSubMod} setOpen={setOpenSubMod} selectMod={selectMod} />
+      <DialogAccionesModulo open={openAccion} setOpen={setOpenAccion} selectMod={selectMod} />
     </div>
   )
 }

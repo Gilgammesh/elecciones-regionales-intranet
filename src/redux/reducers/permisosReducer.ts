@@ -37,9 +37,9 @@ const initialState: Array<IPermisoModReducer> = []
 const permisosReducer = (state = initialState, { type, payload }: IAction) => {
   switch (type) {
     case types.setPermisos:
-      return payload
+      return [...payload]
     case types.resetPermisos:
-      return initialState
+      return [...initialState]
     default:
       return state
   }

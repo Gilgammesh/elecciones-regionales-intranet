@@ -2,14 +2,21 @@
 // Importamos las dependencias //
 /*******************************************************************************************************/
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import {
   TableCell,
   TableHead,
   TableRow,
   TableSortLabel,
-  Tooltip
+  Tooltip,
+  IconButton
 } from '@material-ui/core'
+import RefreshIcon from '@material-ui/icons/Refresh'
+import {
+  startSetUsuariosRol,
+  startSetUsuariosDepartamento
+} from 'redux/actions/usuarios'
 
 /*******************************************************************************************************/
 // Columnas cabecera de la Tabla //
@@ -82,7 +89,7 @@ let headers = [
     id: 'estado',
     align: 'center',
     disablePadding: false,
-    label: 'Activo',
+    label: 'Habilitado',
     sort: true
   },
   {
@@ -99,12 +106,26 @@ let headers = [
 /*******************************************************************************************************/
 const UsuariosTableHead = props => {
   // Obtenemos las propiedades del componente
-  const { order, onRequestSort, superUser } = props
+  const { order, onRequestSort, setChange } = props
+
+  // Llamamos al dispatch de redux
+  const dispatch = useDispatch()
+
+  // Obtenemos el Rol de Usuario
+  const { rol } = useSelector(state => state.auth.usuario)
 
   // Función para crear un ordenamiento de la columna
   const createSortHandler = property => event => {
     onRequestSort(event, property)
   }
+
+  // Función para refrescar la tabla
+  const refreshTable = () => {
+    dispatch(startSetUsuariosRol('todos'))
+    rol.super && dispatch(startSetUsuariosDepartamento('todos'))
+    setChange(`${new Date()}`)
+  }
+
   // Renderizamos el componente
   return (
     <TableHead>
@@ -112,7 +133,7 @@ const UsuariosTableHead = props => {
         {headers
           .filter(ele => {
             // Si es un superusuario moostramos todo
-            if (superUser) {
+            if (rol.super) {
               return ele
             }
             // Caso contrario excluimos el departamento
@@ -144,6 +165,16 @@ const UsuariosTableHead = props => {
                     >
                       {col.label}
                     </TableSortLabel>
+                  </Tooltip>
+                ) : col.id === 'botones' ? (
+                  <Tooltip
+                    title="Refrescar"
+                    placement="bottom-start"
+                    enterDelay={100}
+                  >
+                    <IconButton aria-label="refrescar" onClick={refreshTable}>
+                      <RefreshIcon />
+                    </IconButton>
                   </Tooltip>
                 ) : (
                   col.label

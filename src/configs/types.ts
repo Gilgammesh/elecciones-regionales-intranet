@@ -32,12 +32,16 @@ export interface ITypes {
   setSocketIO: string
   setUsuariosRol: string
   setUsuariosDepartamento: string
-  setCentrosVotacionDepartamento: string
-  setCentrosVotacionProvincia: string
-  setCentrosVotacionDistrito: string
-  setCentrosVotacionLocal: string
-  setCentrosVotacionMesa: string
-  setCentrosVotacionPersonero: string
+  setPersonerosSearch: string
+  setPersonerosTipo: string
+  setPersonerosEstado: string
+  setPersonerosDepartamento: string
+  setMesasDepartamento: string
+  setMesasProvincia: string
+  setMesasDistrito: string
+  setMesasLocal: string
+  setMesasMesa: string
+  setMesasPersonero: string
 }
 
 /*******************************************************************************************************/
@@ -74,12 +78,16 @@ const types: ITypes = {
   setSocketIO: '[socketio] socket',
   setUsuariosRol: '[usuarios] set rol',
   setUsuariosDepartamento: '[usuarios] set departamento',
-  setCentrosVotacionDepartamento: '[usuarios] set departamento',
-  setCentrosVotacionProvincia: '[usuarios] set provincia',
-  setCentrosVotacionDistrito: '[usuarios] set distrito',
-  setCentrosVotacionLocal: '[usuarios] set local',
-  setCentrosVotacionMesa: '[usuarios] set mesa',
-  setCentrosVotacionPersonero: '[usuarios] set personero'
+  setPersonerosSearch: '[personeros] set search',
+  setPersonerosTipo: '[personeros] set tipo',
+  setPersonerosEstado: '[personeros] set estado',
+  setPersonerosDepartamento: '[personeros] set departamento',
+  setMesasDepartamento: '[mesas] set departamento',
+  setMesasProvincia: '[mesas] set provincia',
+  setMesasDistrito: '[mesas] set distrito',
+  setMesasLocal: '[mesas] set local',
+  setMesasMesa: '[mesas] set mesa',
+  setMesasPersonero: '[mesas] set personero'
 }
 
 /*******************************************************************************************************/

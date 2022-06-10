@@ -44,11 +44,9 @@ export interface INavigationModReducer {
   children?: Array<INavigationSubModReducer>
 }
 export interface INavigationReducer {
-  orden: number
   id: string
   title: string
   type: string
-  icon: string
   children: Array<INavigationModReducer>
 }
 
@@ -56,11 +54,9 @@ export interface INavigationReducer {
 // Estado inicial del Reducer //
 /*******************************************************************************************************/
 const initialState: INavigationReducer = {
-  orden: 3,
   id: 'modulos',
   title: 'Módulos',
   type: 'group',
-  icon: 'apps',
   children: []
 }
 

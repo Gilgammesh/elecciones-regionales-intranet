@@ -65,7 +65,7 @@ const NavHorizontalItem = props => {
       <ListItemText
         className="list-item-text"
         primary={item.title}
-        classes={{ primary: 'text-14 list-item-text-primary' }}
+        classes={{ primary: 'text-13 list-item-text-primary' }}
       />
 
       {item.badge && (

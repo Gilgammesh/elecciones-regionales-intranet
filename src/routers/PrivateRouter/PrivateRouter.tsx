@@ -161,9 +161,8 @@ const PrivateRouter = () => {
     <Layout>
       <Switch>
         <Route exact path="/" component={Building} />
-        <Route exact path="/chat" component={Building} />
         {rutas_}
-        <Redirect to="/reportes" />
+        <Redirect to="/usuarios" />
       </Switch>
     </Layout>
   )

@@ -89,8 +89,6 @@ const DialogAccionesModulo = props => {
     let mounted = true
     // Función para obtener todas las acciones
     const getAcciones = async () => {
-      // Iniciamos carga de la tabla
-      setLoading(true)
       // Obtenemos la lista de las acciones
       const result = await fetchData(`admin/acciones?page=1&pageSize=500`, {
         isTokenReq: true

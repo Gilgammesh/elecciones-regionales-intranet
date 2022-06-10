@@ -2,7 +2,7 @@
 // Importamos las dependencias //
 /*******************************************************************************************************/
 import React from 'react'
-import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
 import { Divider, List } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
@@ -37,16 +37,10 @@ const useStyles = makeStyles(theme => ({
   navigation: {
     '& .list-item': {
       '&:hover': {
-        backgroundColor:
-          theme.palette.type === 'dark'
-            ? 'rgba(255, 255, 255, 0.05)'
-            : 'rgba(0,0,0,.04)'
+        backgroundColor: theme.palette.type === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0,0,0,.04)'
       },
       '&:focus:not(.active)': {
-        backgroundColor:
-          theme.palette.type === 'dark'
-            ? 'rgba(255, 255, 255, 0.06)'
-            : 'rgba(0,0,0,.05)'
+        backgroundColor: theme.palette.type === 'dark' ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0,0,0,.05)'
       }
     }
   },
@@ -111,11 +105,14 @@ const useStyles = makeStyles(theme => ({
 // Definimos el componente de Navegación o Menú de la Aplicación //
 /*******************************************************************************************************/
 const Navigation = props => {
+  // Obtenemos la navegación de los módulos del usuario
+  const navigation = useSelector(state => state.navigation)
+
   // Instanciamos los estilos
   const styles = useStyles(props)
 
   // Obtenemos las propiedades del componente
-  const { navigation, layout, active, dense, className } = props
+  const { layout, active, dense, className } = props
 
   // Componente Vertical
   const verticalNav = (
@@ -129,14 +126,7 @@ const Navigation = props => {
         className
       )}
     >
-      {navigation.map(_item => (
-        <NavItem
-          key={_item.id}
-          type={`vertical-${_item.type}`}
-          item={_item}
-          nestedLevel={0}
-        />
-      ))}
+      <NavItem key={navigation.id} type={`vertical-${navigation.type}`} item={navigation} nestedLevel={0} />
     </List>
   )
 
@@ -152,40 +142,27 @@ const Navigation = props => {
         className
       )}
     >
-      {navigation.map(_item => (
-        <NavItem
-          key={_item.id}
-          type={`horizontal-${_item.type}`}
-          item={_item}
-          nestedLevel={0}
-          dense={dense}
-        />
-      ))}
+      <NavItem
+        key={navigation.id}
+        type={`horizontal-${navigation.type}`}
+        item={navigation}
+        nestedLevel={0}
+        dense={dense}
+      />
     </List>
   )
 
   // Renderizamos el componente condicionado por el layout
-  if (navigation.length > 0) {
-    switch (layout) {
-      case 'horizontal': {
-        return horizontalNav
-      }
-      case 'vertical':
-        return verticalNav
-      default: {
-        return verticalNav
-      }
+  switch (layout) {
+    case 'horizontal': {
+      return horizontalNav
     }
-  } else {
-    return null
+    case 'vertical':
+      return verticalNav
+    default: {
+      return verticalNav
+    }
   }
-}
-
-/*******************************************************************************************************/
-// Declaramos los tipos de propiedades del componente //
-/*******************************************************************************************************/
-Navigation.propTypes = {
-  navigation: PropTypes.array.isRequired
 }
 
 /*******************************************************************************************************/
