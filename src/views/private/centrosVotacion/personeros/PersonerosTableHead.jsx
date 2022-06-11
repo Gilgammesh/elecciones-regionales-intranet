@@ -4,21 +4,9 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-import {
-  TableCell,
-  TableHead,
-  TableRow,
-  TableSortLabel,
-  Tooltip,
-  IconButton
-} from '@material-ui/core'
+import { TableCell, TableHead, TableRow, TableSortLabel, Tooltip, IconButton } from '@material-ui/core'
 import RefreshIcon from '@material-ui/icons/Refresh'
-import {
-  startSetPersonerosSearch,
-  startSetPersonerosTipo,
-  startSetPersonerosEstado,
-  startSetPersonerosDepartamento
-} from 'redux/actions/personeros'
+import { startResetPersoneros } from 'redux/actions/personeros'
 
 /*******************************************************************************************************/
 // Columnas cabecera de la Tabla //
@@ -101,7 +89,7 @@ const headers = [
 /*******************************************************************************************************/
 const PersonerosTableHead = props => {
   // Obtenemos las propiedades del componente
-  const { order, onRequestSort, setChange } = props
+  const { order, onRequestSort } = props
 
   // Llamamos al dispatch de redux
   const dispatch = useDispatch()
@@ -116,11 +104,7 @@ const PersonerosTableHead = props => {
 
   // Función para refrescar la tabla
   const refreshTable = () => {
-    dispatch(startSetPersonerosSearch('', ''))
-    dispatch(startSetPersonerosTipo('todos'))
-    dispatch(startSetPersonerosEstado('todos'))
-    rol.super && dispatch(startSetPersonerosDepartamento('todos'))
-    setChange(`${new Date()}`)
+    dispatch(startResetPersoneros())
   }
 
   // Renderizamos el componente
@@ -150,9 +134,7 @@ const PersonerosTableHead = props => {
                 {col.sort ? (
                   <Tooltip
                     title="Ordenar"
-                    placement={
-                      col.align === 'right' ? 'bottom-end' : 'bottom-start'
-                    }
+                    placement={col.align === 'right' ? 'bottom-end' : 'bottom-start'}
                     enterDelay={300}
                   >
                     <TableSortLabel
@@ -164,11 +146,7 @@ const PersonerosTableHead = props => {
                     </TableSortLabel>
                   </Tooltip>
                 ) : col.id === 'botones' ? (
-                  <Tooltip
-                    title="Refrescar"
-                    placement="bottom-start"
-                    enterDelay={100}
-                  >
+                  <Tooltip title="Refrescar" placement="bottom-start" enterDelay={100}>
                     <IconButton aria-label="refrescar" onClick={refreshTable}>
                       <RefreshIcon />
                     </IconButton>
@@ -189,8 +167,7 @@ const PersonerosTableHead = props => {
 /*******************************************************************************************************/
 PersonerosTableHead.propTypes = {
   order: PropTypes.object.isRequired,
-  onRequestSort: PropTypes.func.isRequired,
-  setChange: PropTypes.func.isRequired
+  onRequestSort: PropTypes.func.isRequired
 }
 
 /*******************************************************************************************************/

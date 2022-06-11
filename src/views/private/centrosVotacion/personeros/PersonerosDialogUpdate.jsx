@@ -14,7 +14,7 @@ import { fetchData } from 'services/fetch'
 import clsx from 'clsx'
 import { validateFetchData } from 'helpers/validateFetchData'
 import { apiBaseUrl } from 'configs/settings'
-import { startSetPersonerosDepartamento, startSetPersonerosTipo } from 'redux/actions/personeros'
+import { startResetPersoneros } from 'redux/actions/personeros'
 
 /*******************************************************************************************************/
 // Definimos los estilos del componente //
@@ -164,22 +164,17 @@ const PersonerosDialogUpdate = props => {
     // Validamos el resultado
     if (validateFetchData(result)) {
       if (result.data.errores && result.data.errores.length > 0) {
+        // Mostramos los errores en la importación
         setErrors(result.data.errores)
         setOpenErrors(true)
+      } else {
+        // Reseteamos los datos de personeros
+        dispatch(startResetPersoneros())
       }
       // Finalizamos el proceso
       setProcesando(false)
       // Habilitamos los botones
       setDisabled(false)
-      // Si es un super usuario
-      if (rol.super) {
-        // Reseteamos los datos del departamento y tipo de usuario
-        dispatch(startSetPersonerosDepartamento('todos'))
-        dispatch(startSetPersonerosTipo('todos'))
-      } else {
-        // Reseteamos los datos del tipo de usuario
-        dispatch(startSetPersonerosTipo('todos'))
-      }
       // Cerramos el modal de carga
       setOpen(false)
     }

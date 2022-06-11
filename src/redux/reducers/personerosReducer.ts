@@ -22,6 +22,7 @@ export interface IPersonerosReducer {
   tipo: string
   estado: string | boolean
   departamento: string
+  change: string
 }
 
 /*******************************************************************************************************/
@@ -34,16 +35,14 @@ const initialState: IPersonerosReducer = {
   },
   tipo: 'todos',
   estado: 'todos',
-  departamento: 'todos'
+  departamento: 'todos',
+  change: ``
 }
 
 /*******************************************************************************************************/
 // Definimos el reducer y sus métodos //
 /*******************************************************************************************************/
-const personerosReducer = (
-  state = initialState,
-  { type, payload }: IAction
-) => {
+const personerosReducer = (state = initialState, { type, payload }: IAction) => {
   switch (type) {
     case types.setPersonerosSearch:
       return {
@@ -65,6 +64,8 @@ const personerosReducer = (
         ...state,
         departamento: payload
       }
+    case types.resetPersoneros:
+      return { ...initialState, change: `${new Date()}` }
     default:
       return state
   }

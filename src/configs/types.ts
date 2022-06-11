@@ -36,6 +36,7 @@ export interface ITypes {
   setPersonerosTipo: string
   setPersonerosEstado: string
   setPersonerosDepartamento: string
+  resetPersoneros: string
   setMesasDepartamento: string
   setMesasProvincia: string
   setMesasDistrito: string
@@ -82,6 +83,7 @@ const types: ITypes = {
   setPersonerosTipo: '[personeros] set tipo',
   setPersonerosEstado: '[personeros] set estado',
   setPersonerosDepartamento: '[personeros] set departamento',
+  resetPersoneros: '[personeros] reset',
   setMesasDepartamento: '[mesas] set departamento',
   setMesasProvincia: '[mesas] set provincia',
   setMesasDistrito: '[mesas] set distrito',

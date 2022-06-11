@@ -28,6 +28,7 @@ import ProgressLinear from 'components/core/Progress/ProgressLinear'
 import { Swal, Toast } from 'configs/settings'
 import { validateFetchData } from 'helpers/validateFetchData'
 import { startGetAccionesSubModulo } from 'redux/actions/auth'
+import { startResetPersoneros } from 'redux/actions/personeros'
 
 /*******************************************************************************************************/
 // Definimos los estilos del componente //
@@ -58,9 +59,7 @@ const PersonerosTable = props => {
   const { rol } = useSelector(state => state.auth.usuario)
 
   // Obtenemos los estados por defecto de la vista personeros
-  const { search, tipo, estado, departamento } = useSelector(
-    state => state.personeros
-  )
+  const { search, tipo, estado, departamento, change } = useSelector(state => state.personeros)
 
   // Estado para definir el número de página de la tabla
   const [page, setPage] = useState(0)
@@ -78,17 +77,12 @@ const PersonerosTable = props => {
   // Estado de carga de la tabla
   const [loading, setLoading] = useState(true)
 
-  // Estado de cambio de la data
-  const [change, setChange] = useState('')
-
   // Array de Permisos de Acciones del SubMódulo
   const [accionesPerm, setAccionesPerm] = useState(null)
 
   // Efecto para obtener las acciones del submódulo
   useEffect(() => {
-    dispatch(startGetAccionesSubModulo('centros-votacion', 'personeros')).then(
-      res => setAccionesPerm(res)
-    )
+    dispatch(startGetAccionesSubModulo('centros-votacion', 'personeros')).then(res => setAccionesPerm(res))
   }, [dispatch])
 
   // Efecto para obtener la lista de los personeros
@@ -103,9 +97,7 @@ const PersonerosTable = props => {
       const result = await fetchData(
         `centros-votacion/personeros?searchTipo=${search.tipo}&searchValue=${
           search.value
-        }&tipo=${tipo}&estado=${estado}&departamento=${departamento}&page=${
-          page + 1
-        }&pageSize=${rowsPerPage}`,
+        }&tipo=${tipo}&estado=${estado}&departamento=${departamento}&page=${page + 1}&pageSize=${rowsPerPage}`,
         {
           isTokenReq: true
         }
@@ -137,17 +129,7 @@ const PersonerosTable = props => {
     return () => {
       mounted = false
     }
-  }, [
-    socket,
-    search,
-    tipo,
-    estado,
-    departamento,
-    change,
-    page,
-    rowsPerPage,
-    setData
-  ])
+  }, [socket, search, tipo, estado, departamento, change, page, rowsPerPage, setData])
 
   // Función para ordenar una columna
   const handleRequestSort = (event, property) => {
@@ -189,15 +171,11 @@ const PersonerosTable = props => {
     }).then(async result => {
       if (result.isConfirmed) {
         // Eliminamos la acción
-        const result = await fetchData(
-          `centros-votacion/personeros/${id}`,
-          { isTokenReq: true },
-          'DELETE'
-        )
+        const result = await fetchData(`centros-votacion/personeros/${id}`, { isTokenReq: true }, 'DELETE')
         // Validamos el resultado
         if (validateFetchData(result)) {
-          // Cambiamos el estado de cambio de la data
-          setChange(`${new Date()}`)
+          // Reseteamos los estados de personeros
+          dispatch(startResetPersoneros())
           // Avisamos con un toast alert
           Toast.fire({
             icon: 'success',
@@ -213,124 +191,74 @@ const PersonerosTable = props => {
     <div className="w-full flex flex-col">
       <Scrollbars className="flex-grow overflow-x-auto">
         <Table stickyHeader className="min-w-xl" aria-labelledby="tableTitle">
-          <PersonerosTableHead
-            order={order}
-            onRequestSort={handleRequestSort}
-            setChange={setChange}
-          />
+          <PersonerosTableHead order={order} onRequestSort={handleRequestSort} />
           {!loading && data && (
             <TableBody>
-              {_.orderBy(data, [order.id], [order.direction]).map(
-                (row, index) => {
-                  return (
-                    <TableRow
-                      className="h-32"
-                      hover
-                      tabIndex={-1}
-                      key={row._id}
-                    >
-                      <TableCell className="py-2" component="th" scope="row">
-                        {index + 1 + page * rowsPerPage}
-                      </TableCell>
-                      <TableCell className="py-2" component="th" scope="row">
-                        {row.nombres}
-                      </TableCell>
-                      <TableCell className="py-2" component="th" scope="row">
-                        {row.apellidos}
-                      </TableCell>
-                      <TableCell className="py-2" component="th" scope="row">
-                        {row.dni}
-                      </TableCell>
-                      <TableCell className="py-2" component="th" scope="row">
-                        {row.celular}
-                      </TableCell>
-                      <TableCell className="py-2" component="th" scope="row">
-                        {row.asignado ? (
-                          `Personero de ${_.capitalize(row.tipo)}`
-                        ) : (
-                          <Typography className={styles.red}>
-                            --Sin asignar--
-                          </Typography>
-                        )}
-                      </TableCell>
-                      <TableCell className="py-2" component="th" scope="row">
-                        {row.asignado ? (
-                          row.asignadoA
-                        ) : (
-                          <Typography className={styles.red}>
-                            --Sin asignar--
-                          </Typography>
-                        )}
-                      </TableCell>
-                      {rol.super && (
-                        <TableCell className="py-2" component="th" scope="row">
-                          {row.departamento.nombre}
-                        </TableCell>
+              {_.orderBy(data, [order.id], [order.direction]).map((row, index) => {
+                return (
+                  <TableRow className="h-32" hover tabIndex={-1} key={row._id}>
+                    <TableCell className="py-2" component="th" scope="row">
+                      {index + 1 + page * rowsPerPage}
+                    </TableCell>
+                    <TableCell className="py-2" component="th" scope="row">
+                      {row.nombres}
+                    </TableCell>
+                    <TableCell className="py-2" component="th" scope="row">
+                      {row.apellidos}
+                    </TableCell>
+                    <TableCell className="py-2" component="th" scope="row">
+                      {row.dni}
+                    </TableCell>
+                    <TableCell className="py-2" component="th" scope="row">
+                      {row.celular}
+                    </TableCell>
+                    <TableCell className="py-2" component="th" scope="row">
+                      {row.asignado ? (
+                        `Personero de ${_.capitalize(row.tipo)}`
+                      ) : (
+                        <Typography className={styles.red}>--Sin asignar--</Typography>
                       )}
-                      <TableCell
-                        className="py-2 pr-40"
-                        component="th"
-                        scope="row"
-                        align="center"
-                      >
-                        {row.estado ? (
-                          <Icon className="text-green text-20">
-                            check_circle
-                          </Icon>
-                        ) : (
-                          <Icon className="text-red text-20">cancel</Icon>
-                        )}
+                    </TableCell>
+                    <TableCell className="py-2" component="th" scope="row">
+                      {row.asignado ? row.asignadoA : <Typography className={styles.red}>--Sin asignar--</Typography>}
+                    </TableCell>
+                    {rol.super && (
+                      <TableCell className="py-2" component="th" scope="row">
+                        {row.departamento.nombre}
                       </TableCell>
-                      <TableCell
-                        className="py-2"
-                        component="th"
-                        scope="row"
-                        align="center"
-                        width={140}
-                        height={48}
-                      >
-                        {(rol.super ||
-                          (accionesPerm &&
-                            accionesPerm.indexOf('editar') !== -1)) && (
-                          <Link
-                            to={`/centros-votacion/personeros/editar/${row._id}`}
-                          >
-                            <Tooltip
-                              title="Editar"
-                              placement="bottom-start"
-                              enterDelay={100}
-                            >
-                              <IconButton
-                                color="primary"
-                                aria-label="editar personero"
-                              >
-                                <EditIcon />
-                              </IconButton>
-                            </Tooltip>
-                          </Link>
-                        )}
-                        {(rol.super ||
-                          (accionesPerm &&
-                            accionesPerm.indexOf('eliminar') !== -1)) && (
-                          <Tooltip
-                            title="Eliminar"
-                            placement="bottom-start"
-                            enterDelay={100}
-                          >
-                            <IconButton
-                              style={{ color: '#F44343' }}
-                              aria-label="eliminar personero"
-                              onClick={() => handleRemoveRow(row._id)}
-                            >
-                              <DeleteIcon />
+                    )}
+                    <TableCell className="py-2 pr-40" component="th" scope="row" align="center">
+                      {row.estado ? (
+                        <Icon className="text-green text-20">check_circle</Icon>
+                      ) : (
+                        <Icon className="text-red text-20">cancel</Icon>
+                      )}
+                    </TableCell>
+                    <TableCell className="py-2" component="th" scope="row" align="center" width={140} height={48}>
+                      {(rol.super || (accionesPerm && accionesPerm.indexOf('editar') !== -1)) && (
+                        <Link to={`/centros-votacion/personeros/editar/${row._id}`}>
+                          <Tooltip title="Editar" placement="bottom-start" enterDelay={100}>
+                            <IconButton color="primary" aria-label="editar personero">
+                              <EditIcon />
                             </IconButton>
                           </Tooltip>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  )
-                }
-              )}
+                        </Link>
+                      )}
+                      {(rol.super || (accionesPerm && accionesPerm.indexOf('eliminar') !== -1)) && (
+                        <Tooltip title="Eliminar" placement="bottom-start" enterDelay={100}>
+                          <IconButton
+                            style={{ color: '#F44343' }}
+                            aria-label="eliminar personero"
+                            onClick={() => handleRemoveRow(row._id)}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </Tooltip>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                )
+              })}
             </TableBody>
           )}
         </Table>

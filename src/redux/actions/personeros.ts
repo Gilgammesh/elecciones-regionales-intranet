@@ -7,10 +7,7 @@ import { Dispatch } from 'redux'
 /*******************************************************************************************************/
 // Función para iniciar establecer el query de búsqueda personalizado de los personeros //
 /*******************************************************************************************************/
-export const startSetPersonerosSearch = (
-  tipo: string,
-  value: string | string[]
-) => {
+export const startSetPersonerosSearch = (tipo: string, value: string | string[]) => {
   return (dispatch: Dispatch) => {
     dispatch(setPersonerosSearch(tipo, value))
   }
@@ -37,6 +34,14 @@ export const startSetPersonerosEstado = (estado: string) => {
 export const startSetPersonerosDepartamento = (departamento: string) => {
   return (dispatch: Dispatch) => {
     dispatch(setPersonerosDepartamento(departamento))
+  }
+}
+/*******************************************************************************************************/
+// Función para iniciar restablecer los personeros //
+/*******************************************************************************************************/
+export const startResetPersoneros = () => {
+  return (dispatch: Dispatch) => {
+    dispatch(resetPersoneros())
   }
 }
 
@@ -77,5 +82,13 @@ export const setPersonerosDepartamento = (departamento: string) => {
   return {
     type: types.setPersonerosDepartamento,
     payload: departamento
+  }
+}
+/*******************************************************************************************************/
+// Acción para restablecer los personeros //
+/*******************************************************************************************************/
+export const resetPersoneros = () => {
+  return {
+    type: types.resetPersoneros
   }
 }
