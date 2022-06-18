@@ -94,14 +94,13 @@ const PersonerosTable = props => {
       // Iniciamos carga de la tabla
       setLoading(true)
       // Obtenemos la lista de los personeros con fetch
-      const result = await fetchData(
-        `centros-votacion/personeros?searchTipo=${search.tipo}&searchValue=${
-          search.value
-        }&tipo=${tipo}&estado=${estado}&departamento=${departamento}&page=${page + 1}&pageSize=${rowsPerPage}`,
-        {
-          isTokenReq: true
-        }
-      )
+      let url = `centros-votacion/personeros?page=${page + 1}&pageSize=${rowsPerPage}`
+      // Agregamos los parámetros
+      url += `&searchTipo=${search.tipo}&searchValue=${search.value}`
+      url += `&tipo=${tipo}`
+      url += `&estado=${estado}`
+      url += `&departamento=${departamento}`
+      const result = await fetchData(url, { isTokenReq: true })
       // Si existe un resultado y el status es positivo
       if (result && mounted && result.data.status) {
         // Actualizamos el total de registros de la lista

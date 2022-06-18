@@ -112,16 +112,7 @@ const PersonerosTableHead = props => {
     <TableHead>
       <TableRow className="h-64">
         {headers
-          .filter(ele => {
-            // Si es un superusuario mostramos todo
-            if (rol.super) {
-              return ele
-            }
-            // Caso contrario excluimos el departamento
-            else {
-              return ele.id !== 'departamento'
-            }
-          })
+          .filter(ele => (rol.super ? ele : ele.id !== 'departamento'))
           .map(col => {
             return (
               <TableCell

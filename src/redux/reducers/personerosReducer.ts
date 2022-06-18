@@ -36,7 +36,7 @@ const initialState: IPersonerosReducer = {
   tipo: 'todos',
   estado: 'todos',
   departamento: 'todos',
-  change: ``
+  change: ''
 }
 
 /*******************************************************************************************************/

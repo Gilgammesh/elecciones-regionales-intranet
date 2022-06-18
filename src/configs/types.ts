@@ -37,12 +37,13 @@ export interface ITypes {
   setPersonerosEstado: string
   setPersonerosDepartamento: string
   resetPersoneros: string
+  setMesasSearch: string
+  setMesasAssign: string
   setMesasDepartamento: string
   setMesasProvincia: string
   setMesasDistrito: string
-  setMesasLocal: string
-  setMesasMesa: string
-  setMesasPersonero: string
+  setMesasChange: string
+  resetMesas: string
 }
 
 /*******************************************************************************************************/
@@ -84,12 +85,13 @@ const types: ITypes = {
   setPersonerosEstado: '[personeros] set estado',
   setPersonerosDepartamento: '[personeros] set departamento',
   resetPersoneros: '[personeros] reset',
+  setMesasSearch: '[mesas] set search',
+  setMesasAssign: '[mesas] set assign',
   setMesasDepartamento: '[mesas] set departamento',
   setMesasProvincia: '[mesas] set provincia',
   setMesasDistrito: '[mesas] set distrito',
-  setMesasLocal: '[mesas] set local',
-  setMesasMesa: '[mesas] set mesa',
-  setMesasPersonero: '[mesas] set personero'
+  setMesasChange: '[mesas] set change',
+  resetMesas: '[mesas] reset'
 }
 
 /*******************************************************************************************************/

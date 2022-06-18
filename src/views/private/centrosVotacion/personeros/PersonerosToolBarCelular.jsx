@@ -3,13 +3,7 @@
 /*******************************************************************************************************/
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  FormControl,
-  InputLabel,
-  Input,
-  InputAdornment,
-  IconButton
-} from '@material-ui/core'
+import { FormControl, InputLabel, Input, InputAdornment, IconButton } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 import validateInputRegexp from 'helpers/validateInputRegexp'
 import { startSetPersonerosSearch } from 'redux/actions/personeros'
@@ -43,10 +37,12 @@ const PersonerosToolBarCelular = () => {
     setCelular(value)
   }
 
+  // Función para prevenir el mouse para abajo
   const handleMouseDownSearch = evt => {
     evt.preventDefault()
   }
 
+  // Función para realizar la búsqueda
   const handleSearchQuery = () => {
     dispatch(startSetPersonerosSearch('celular', celular))
   }
@@ -54,17 +50,13 @@ const PersonerosToolBarCelular = () => {
   // Renderizamos el componente
   return (
     <FormControl className="col-span-12 sm:col-span-2">
-      <InputLabel htmlFor="input-centros-votacion-personeros-celular">
-        Celular
-      </InputLabel>
+      <InputLabel htmlFor="input-centros-votacion-personeros-celular">Celular</InputLabel>
       <Input
         id="input-centros-votacion-personeros-celular"
         type="text"
         value={celular}
         onChange={handleInputChange}
-        inputProps={{
-          maxLength: 9
-        }}
+        inputProps={{ maxLength: 9 }}
         endAdornment={
           <InputAdornment position="end">
             <IconButton

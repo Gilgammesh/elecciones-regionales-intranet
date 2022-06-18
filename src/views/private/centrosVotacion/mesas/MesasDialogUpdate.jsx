@@ -3,18 +3,9 @@
 /*******************************************************************************************************/
 import React, { forwardRef, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
-import {
-  Button,
-  Icon,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  Paper,
-  Slide,
-  Tooltip
-} from '@material-ui/core'
+import { Button, Icon, Dialog, DialogActions, DialogContent, Paper, Slide, Tooltip } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import SyncIcon from '@material-ui/icons/Sync'
 import { Icon as Iconify } from '@iconify/react'
@@ -23,10 +14,7 @@ import { fetchData } from 'services/fetch'
 import clsx from 'clsx'
 import { validateFetchData } from 'helpers/validateFetchData'
 import { apiBaseUrl } from 'configs/settings'
-import {
-  startSetMesasDepartamento,
-  startSetMesasProvincia
-} from 'redux/actions/mesas'
+import { startResetMesas } from 'redux/actions/mesas'
 
 /*******************************************************************************************************/
 // Definimos los estilos del componente //
@@ -76,9 +64,6 @@ const MesasDialogUpdate = props => {
 
   // Llamamos al dispatch de redux
   const dispatch = useDispatch()
-
-  // Obtenemos el Rol de Usuario
-  const { rol } = useSelector(state => state.auth.usuario)
 
   // Instanciamos los estilos
   const styles = useStyles()
@@ -168,26 +153,18 @@ const MesasDialogUpdate = props => {
     )
     // Validamos el resultado
     if (validateFetchData(result)) {
-      if (result.data.errores.length > 0) {
+      if (result.data.errores && result.data.errores.length > 0) {
+        // Mostramos los errores en la importación
         setErrors(result.data.errores)
         setOpenErrors(true)
+      } else {
+        // Reseteamos los datos de mesas de votación
+        dispatch(startResetMesas())
       }
       // Finalizamos el proceso
       setProcesando(false)
       // Habilitamos los botones
       setDisabled(false)
-      // Si es un super usuario
-      if (rol.super) {
-        // Reseteamos los datos del departamento, provincia y distrito para recargar la tabla
-        dispatch(startSetMesasDepartamento('', '', '', '', ''))
-        dispatch(
-          startSetMesasDepartamento('todos', 'todos', 'todos', 'todos', 'todos')
-        )
-      } else {
-        // Reseteamos los datos del provincia y distrito para recargar la tabla
-        dispatch(startSetMesasProvincia('', '', '', ''))
-        dispatch(startSetMesasProvincia('todos', 'todos', 'todos', 'todos'))
-      }
       // Cerramos el modal de carga
       setOpen(false)
     }
@@ -212,12 +189,10 @@ const MesasDialogUpdate = props => {
                 <b>Primero:</b> Descargue la plantilla de excel.
               </p>
               <p className="mt-6">
-                <b>Segundo:</b> Llene la información de la plantilla con los
-                datos de las mesas y locales de votación.
+                <b>Segundo:</b> Llene la información de la plantilla con los datos de las mesas y locales de votación.
               </p>
               <p className="mt-6">
-                <b>Tercero:</b> Adjunte la plantilla llena y procese la
-                información.
+                <b>Tercero:</b> Adjunte la plantilla llena y procese la información.
               </p>
             </Paper>
             <div className="flex justify-center flex-wrap">
@@ -233,9 +208,7 @@ const MesasDialogUpdate = props => {
                       <Icon fontSize="large" color="action">
                         cloud_download
                       </Icon>
-                      <label className="font-500 mt-20">
-                        Descargar Plantilla
-                      </label>
+                      <label className="font-500 mt-20">Descargar Plantilla</label>
                     </div>
                   </label>
                 ) : (
@@ -254,9 +227,7 @@ const MesasDialogUpdate = props => {
                       <Icon fontSize="large" color="action">
                         cloud_download
                       </Icon>
-                      <label className="font-500 mt-20">
-                        Descargar Plantilla
-                      </label>
+                      <label className="font-500 mt-20">Descargar Plantilla</label>
                     </div>
                   </Link>
                 )}
@@ -284,12 +255,7 @@ const MesasDialogUpdate = props => {
                   />
                   {file.size && file.size > 0 ? (
                     <div className="flex flex-col justify-center items-center px-16">
-                      <Iconify
-                        className="mb-10"
-                        width="48"
-                        icon={fileExcel}
-                        color="#008000"
-                      />
+                      <Iconify className="mb-10" width="48" icon={fileExcel} color="#008000" />
                       <label className="font-500 mb-20">
                         {file.name} ({file.size} MB)
                       </label>
@@ -299,9 +265,7 @@ const MesasDialogUpdate = props => {
                       <Icon fontSize="large" color="action">
                         attach_file
                       </Icon>
-                      <label className="font-500 mt-20">
-                        Adjuntar plantilla
-                      </label>
+                      <label className="font-500 mt-20">Adjuntar plantilla</label>
                     </div>
                   )}
                 </label>
@@ -315,9 +279,7 @@ const MesasDialogUpdate = props => {
           <Button
             className="whitespace-no-wrap normal-case"
             variant="contained"
-            startIcon={
-              <SyncIcon className={clsx('', procesando && styles.processBtn)} />
-            }
+            startIcon={<SyncIcon className={clsx('', procesando && styles.processBtn)} />}
             color="primary"
             onClick={handleProcessFile}
             disabled={disabled}

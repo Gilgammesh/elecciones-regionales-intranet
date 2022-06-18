@@ -46,27 +46,21 @@ const MesasDialogErrores = props => {
   const styles = useStyles()
 
   // Estado de expansión del acordión
-  const [expanded, setExpanded] = useState(null)
+  const [expanded, setExpanded] = useState(false)
 
   // Función para cerrar el modal
   const handleClose = () => {
     setOpen(false)
   }
 
-  const toggleAccordion = panel => (event, _expanded) => {
-    setExpanded(_expanded ? panel : false)
+  // Función para expandir o contraer el acordión
+  const toggleAccordion = (event, _expanded) => {
+    setExpanded(_expanded)
   }
 
   // Renderizamos el componente
   return (
-    <Dialog
-      fullWidth={true}
-      maxWidth="md"
-      open={open}
-      onClose={handleClose}
-      keepMounted
-      aria-labelledby="errors"
-    >
+    <Dialog fullWidth={true} maxWidth="md" open={open} onClose={handleClose} keepMounted aria-labelledby="errors">
       <DialogContent>
         <div className="grid grid-cols-12 gap-16 mt-16 mb-16">
           <div className="flex flex-col col-span-12 justify-center mb-20">
@@ -75,7 +69,7 @@ const MesasDialogErrores = props => {
                 warning
               </Icon>
               <Typography variant="h6" className="ml-10">
-                Advertencia!
+                Advertencia
               </Typography>
             </div>
             <Accordion
@@ -84,24 +78,18 @@ const MesasDialogErrores = props => {
                 expanded: styles.expanded
               }}
               expanded={expanded}
-              onChange={toggleAccordion('1')}
+              onChange={toggleAccordion}
               elevation={0}
             >
-              <AccordionSummary
-                className={styles.summary}
-                expandIcon={<Icon>expand_more</Icon>}
-              >
+              <AccordionSummary className={styles.summary} expandIcon={<Icon>expand_more</Icon>}>
                 <Typography variant="subtitle1" className="px-8">
-                  Se cargaron los datos con algunos errores, ver detalle
+                  Hubo errores al importar los personeros, vea el detalle y corrija:
                 </Typography>
               </AccordionSummary>
               <AccordionDetails className="flex flex-col">
                 {errors.map(error => {
                   return (
-                    <Typography
-                      key={error.index}
-                      className={clsx('mb-4', styles.red)}
-                    >
+                    <Typography key={error.index} className={clsx('mb-4', styles.red)}>
                       {error.msg}
                     </Typography>
                   )
