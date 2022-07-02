@@ -41,6 +41,7 @@ import CentrosPersonerosNewView from 'views/private/centrosVotacion/personeros/p
 import CentrosPersonerosEditView from 'views/private/centrosVotacion/personeros/personerosEdit'
 import CentrosMesasView from 'views/private/centrosVotacion/mesas'
 import CentrosMesasNewView from 'views/private/centrosVotacion/mesas/mesasNew'
+import CentrosMesasEditView from 'views/private/centrosVotacion/mesas/mesasEdit'
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 //---- MÓDULO MONITOREO --------------------------------------------------------------------//
@@ -195,6 +196,10 @@ const routes: IRoutesModulos = {
           {
             path: '/centros-votacion/mesas/nuevo',
             component: CentrosMesasNewView
+          },
+          {
+            path: '/centros-votacion/mesas/editar/:id',
+            component: CentrosMesasEditView
           }
         ]
       }

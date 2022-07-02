@@ -2,14 +2,11 @@
 // Importamos las dependencias //
 /*******************************************************************************************************/
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-import {
-  TableCell,
-  TableHead,
-  TableRow,
-  TableSortLabel,
-  Tooltip
-} from '@material-ui/core'
+import { TableCell, TableHead, TableRow, TableSortLabel, Tooltip, IconButton } from '@material-ui/core'
+import RefreshIcon from '@material-ui/icons/Refresh'
+import { startResetMesas } from 'redux/actions/mesas'
 
 /*******************************************************************************************************/
 // Columnas cabecera de la Tabla //
@@ -23,11 +20,32 @@ const headers = [
     sort: false
   },
   {
-    id: 'ubigeo',
+    id: 'mesa',
     align: 'left',
     disablePadding: false,
-    label: 'Ubigeo',
+    label: 'Mesa',
     sort: true
+  },
+  {
+    id: 'personero_mesa',
+    align: 'left',
+    disablePadding: false,
+    label: 'Personero Mesa',
+    sort: false
+  },
+  {
+    id: 'local',
+    align: 'left',
+    disablePadding: false,
+    label: 'Local',
+    sort: false
+  },
+  {
+    id: 'personero_local',
+    align: 'left',
+    disablePadding: false,
+    label: 'Personero Local',
+    sort: false
   },
   {
     id: 'departamento',
@@ -51,32 +69,11 @@ const headers = [
     sort: false
   },
   {
-    id: 'local',
+    id: 'ubigeo',
     align: 'left',
     disablePadding: false,
-    label: 'Local',
-    sort: false
-  },
-  {
-    id: 'personero_local',
-    align: 'left',
-    disablePadding: false,
-    label: 'Personero Local',
-    sort: false
-  },
-  {
-    id: 'mesa',
-    align: 'left',
-    disablePadding: false,
-    label: 'Mesa',
+    label: 'Ubigeo',
     sort: true
-  },
-  {
-    id: 'personero_mesa',
-    align: 'left',
-    disablePadding: false,
-    label: 'Personero Mesa',
-    sort: false
   },
   {
     id: 'botones',
@@ -92,11 +89,23 @@ const headers = [
 /*******************************************************************************************************/
 const MesasTableHead = props => {
   // Obtenemos las propiedades del componente
-  const { order, onRequestSort, superUser } = props
+  const { order, onRequestSort, resetPages } = props
+
+  // Llamamos al dispatch de redux
+  const dispatch = useDispatch()
+
+  // Obtenemos el Rol de Usuario
+  const { rol } = useSelector(state => state.auth.usuario)
 
   // Función para crear un ordenamiento de la columna
   const createSortHandler = property => event => {
     onRequestSort(event, property)
+  }
+
+  // Función para refrescar la tabla
+  const refreshTable = () => {
+    dispatch(startResetMesas())
+    resetPages()
   }
 
   // Renderizamos el componente
@@ -104,16 +113,7 @@ const MesasTableHead = props => {
     <TableHead>
       <TableRow className="h-64">
         {headers
-          .filter(ele => {
-            // Si es un superusuario mostramos todo
-            if (superUser) {
-              return ele
-            }
-            // Caso contrario excluimos el departamento
-            else {
-              return ele.id !== 'departamento'
-            }
-          })
+          .filter(ele => (rol.super ? ele : ele.id !== 'departamento'))
           .map(col => {
             return (
               <TableCell
@@ -126,9 +126,7 @@ const MesasTableHead = props => {
                 {col.sort ? (
                   <Tooltip
                     title="Ordenar"
-                    placement={
-                      col.align === 'right' ? 'bottom-end' : 'bottom-start'
-                    }
+                    placement={col.align === 'right' ? 'bottom-end' : 'bottom-start'}
                     enterDelay={300}
                   >
                     <TableSortLabel
@@ -138,6 +136,12 @@ const MesasTableHead = props => {
                     >
                       {col.label}
                     </TableSortLabel>
+                  </Tooltip>
+                ) : col.id === 'botones' ? (
+                  <Tooltip title="Refrescar" placement="bottom-start" enterDelay={100}>
+                    <IconButton aria-label="refrescar" onClick={refreshTable}>
+                      <RefreshIcon />
+                    </IconButton>
                   </Tooltip>
                 ) : (
                   col.label
@@ -156,7 +160,7 @@ const MesasTableHead = props => {
 MesasTableHead.propTypes = {
   order: PropTypes.object.isRequired,
   onRequestSort: PropTypes.func.isRequired,
-  superUser: PropTypes.bool.isRequired
+  resetPages: PropTypes.func.isRequired
 }
 
 /*******************************************************************************************************/

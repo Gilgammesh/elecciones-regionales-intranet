@@ -1,162 +1,93 @@
 /*******************************************************************************************************/
 // Importamos las dependencias //
 /*******************************************************************************************************/
-import React, { useEffect, useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  Paper,
-  Icon,
-  Input
-} from '@material-ui/core'
-import { fetchData } from 'services/fetch'
-import { normalizar } from 'helpers/texts'
-import { startSetMesasMesa } from 'redux/actions/mesas'
+import PropTypes from 'prop-types'
+import { FormControl, InputLabel, Input, InputAdornment, IconButton } from '@material-ui/core'
+import SearchIcon from '@material-ui/icons/Search'
+import validateInputRegexp from 'helpers/validateInputRegexp'
+import clsx from 'clsx'
+import { startSetMesasSearch } from 'redux/actions/mesas'
 
 /*******************************************************************************************************/
-// Definimos la Vista del componente Centros de Votación - Mesas ToolBar - Mesas //
+// Definimos la Vista del componente Centros de Votación - Mesas ToolBar - Número Mesa //
 /*******************************************************************************************************/
-const MesasToolBarMesa = () => {
+const MesasToolBarMesa = props => {
+  // Obtenemos las propiedades del componente
+  const { resetPages } = props
+
   // Llamamos al dispatch de redux
   const dispatch = useDispatch()
 
-  // Obtenemos el usuario logueado
-  const usuario = useSelector(state => state.auth.usuario)
+  // Obtenemos el Rol de Usuario
+  const { rol } = useSelector(state => state.auth.usuario)
 
-  // Obtenemos los datos por defecto de las mesas de votación
-  const { departamento, provincia, distrito, local, mesa } = useSelector(
-    state => state.mesas
-  )
+  // Obtenemos los estados por defecto de la vista mesas de votación
+  const { search } = useSelector(state => state.mesas)
 
-  // Estado inicial de la lista de mesas
-  const [dataMesas, setDataMesas] = useState([])
-  const [listMesas, setListMesas] = useState([])
+  // Estado del número de mesa de búsqueda
+  const [mesa, setMesa] = useState('')
 
-  // Estado inicial de la caja de búsqueda
-  const [searchMesa, setSearchMesa] = useState('')
-
-  // Efecto para obtener las mesas
+  // Efecto para limpiar los inputs del componente
   useEffect(() => {
-    // Inicializamos el montaje
-    let mounted = true
-    // Función para obtener las mesas
-    const getMesas = async (dpto, prov, dist, loc) => {
-      // Obtenemos las mesas con fetch
-      const result = await fetchData(
-        `centros-votacion/getMesas?departamento=${dpto}&provincia=${prov}&distrito=${dist}&local=${loc}`,
-        {
-          isTokenReq: true
-        }
-      )
-      // Si existe un resultado y el status es positivo
-      if (result && mounted && result.data.status) {
-        // Establecemos las mesas
-        setDataMesas(result.data.list)
-        setListMesas(result.data.list)
-      }
+    if (search.tipo !== 'mesa') {
+      setMesa('')
     }
+  }, [search])
 
-    if (departamento === 'todos') {
-      setDataMesas([])
-      setListMesas([])
-    } else {
-      // Si es un superusuario
-      if (usuario.rol.super) {
-        // Obtenemos la lista de mesas con el departamento, provincia y distrito
-        getMesas(departamento, provincia, distrito, local)
-      } else {
-        // Obtenemos la lista de mesas con el departamento, provincia y distrito
-        getMesas(usuario.departamento.codigo, provincia, distrito, local)
-      }
-    }
-    // Limpiamos la caja de búsqueda
-    setSearchMesa('')
-    return () => {
-      // Limpiamos el montaje
-      mounted = false
-    }
-  }, [usuario, departamento, provincia, distrito, local])
-
-  // Función para actualizar el valor de la mesa
-  const handleChange = evt => {
+  // Función para actualizar el valor del número de mesa de búsqueda
+  const handleInputChange = evt => {
     const { value } = evt.target
-    dispatch(startSetMesasMesa(value))
+    if (!validateInputRegexp('onlyNumber', value)) {
+      return
+    }
+    setMesa(value)
   }
 
-  // Función para cambiar el valor de la caja de búsqueda
-  const handleInputSearch = async evt => {
-    // Obtenemos el valor
-    const { value } = evt.target
-    // Establecemos el valor de la caja
-    setSearchMesa(value)
-    // Normalizamos el valor
-    const value_ = await normalizar(value)
-    // Recorremos la lista para filtrar los datos buscados
-    const promises = listMesas
-      .map(ele => ele)
-      .filter(ele => {
-        return normalizar(ele._id).includes(value_)
-      })
-    const filter = await Promise.all(promises)
-    // Guardamos la data filtrada
-    setDataMesas(filter)
+  // Función para prevenir el mouse para abajo
+  const handleMouseDownSearch = evt => {
+    evt.preventDefault()
+  }
+
+  // Función para realizar la búsqueda
+  const handleSearchQuery = () => {
+    dispatch(startSetMesasSearch('mesa', mesa))
+    resetPages()
   }
 
   // Renderizamos el componente
   return (
-    <FormControl className="col-span-12 sm:col-span-2">
-      <InputLabel shrink id="select-centros-votacion-mesa">
-        Mesa
-      </InputLabel>
-      <Select
-        labelId="select-centros-votacion-mesa"
-        className="col-span-12"
+    <FormControl className={clsx('col-span-12', rol.super ? 'sm:col-span-1' : 'sm:col-span-2')}>
+      <InputLabel htmlFor="input-centros-votacion-mesas-mesa">Mesa</InputLabel>
+      <Input
+        id="input-centros-votacion-mesas-mesa"
+        type="text"
         value={mesa}
-        onChange={handleChange}
-        displayEmpty
-      >
-        <MenuItem value="todos">{`--Todas (${listMesas.length}) --`}</MenuItem>
-        <MenuItem
-          onKeyDown={evt => evt.stopPropagation()}
-          className="px-6"
-          style={{ cursor: 'default', pointerEvents: 'none' }}
-        >
-          <Paper
-            className="flex items-center w-full px-8 py-4 rounded-8"
-            elevation={1}
-            style={{ cursor: 'default', pointerEvents: 'auto' }}
-          >
-            <Icon color="action" onClick={event => event.stopPropagation()}>
-              search
-            </Icon>
-            <Input
-              placeholder="Buscar mesa"
-              className="flex flex-1 mx-8"
-              disableUnderline
-              fullWidth
-              value={searchMesa}
-              inputProps={{
-                'aria-label': 'Buscar'
-              }}
-              onChange={handleInputSearch}
-              onClick={event => event.stopPropagation()}
-            />
-          </Paper>
-        </MenuItem>
-        {dataMesas.length > 0 &&
-          dataMesas.map((ele, index) => {
-            return (
-              <MenuItem key={index} value={ele._id}>
-                {ele._id}
-              </MenuItem>
-            )
-          })}
-      </Select>
+        onChange={handleInputChange}
+        inputProps={{ maxLength: 6 }}
+        endAdornment={
+          <InputAdornment position="end">
+            <IconButton
+              aria-label="toggle search"
+              onClick={handleSearchQuery}
+              onMouseDown={handleMouseDownSearch}
+              disabled={mesa === '' ? true : false}
+            >
+              <SearchIcon />
+            </IconButton>
+          </InputAdornment>
+        }
+      />
     </FormControl>
   )
+}
+
+/*******************************************************************************************************/
+// Definimos los tipos de propiedades del componente //
+/*******************************************************************************************************/
+MesasToolBarMesa.propTypes = {
+  resetPages: PropTypes.func.isRequired
 }
 
 /*******************************************************************************************************/

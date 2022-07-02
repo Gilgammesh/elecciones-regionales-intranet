@@ -24,26 +24,23 @@ const MesasNew = () => {
 
   // Estado inicial del formulario
   const initialForm = {
+    mesa: '',
+    local: '',
     departamento: '',
     provincia: '',
     distrito: '',
-    nombre: '',
-    mesa: '',
-    votantes: 1
+    ubigeo: '',
+    votantes: 1,
+    personero_mesa: null
   }
 
   // Usamos el Hook personalizado de formularios
-  const [formValues, handleInputChange, resetForm] = useForm(initialForm)
+  const [formValues, handleInputChange, resetForm, setForm] = useForm(initialForm)
 
   // Función que se ejecuta cuando se envia el formulario
   const handleSubmit = async () => {
     // Guardamos la data de la mesa
-    const result = await fetchData(
-      'centros-votacion',
-      { isTokenReq: true },
-      'POST',
-      formValues
-    )
+    const result = await fetchData('centros-votacion/mesas', { isTokenReq: true }, 'POST', formValues)
     // Validamos el resultado
     if (validateFetchData(result)) {
       // Reseteamos el formulario
@@ -70,11 +67,7 @@ const MesasNew = () => {
 
   // Renderizamos el componente
   return (
-    <Formsy
-      onValidSubmit={handleSubmit}
-      onValid={enableButton}
-      onInvalid={disableButton}
-    >
+    <Formsy onValidSubmit={handleSubmit} onValid={enableButton} onInvalid={disableButton}>
       <PageCarded
         classes={{
           toolbar: 'p-0',
@@ -86,12 +79,7 @@ const MesasNew = () => {
             <h2>Registro</h2>
           </div>
         }
-        content={
-          <MesasNewForm
-            formValues={formValues}
-            handleInputChange={handleInputChange}
-          />
-        }
+        content={<MesasNewForm formValues={formValues} handleInputChange={handleInputChange} setForm={setForm} />}
         innerScroll
       />
     </Formsy>

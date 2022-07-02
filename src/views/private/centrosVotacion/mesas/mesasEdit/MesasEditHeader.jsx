@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Icon, makeStyles, Typography, useTheme } from '@material-ui/core'
 import SaveIcon from '@material-ui/icons/Save'
-import AccountBoxIcon from '@material-ui/icons/AccountBox'
+import AssistantIcon from '@material-ui/icons/Assistant'
 import Animate from 'components/core/Animate'
 import clsx from 'clsx'
 import { startGetAccionesSubModulo } from 'redux/actions/auth'
@@ -24,9 +24,9 @@ const useStyles = makeStyles(theme => ({
 }))
 
 /*******************************************************************************************************/
-// Definimos la Vista del componente Centros de Votación - Personeros - Editar Header //
+// Definimos la Vista del componente Centros de Votación - Mesas - Editar Header //
 /*******************************************************************************************************/
-const PersonerosEditHeader = props => {
+const MesasEditHeader = props => {
   // Obtenemos las propiedades
   const { isFormValid } = props
 
@@ -47,7 +47,7 @@ const PersonerosEditHeader = props => {
 
   // Efecto para obtener las acciones del submódulo
   useEffect(() => {
-    dispatch(startGetAccionesSubModulo('centros-votacion', 'personeros')).then(res => setAccionesPerm(res))
+    dispatch(startGetAccionesSubModulo('centros-votacion', 'mesas')).then(res => setAccionesPerm(res))
   }, [dispatch])
 
   // Renderizamos el componente
@@ -59,26 +59,26 @@ const PersonerosEditHeader = props => {
             className="normal-case flex items-center sm:mb-12"
             component={Link}
             role="button"
-            to="/centros-votacion/personeros"
+            to="/centros-votacion/mesas"
             color="inherit"
           >
             <Icon className="text-20">{theme.direction === 'ltr' ? 'arrow_back' : 'arrow_forward'}</Icon>
-            <span className="mx-4">Personeros</span>
+            <span className="mx-4">Mesas de Votación</span>
           </Typography>
         </Animate>
 
         <div className="flex items-center max-w-full">
           <Animate animation="transition.expandIn" delay={300}>
-            <AccountBoxIcon fontSize="large" />
+            <AssistantIcon fontSize="large" />
           </Animate>
           <div className="flex flex-col min-w-0 mx-8 sm:mc-16">
             <Animate animation="transition.slideLeftIn" delay={300}>
-              <Typography className="text-16 sm:text-20 truncate">Editar Personero</Typography>
+              <Typography className="text-16 sm:text-20 truncate">Editar Mesa</Typography>
             </Animate>
           </div>
         </div>
       </div>
-      {(rol.super || (accionesPerm && accionesPerm.indexOf('editar') !== -1)) && (
+      {(rol.super || (accionesPerm && accionesPerm.indexOf('crear') !== -1)) && (
         <Animate animation="transition.slideRightIn" delay={300}>
           <Button
             type="submit"
@@ -98,11 +98,11 @@ const PersonerosEditHeader = props => {
 /*******************************************************************************************************/
 // Definimos los tipos de propiedades del componente //
 /*******************************************************************************************************/
-PersonerosEditHeader.propTypes = {
+MesasEditHeader.propTypes = {
   isFormValid: PropTypes.bool.isRequired
 }
 
 /*******************************************************************************************************/
 // Exportamos el componente //
 /*******************************************************************************************************/
-export default PersonerosEditHeader
+export default MesasEditHeader

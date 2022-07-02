@@ -3,14 +3,18 @@
 /*******************************************************************************************************/
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import PropTypes from 'prop-types'
 import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core'
 import { fetchData } from 'services/fetch'
-import { startSetMesasDepartamento } from 'redux/actions/mesas'
+import { startSetMesasSearch, startSetMesasDepartamento } from 'redux/actions/mesas'
 
 /*******************************************************************************************************/
 // Definimos la Vista del componente Centros de Votación - Mesas ToolBar - Departamentos //
 /*******************************************************************************************************/
-const MesasToolBarDptos = () => {
+const MesasToolBarDptos = props => {
+  // Obtenemos las propiedades del componente
+  const { resetPages } = props
+
   // Llamamos al dispatch de redux
   const dispatch = useDispatch()
 
@@ -27,10 +31,7 @@ const MesasToolBarDptos = () => {
     // Función para obtener los departamentos
     const getDepartamentos = async () => {
       // Obtenemos los departamentos con fetch
-      const result = await fetchData(
-        'ubigeo/departamentos?page=1&pageSize=100',
-        { isTokenReq: true }
-      )
+      const result = await fetchData('ubigeo/departamentos?page=1&pageSize=100', { isTokenReq: true })
       // Si existe un resultado y el status es positivo
       if (result && mounted && result.data.status) {
         // Establecemos los departamentos
@@ -48,9 +49,9 @@ const MesasToolBarDptos = () => {
   // Función para actualizar el valor del departamento
   const handleChange = evt => {
     const { value } = evt.target
-    dispatch(
-      startSetMesasDepartamento(value, 'todos', 'todos', 'todos', 'todos')
-    )
+    dispatch(startSetMesasSearch('', ''))
+    dispatch(startSetMesasDepartamento(value, 'todos', 'todos'))
+    resetPages()
   }
 
   // Renderizamos el componente
@@ -78,6 +79,13 @@ const MesasToolBarDptos = () => {
       </Select>
     </FormControl>
   )
+}
+
+/*******************************************************************************************************/
+// Definimos los tipos de propiedades del componente //
+/*******************************************************************************************************/
+MesasToolBarDptos.propTypes = {
+  resetPages: PropTypes.func.isRequired
 }
 
 /*******************************************************************************************************/

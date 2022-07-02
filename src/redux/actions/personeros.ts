@@ -23,7 +23,7 @@ export const startSetPersonerosTipo = (tipo: string) => {
 /*******************************************************************************************************/
 // Función para iniciar establecer el estado de los personeros //
 /*******************************************************************************************************/
-export const startSetPersonerosEstado = (estado: string) => {
+export const startSetPersonerosEstado = (estado: string | boolean) => {
   return (dispatch: Dispatch) => {
     dispatch(setPersonerosEstado(estado))
   }
@@ -69,7 +69,7 @@ export const setPersonerosTipo = (tipo: string) => {
 /*******************************************************************************************************/
 // Acción para establecer el estado de los personeros //
 /*******************************************************************************************************/
-export const setPersonerosEstado = (estado: string) => {
+export const setPersonerosEstado = (estado: string | boolean) => {
   return {
     type: types.setPersonerosEstado,
     payload: estado

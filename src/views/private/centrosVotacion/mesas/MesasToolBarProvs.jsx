@@ -3,14 +3,18 @@
 /*******************************************************************************************************/
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import PropTypes from 'prop-types'
 import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core'
 import { fetchData } from 'services/fetch'
-import { startSetMesasProvincia } from 'redux/actions/mesas'
+import { startSetMesasSearch, startSetMesasProvincia } from 'redux/actions/mesas'
 
 /*******************************************************************************************************/
 // Definimos la Vista del componente Centros de Votación - Mesas ToolBar - Provincias //
 /*******************************************************************************************************/
-const MesasToolBarProvs = () => {
+const MesasToolBarProvs = props => {
+  // Obtenemos las propiedades del componente
+  const { resetPages } = props
+
   // Llamamos al dispatch de redux
   const dispatch = useDispatch()
 
@@ -30,12 +34,9 @@ const MesasToolBarProvs = () => {
     // Función para obtener las provincias
     const getProvincias = async dpto => {
       // Obtenemos las provincias con fetch
-      const result = await fetchData(
-        `ubigeo/provincias?departamento=${dpto}&page=1&pageSize=100`,
-        {
-          isTokenReq: true
-        }
-      )
+      const result = await fetchData(`ubigeo/provincias?departamento=${dpto}&page=1&pageSize=100`, {
+        isTokenReq: true
+      })
       // Si existe un resultado y el status es positivo
       if (result && mounted && result.data.status) {
         // Establecemos las provincias
@@ -65,7 +66,9 @@ const MesasToolBarProvs = () => {
   // Función para actualizar el valor de la provincia
   const handleChange = evt => {
     const { value } = evt.target
-    dispatch(startSetMesasProvincia(value, 'todos', 'todos', 'todos'))
+    dispatch(startSetMesasSearch('', ''))
+    dispatch(startSetMesasProvincia(value, 'todos'))
+    resetPages()
   }
 
   // Renderizamos el componente
@@ -93,6 +96,13 @@ const MesasToolBarProvs = () => {
       </Select>
     </FormControl>
   )
+}
+
+/*******************************************************************************************************/
+// Definimos los tipos de propiedades del componente //
+/*******************************************************************************************************/
+MesasToolBarProvs.propTypes = {
+  resetPages: PropTypes.func.isRequired
 }
 
 /*******************************************************************************************************/

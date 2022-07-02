@@ -5,14 +5,7 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import {
-  FormControlLabel,
-  Icon,
-  IconButton,
-  InputAdornment,
-  MenuItem,
-  TextField
-} from '@material-ui/core'
+import { FormControlLabel, Icon, IconButton, InputAdornment, MenuItem, TextField } from '@material-ui/core'
 import ProgressCircle from 'components/core/Progress/ProgressCircle'
 import TextFieldFormsy from 'components/core/Formsy/TextFieldFormsy'
 import IosSwitch from 'components/core/Switches/IosSwitch'
@@ -22,16 +15,15 @@ import { fetchData } from 'services/fetch'
 // Definimos la Vista del componente Centros de Votación - Personeros - Editar Formulario //
 /*******************************************************************************************************/
 const PersonerosEditForm = props => {
-  // Obtenemos el id del usuario de los parámetros de la ruta
+  // Obtenemos el id del personero de los parámetros de la ruta
   const { id } = useParams()
 
-  // Obtenemos lso datos del Usuario logueado
+  // Obtenemos los datos del Usuario logueado
   const usuario = useSelector(state => state.auth.usuario)
 
   // Obtenemos las propiedades del componente
   const { formValues, handleInputChange, setForm } = props
-  const { nombres, apellidos, dni, celular, password, estado, departamento } =
-    formValues
+  const { nombres, apellidos, dni, celular, password, estado, departamento } = formValues
 
   // Estado inicial para mostrar la contraseña
   const [showPassword, setShowPassword] = useState(false)
@@ -39,7 +31,7 @@ const PersonerosEditForm = props => {
   // Estado inicial de los departamentos
   const [departamentos, setDepartamentos] = useState([])
 
-  // Estado de carga de los datos de usuario
+  // Estado de carga de los datos del personero
   const [loading, setLoading] = useState(true)
 
   // Efecto para obtener los departamentos
@@ -49,10 +41,7 @@ const PersonerosEditForm = props => {
     // Función para obtener la lista de departamentos
     const getDepartamentos = async () => {
       // Obtenemos los departamentos con fetch
-      const result = await fetchData(
-        'ubigeo/departamentos?page=1&pageSize=50',
-        { isTokenReq: true }
-      )
+      const result = await fetchData('ubigeo/departamentos?page=1&pageSize=50', { isTokenReq: true })
       // Si existe un resultado y el status es positivo
       if (result && mounted && result.data.status) {
         // Recorremos la lista de departamentos
@@ -101,9 +90,7 @@ const PersonerosEditForm = props => {
           dni: personero.dni,
           celular: personero.celular,
           password: null,
-          departamento: personero.departamento
-            ? personero.departamento._id
-            : '',
+          departamento: personero.departamento ? personero.departamento._id : '',
           estado: personero.estado
         })
         // Finalizamos el estado de carga de los datos del personero
@@ -267,13 +254,7 @@ const PersonerosEditForm = props => {
           <div className="grid grid-cols-12 gap-16 mt-16">
             <FormControlLabel
               className="ml-0 mr-0 col-span-12 sm:col-span-3"
-              control={
-                <IosSwitch
-                  name="estado"
-                  checked={estado}
-                  onChange={handleInputChange}
-                />
-              }
+              control={<IosSwitch name="estado" checked={estado} onChange={handleInputChange} />}
               label={estado ? 'Activado' : 'Desactivado'}
             />
           </div>

@@ -3,14 +3,18 @@
 /*******************************************************************************************************/
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import PropTypes from 'prop-types'
 import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core'
 import { fetchData } from 'services/fetch'
-import { startSetMesasDistrito } from 'redux/actions/mesas'
+import { startSetMesasSearch, startSetMesasDistrito } from 'redux/actions/mesas'
 
 /*******************************************************************************************************/
 // Definimos la Vista del componente Centros de Votación - Mesas ToolBar - Distritos //
 /*******************************************************************************************************/
-const MesasToolBarDists = () => {
+const MesasToolBarDists = props => {
+  // Obtenemos las propiedades del componente
+  const { resetPages } = props
+
   // Llamamos al dispatch de redux
   const dispatch = useDispatch()
 
@@ -18,9 +22,7 @@ const MesasToolBarDists = () => {
   const usuario = useSelector(state => state.auth.usuario)
 
   // Obtenemos los datos por defecto de las mesas de votación
-  const { departamento, provincia, distrito } = useSelector(
-    state => state.mesas
-  )
+  const { departamento, provincia, distrito } = useSelector(state => state.mesas)
 
   // Estado inicial de la lista de distritos
   const [listDistritos, setListDistritos] = useState([])
@@ -32,12 +34,9 @@ const MesasToolBarDists = () => {
     // Función para obtener los distritos
     const getDistritos = async (dpto, prov) => {
       // Obtenemos los distritos con fetch
-      const result = await fetchData(
-        `ubigeo/distritos?departamento=${dpto}&provincia=${prov}&page=1&pageSize=100`,
-        {
-          isTokenReq: true
-        }
-      )
+      const result = await fetchData(`ubigeo/distritos?departamento=${dpto}&provincia=${prov}&page=1&pageSize=100`, {
+        isTokenReq: true
+      })
       // Si existe un resultado y el status es positivo
       if (result && mounted && result.data.status) {
         // Establecemos los distritos
@@ -66,7 +65,9 @@ const MesasToolBarDists = () => {
   // Función para actualizar el valor del distrito
   const handleChange = evt => {
     const { value } = evt.target
-    dispatch(startSetMesasDistrito(value, 'todos', 'todos'))
+    dispatch(startSetMesasSearch('', ''))
+    dispatch(startSetMesasDistrito(value))
+    resetPages()
   }
 
   // Renderizamos el componente
@@ -94,6 +95,13 @@ const MesasToolBarDists = () => {
       </Select>
     </FormControl>
   )
+}
+
+/*******************************************************************************************************/
+// Definimos los tipos de propiedades del componente //
+/*******************************************************************************************************/
+MesasToolBarDists.propTypes = {
+  resetPages: PropTypes.func.isRequired
 }
 
 /*******************************************************************************************************/

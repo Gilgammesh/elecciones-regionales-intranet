@@ -5,142 +5,123 @@ import types from 'configs/types'
 import { Dispatch } from 'redux'
 
 /*******************************************************************************************************/
-// Función para iniciar establecer el departamento de las mesas de votación //
+// Función para iniciar establecer el query de búsqueda personalizado de las mesas de votación //
 /*******************************************************************************************************/
-export const startSetMesasDepartamento = (
-  departamento: string,
-  provincia: string,
-  distrito: string,
-  local: string,
-  mesa: string
-) => {
+export const startSetMesasSearch = (tipo: string, value: string | string[]) => {
   return (dispatch: Dispatch) => {
-    dispatch(
-      setMesasDepartamento(departamento, provincia, distrito, local, mesa)
-    )
+    dispatch(setMesasSearch(tipo, value))
   }
 }
-
+/*******************************************************************************************************/
+// Función para iniciar establecer el estado de mesas con personeros asignados //
+/*******************************************************************************************************/
+export const startSetMesasAssign = (assign: string | boolean) => {
+  return (dispatch: Dispatch) => {
+    dispatch(setMesasAssign(assign))
+  }
+}
+/*******************************************************************************************************/
+// Función para iniciar establecer el departamento de las mesas de votación //
+/*******************************************************************************************************/
+export const startSetMesasDepartamento = (departamento: string, provincia: string, distrito: string) => {
+  return (dispatch: Dispatch) => {
+    dispatch(setMesasDepartamento(departamento, provincia, distrito))
+  }
+}
 /*******************************************************************************************************/
 // Función para iniciar establecer la provincia de las mesas de votación //
 /*******************************************************************************************************/
-export const startSetMesasProvincia = (
-  provincia: string,
-  distrito: string,
-  local: string,
-  mesa: string
-) => {
+export const startSetMesasProvincia = (provincia: string, distrito: string) => {
   return (dispatch: Dispatch) => {
-    dispatch(setMesasProvincia(provincia, distrito, local, mesa))
+    dispatch(setMesasProvincia(provincia, distrito))
   }
 }
-
 /*******************************************************************************************************/
 // Función para iniciar establecer el distrito de las mesas de votación //
 /*******************************************************************************************************/
-export const startSetMesasDistrito = (
-  distrito: string,
-  local: string,
-  mesa: string
-) => {
+export const startSetMesasDistrito = (distrito: string) => {
   return (dispatch: Dispatch) => {
-    dispatch(setMesasDistrito(distrito, local, mesa))
+    dispatch(setMesasDistrito(distrito))
+  }
+}
+/*******************************************************************************************************/
+// Función para iniciar establecer cambio en las mesas de votación //
+/*******************************************************************************************************/
+export const startSetMesasChange = () => {
+  return (dispatch: Dispatch) => {
+    dispatch(setMesasChange())
+  }
+}
+/*******************************************************************************************************/
+// Función para iniciar restablecer las mesas de votación //
+/*******************************************************************************************************/
+export const startResetMesas = () => {
+  return (dispatch: Dispatch) => {
+    dispatch(resetMesas())
   }
 }
 
 /*******************************************************************************************************/
-// Función para iniciar establecer el local de las mesas de votación //
+// Acción para establecer el query de búsqueda personalizado de las mesas de votación //
 /*******************************************************************************************************/
-export const startSetMesasLocal = (local: string) => {
-  return (dispatch: Dispatch) => {
-    dispatch(setMesasLocal(local))
+export const setMesasSearch = (tipo: string, value: string | string[]) => {
+  return {
+    type: types.setMesasSearch,
+    payload: {
+      tipo,
+      value
+    }
   }
 }
-
 /*******************************************************************************************************/
-// Función para iniciar establecer la mesa de las mesas de votación //
+// Acción para establecer el estado de mesas con personeros asignados //
 /*******************************************************************************************************/
-export const startSetMesasMesa = (mesa: string) => {
-  return (dispatch: Dispatch) => {
-    dispatch(setMesasMesa(mesa))
+export const setMesasAssign = (assign: string | boolean) => {
+  return {
+    type: types.setMesasAssign,
+    payload: assign
   }
 }
-
-/*******************************************************************************************************/
-// Función para iniciar establecer el personero de las mesas de votación //
-/*******************************************************************************************************/
-export const startSetMesasPersonero = (personero: string) => {
-  return (dispatch: Dispatch) => {
-    dispatch(setMesasPersonero(personero))
-  }
-}
-
 /*******************************************************************************************************/
 // Acción para establecer el departamento de las mesas de votación //
 /*******************************************************************************************************/
-export const setMesasDepartamento = (
-  departamento: string,
-  provincia: string,
-  distrito: string,
-  local: string,
-  mesa: string
-) => {
+export const setMesasDepartamento = (departamento: string, provincia: string, distrito: string) => {
   return {
     type: types.setMesasDepartamento,
-    payload: { departamento, provincia, distrito, local, mesa }
+    payload: { departamento, provincia, distrito }
   }
 }
 /*******************************************************************************************************/
 // Acción para establecer la provincia de las mesas de votación //
 /*******************************************************************************************************/
-export const setMesasProvincia = (
-  provincia: string,
-  distrito: string,
-  local: string,
-  mesa: string
-) => {
+export const setMesasProvincia = (provincia: string, distrito: string) => {
   return {
     type: types.setMesasProvincia,
-    payload: { provincia, distrito, local, mesa }
+    payload: { provincia, distrito }
   }
 }
 /*******************************************************************************************************/
 // Acción para establecer el distrito de las mesas de votación //
 /*******************************************************************************************************/
-export const setMesasDistrito = (
-  distrito: string,
-  local: string,
-  mesa: string
-) => {
+export const setMesasDistrito = (distrito: string) => {
   return {
     type: types.setMesasDistrito,
-    payload: { distrito, local, mesa }
+    payload: { distrito }
   }
 }
 /*******************************************************************************************************/
-// Acción para establecer el local de las mesas de votación //
+// Acción para establecer cambio en las mesas de votación //
 /*******************************************************************************************************/
-export const setMesasLocal = (local: string) => {
+export const setMesasChange = () => {
   return {
-    type: types.setMesasLocal,
-    payload: local
+    type: types.setMesasChange
   }
 }
 /*******************************************************************************************************/
-// Acción para establecer la mesa de las mesas de votación //
+// Acción para restablecer las mesas de votación //
 /*******************************************************************************************************/
-export const setMesasMesa = (mesa: string) => {
+export const resetMesas = () => {
   return {
-    type: types.setMesasMesa,
-    payload: mesa
-  }
-}
-/*******************************************************************************************************/
-// Acción para establecer el personero de las mesas de votación //
-/*******************************************************************************************************/
-export const setMesasPersonero = (personero: string) => {
-  return {
-    type: types.setMesasPersonero,
-    payload: personero
+    type: types.resetMesas
   }
 }

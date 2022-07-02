@@ -89,7 +89,7 @@ const headers = [
 /*******************************************************************************************************/
 const PersonerosTableHead = props => {
   // Obtenemos las propiedades del componente
-  const { order, onRequestSort } = props
+  const { order, onRequestSort, resetPages } = props
 
   // Llamamos al dispatch de redux
   const dispatch = useDispatch()
@@ -105,6 +105,7 @@ const PersonerosTableHead = props => {
   // Función para refrescar la tabla
   const refreshTable = () => {
     dispatch(startResetPersoneros())
+    resetPages()
   }
 
   // Renderizamos el componente
@@ -112,16 +113,7 @@ const PersonerosTableHead = props => {
     <TableHead>
       <TableRow className="h-64">
         {headers
-          .filter(ele => {
-            // Si es un superusuario mostramos todo
-            if (rol.super) {
-              return ele
-            }
-            // Caso contrario excluimos el departamento
-            else {
-              return ele.id !== 'departamento'
-            }
-          })
+          .filter(ele => (rol.super ? ele : ele.id !== 'departamento'))
           .map(col => {
             return (
               <TableCell
@@ -167,7 +159,8 @@ const PersonerosTableHead = props => {
 /*******************************************************************************************************/
 PersonerosTableHead.propTypes = {
   order: PropTypes.object.isRequired,
-  onRequestSort: PropTypes.func.isRequired
+  onRequestSort: PropTypes.func.isRequired,
+  resetPages: PropTypes.func.isRequired
 }
 
 /*******************************************************************************************************/

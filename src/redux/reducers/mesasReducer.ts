@@ -15,24 +15,30 @@ interface IAction {
 // Interface del Reducer //
 /*******************************************************************************************************/
 export interface IMesasReducer {
+  search: {
+    tipo: string
+    value: string
+  }
+  assign: string | boolean
   departamento: string
   provincia: string
   distrito: string
-  local: string
-  mesa: string
-  personero: string
+  change: string
 }
 
 /*******************************************************************************************************/
 // Estado inicial del Reducer //
 /*******************************************************************************************************/
 const initialState: IMesasReducer = {
+  search: {
+    tipo: '',
+    value: ''
+  },
+  assign: 'todos',
   departamento: 'todos',
   provincia: 'todos',
   distrito: 'todos',
-  local: 'todos',
-  mesa: 'todos',
-  personero: 'todos'
+  change: ''
 }
 
 /*******************************************************************************************************/
@@ -40,6 +46,16 @@ const initialState: IMesasReducer = {
 /*******************************************************************************************************/
 const mesasReducer = (state = initialState, { type, payload }: IAction) => {
   switch (type) {
+    case types.setMesasSearch:
+      return {
+        ...state,
+        search: payload
+      }
+    case types.setMesasAssign:
+      return {
+        ...state,
+        assign: payload
+      }
     case types.setMesasDepartamento:
       return {
         ...state,
@@ -55,21 +71,13 @@ const mesasReducer = (state = initialState, { type, payload }: IAction) => {
         ...state,
         ...payload
       }
-    case types.setMesasLocal:
+    case types.setMesasChange:
       return {
         ...state,
-        local: payload
+        change: `${new Date()}`
       }
-    case types.setMesasMesa:
-      return {
-        ...state,
-        mesa: payload
-      }
-    case types.setMesasPersonero:
-      return {
-        ...state,
-        personero: payload
-      }
+    case types.resetMesas:
+      return { ...initialState, change: `${new Date()}` }
     default:
       return state
   }

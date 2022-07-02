@@ -53,6 +53,7 @@ const PersonerosDialogErrores = props => {
     setOpen(false)
   }
 
+  // Función para expandir o contraer el acordión
   const toggleAccordion = (event, _expanded) => {
     setExpanded(_expanded)
   }

@@ -29,6 +29,7 @@ import { Swal, Toast } from 'configs/settings'
 import { validateFetchData } from 'helpers/validateFetchData'
 import { startGetAccionesSubModulo } from 'redux/actions/auth'
 import { startResetPersoneros } from 'redux/actions/personeros'
+import { pageIni } from 'constants/personeros'
 
 /*******************************************************************************************************/
 // Definimos los estilos del componente //
@@ -44,7 +45,7 @@ const useStyles = makeStyles(theme => ({
 /*******************************************************************************************************/
 const PersonerosTable = props => {
   // Obtenemos las propiedades del componente
-  const { data, setData } = props
+  const { data, setData, page, setPage, rowsPerPage, setRowsPerPage, resetPages } = props
 
   // Llamamos al dispatch de redux
   const dispatch = useDispatch()
@@ -61,10 +62,6 @@ const PersonerosTable = props => {
   // Obtenemos los estados por defecto de la vista personeros
   const { search, tipo, estado, departamento, change } = useSelector(state => state.personeros)
 
-  // Estado para definir el número de página de la tabla
-  const [page, setPage] = useState(0)
-  // Estado para definir el número de filas por página
-  const [rowsPerPage, setRowsPerPage] = useState(10)
   // Total de registros de la tablas
   const [totalReg, setTotalReg] = useState(0)
 
@@ -94,14 +91,13 @@ const PersonerosTable = props => {
       // Iniciamos carga de la tabla
       setLoading(true)
       // Obtenemos la lista de los personeros con fetch
-      const result = await fetchData(
-        `centros-votacion/personeros?searchTipo=${search.tipo}&searchValue=${
-          search.value
-        }&tipo=${tipo}&estado=${estado}&departamento=${departamento}&page=${page + 1}&pageSize=${rowsPerPage}`,
-        {
-          isTokenReq: true
-        }
-      )
+      let url = `centros-votacion/personeros?page=${page + 1}&pageSize=${rowsPerPage}`
+      // Agregamos los parámetros
+      url += `&searchTipo=${search.tipo}&searchValue=${search.value}`
+      url += `&tipo=${tipo}`
+      url += `&estado=${estado}`
+      url += `&departamento=${departamento}`
+      const result = await fetchData(url, { isTokenReq: true })
       // Si existe un resultado y el status es positivo
       if (result && mounted && result.data.status) {
         // Actualizamos el total de registros de la lista
@@ -155,7 +151,7 @@ const PersonerosTable = props => {
   // Función para cambiar el tamaño de registros de una página
   const handleChangeRowsPerPage = evt => {
     // Reiniciamos a la página inicial
-    setPage(0)
+    setPage(pageIni)
     // Guardamos el número de registro por página
     setRowsPerPage(evt.target.value)
   }
@@ -191,7 +187,7 @@ const PersonerosTable = props => {
     <div className="w-full flex flex-col">
       <Scrollbars className="flex-grow overflow-x-auto">
         <Table stickyHeader className="min-w-xl" aria-labelledby="tableTitle">
-          <PersonerosTableHead order={order} onRequestSort={handleRequestSort} />
+          <PersonerosTableHead order={order} onRequestSort={handleRequestSort} resetPages={resetPages} />
           {!loading && data && (
             <TableBody>
               {_.orderBy(data, [order.id], [order.direction]).map((row, index) => {
@@ -295,7 +291,12 @@ const PersonerosTable = props => {
 /*******************************************************************************************************/
 PersonerosTable.propTypes = {
   data: PropTypes.array.isRequired,
-  setData: PropTypes.func.isRequired
+  setData: PropTypes.func.isRequired,
+  page: PropTypes.number.isRequired,
+  setPage: PropTypes.func.isRequired,
+  rowsPerPage: PropTypes.number.isRequired,
+  setRowsPerPage: PropTypes.func.isRequired,
+  resetPages: PropTypes.func.isRequired
 }
 
 /*******************************************************************************************************/

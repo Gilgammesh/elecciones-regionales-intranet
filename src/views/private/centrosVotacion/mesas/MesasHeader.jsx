@@ -23,6 +23,9 @@ const MesasHeader = () => {
   // Obtenemos el Rol de Usuario
   const { rol } = useSelector(state => state.auth.usuario)
 
+  // Obtenemos los estados por defecto de la vista mesas
+  const { departamento } = useSelector(state => state.mesas)
+
   // Estado de apertura del Modal
   const [openMod, setOpenMod] = useState(false)
 
@@ -37,9 +40,7 @@ const MesasHeader = () => {
 
   // Efecto para obtener las acciones del submódulo
   useEffect(() => {
-    dispatch(startGetAccionesSubModulo('centros-votacion', 'mesas')).then(res =>
-      setAccionesPerm(res)
-    )
+    dispatch(startGetAccionesSubModulo('centros-votacion', 'mesas')).then(res => setAccionesPerm(res))
   }, [dispatch])
 
   // Función para abrir el Modal
@@ -60,14 +61,14 @@ const MesasHeader = () => {
           </Typography>
         </Animate>
       </div>
-      {(rol.super ||
-        (accionesPerm && accionesPerm.indexOf('crear') !== -1)) && (
+      {(rol.super || (accionesPerm && accionesPerm.indexOf('crear') !== -1)) && (
         <AnimateGroup animation="transition.slideRightIn" delay={300}>
           <Button
             className="whitespace-no-wrap normal-case"
             variant="contained"
             startIcon={<AssignmentIcon />}
             onClick={handleOpenMod}
+            disabled={rol.super ? (departamento === 'todos' ? true : false) : false}
           >
             <span className="hidden sm:flex">Importar Mesas</span>
             <span className="flex sm:hidden">Importar</span>
@@ -85,20 +86,9 @@ const MesasHeader = () => {
         </AnimateGroup>
       )}
       {openMod && (
-        <MesasDialogUpdate
-          open={openMod}
-          setOpen={setOpenMod}
-          setErrors={setErrors}
-          setOpenErrors={setOpenErrors}
-        />
+        <MesasDialogUpdate open={openMod} setOpen={setOpenMod} setErrors={setErrors} setOpenErrors={setOpenErrors} />
       )}
-      {openErrors && (
-        <MesasDialogErrores
-          open={openErrors}
-          setOpen={setOpenErrors}
-          errors={errors}
-        />
-      )}
+      {openErrors && <MesasDialogErrores open={openErrors} setOpen={setOpenErrors} errors={errors} />}
     </div>
   )
 }

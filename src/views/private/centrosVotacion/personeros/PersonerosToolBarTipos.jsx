@@ -3,16 +3,17 @@
 /*******************************************************************************************************/
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import PropTypes from 'prop-types'
 import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core'
-import {
-  startSetPersonerosSearch,
-  startSetPersonerosTipo
-} from 'redux/actions/personeros'
+import { startSetPersonerosSearch, startSetPersonerosTipo } from 'redux/actions/personeros'
 
 /*******************************************************************************************************/
 // Definimos la Vista del componente Centros de Votación - Personeros ToolBar - Tipos //
 /*******************************************************************************************************/
-const PersonerosToolBarTipos = () => {
+const PersonerosToolBarTipos = props => {
+  // Obtenemos las propiedades del componente
+  const { resetPages } = props
+
   // Llamamos al dispatch de redux
   const dispatch = useDispatch()
 
@@ -24,6 +25,7 @@ const PersonerosToolBarTipos = () => {
     const { value } = evt.target
     dispatch(startSetPersonerosSearch('', ''))
     dispatch(startSetPersonerosTipo(value))
+    resetPages()
   }
 
   // Renderizamos el componente
@@ -47,6 +49,13 @@ const PersonerosToolBarTipos = () => {
       </Select>
     </FormControl>
   )
+}
+
+/*******************************************************************************************************/
+// Definimos los tipos de propiedades del componente //
+/*******************************************************************************************************/
+PersonerosToolBarTipos.propTypes = {
+  resetPages: PropTypes.func.isRequired
 }
 
 /*******************************************************************************************************/
