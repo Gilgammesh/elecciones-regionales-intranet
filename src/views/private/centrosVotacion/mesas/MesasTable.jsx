@@ -32,6 +32,7 @@ import { validateFetchData } from 'helpers/validateFetchData'
 import { startGetAccionesSubModulo } from 'redux/actions/auth'
 import { startSetMesasChange } from 'redux/actions/mesas'
 import DialogPersoneros from './DialogPersoneros'
+import { pageIni } from 'constants/mesas'
 
 /*******************************************************************************************************/
 // Definimos los estilos del componente //
@@ -60,7 +61,7 @@ const ActionsPersonero = {
 /*******************************************************************************************************/
 const MesasTable = props => {
   // Obtenemos las propiedades del componente
-  const { data, setData } = props
+  const { data, setData, page, setPage, rowsPerPage, setRowsPerPage, resetPages } = props
 
   // Llamamos al dispatch de redux
   const dispatch = useDispatch()
@@ -77,10 +78,6 @@ const MesasTable = props => {
   // Obtenemos los datos por defecto de las mesas de votación
   const { search, assign, departamento, provincia, distrito, change } = useSelector(state => state.mesas)
 
-  // Estado para definir el número de página de la tabla
-  const [page, setPage] = useState(0)
-  // Estado para definir el número de filas por página
-  const [rowsPerPage, setRowsPerPage] = useState(10)
   // Total de registros de la tablas
   const [totalReg, setTotalReg] = useState(0)
 
@@ -180,7 +177,7 @@ const MesasTable = props => {
   // Función para cambiar el tamaño de registros de una página
   const handleChangeRowsPerPage = evt => {
     // Reiniciamos a la página inicial
-    setPage(0)
+    setPage(pageIni)
     // Guardamos el número de registro por página
     setRowsPerPage(evt.target.value)
   }
@@ -245,7 +242,7 @@ const MesasTable = props => {
     <div className="w-full flex flex-col">
       <Scrollbars className="flex-grow overflow-x-auto">
         <Table stickyHeader className="min-w-xl" aria-labelledby="tableTitle">
-          <MesasTableHead order={order} onRequestSort={handleRequestSort} />
+          <MesasTableHead order={order} onRequestSort={handleRequestSort} resetPages={resetPages} />
           {!loading && data && (
             <TableBody>
               {_.orderBy(data, [order.id], [order.direction]).map((row, index) => {
@@ -441,7 +438,12 @@ const MesasTable = props => {
 /*******************************************************************************************************/
 MesasTable.propTypes = {
   data: PropTypes.array.isRequired,
-  setData: PropTypes.func.isRequired
+  setData: PropTypes.func.isRequired,
+  page: PropTypes.number.isRequired,
+  setPage: PropTypes.func.isRequired,
+  rowsPerPage: PropTypes.number.isRequired,
+  setRowsPerPage: PropTypes.func.isRequired,
+  resetPages: PropTypes.func.isRequired
 }
 
 /*******************************************************************************************************/

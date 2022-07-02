@@ -3,13 +3,17 @@
 /*******************************************************************************************************/
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import PropTypes from 'prop-types'
 import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core'
 import { startSetMesasSearch, startSetMesasAssign } from 'redux/actions/mesas'
 
 /*******************************************************************************************************/
 // Definimos la Vista del componente Centros de Votación - Mesas ToolBar - Asignado Personero //
 /*******************************************************************************************************/
-const MesasToolBarPersAsign = () => {
+const MesasToolBarPersAsign = props => {
+  // Obtenemos las propiedades del componente
+  const { resetPages } = props
+
   // Llamamos al dispatch de redux
   const dispatch = useDispatch()
 
@@ -21,6 +25,7 @@ const MesasToolBarPersAsign = () => {
     const { value } = evt.target
     dispatch(startSetMesasSearch('', ''))
     dispatch(startSetMesasAssign(value))
+    resetPages()
   }
 
   // Renderizamos el componente
@@ -46,6 +51,13 @@ const MesasToolBarPersAsign = () => {
       </Select>
     </FormControl>
   )
+}
+
+/*******************************************************************************************************/
+// Definimos los tipos de propiedades del componente //
+/*******************************************************************************************************/
+MesasToolBarPersAsign.propTypes = {
+  resetPages: PropTypes.func.isRequired
 }
 
 /*******************************************************************************************************/

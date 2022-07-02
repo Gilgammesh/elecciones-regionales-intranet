@@ -3,6 +3,7 @@
 /*******************************************************************************************************/
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import PropTypes from 'prop-types'
 import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core'
 import clsx from 'clsx'
 import { startSetPersonerosSearch, startSetPersonerosEstado } from 'redux/actions/personeros'
@@ -10,7 +11,10 @@ import { startSetPersonerosSearch, startSetPersonerosEstado } from 'redux/action
 /*******************************************************************************************************/
 // Definimos la Vista del componente Centros de Votación - Personeros ToolBar - Estados //
 /*******************************************************************************************************/
-const PersonerosToolBarEstados = () => {
+const PersonerosToolBarEstados = props => {
+  // Obtenemos las propiedades del componente
+  const { resetPages } = props
+
   // Llamamos al dispatch de redux
   const dispatch = useDispatch()
 
@@ -25,6 +29,7 @@ const PersonerosToolBarEstados = () => {
     const { value } = evt.target
     dispatch(startSetPersonerosSearch('', ''))
     dispatch(startSetPersonerosEstado(value))
+    resetPages()
   }
 
   // Renderizamos el componente
@@ -50,6 +55,13 @@ const PersonerosToolBarEstados = () => {
       </Select>
     </FormControl>
   )
+}
+
+/*******************************************************************************************************/
+// Definimos los tipos de propiedades del componente //
+/*******************************************************************************************************/
+PersonerosToolBarEstados.propTypes = {
+  resetPages: PropTypes.func.isRequired
 }
 
 /*******************************************************************************************************/

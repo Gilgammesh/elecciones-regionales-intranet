@@ -3,17 +3,25 @@
 /*******************************************************************************************************/
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import PropTypes from 'prop-types'
 import { FormControl, InputLabel, Input, InputAdornment, IconButton } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 import validateInputRegexp from 'helpers/validateInputRegexp'
+import clsx from 'clsx'
 import { startSetMesasSearch } from 'redux/actions/mesas'
 
 /*******************************************************************************************************/
 // Definimos la Vista del componente Centros de Votación - Mesas ToolBar - Número Mesa //
 /*******************************************************************************************************/
-const MesasToolBarMesa = () => {
+const MesasToolBarMesa = props => {
+  // Obtenemos las propiedades del componente
+  const { resetPages } = props
+
   // Llamamos al dispatch de redux
   const dispatch = useDispatch()
+
+  // Obtenemos el Rol de Usuario
+  const { rol } = useSelector(state => state.auth.usuario)
 
   // Obtenemos los estados por defecto de la vista mesas de votación
   const { search } = useSelector(state => state.mesas)
@@ -45,11 +53,12 @@ const MesasToolBarMesa = () => {
   // Función para realizar la búsqueda
   const handleSearchQuery = () => {
     dispatch(startSetMesasSearch('mesa', mesa))
+    resetPages()
   }
 
   // Renderizamos el componente
   return (
-    <FormControl className="col-span-12 sm:col-span-1">
+    <FormControl className={clsx('col-span-12', rol.super ? 'sm:col-span-1' : 'sm:col-span-2')}>
       <InputLabel htmlFor="input-centros-votacion-mesas-mesa">Mesa</InputLabel>
       <Input
         id="input-centros-votacion-mesas-mesa"
@@ -72,6 +81,13 @@ const MesasToolBarMesa = () => {
       />
     </FormControl>
   )
+}
+
+/*******************************************************************************************************/
+// Definimos los tipos de propiedades del componente //
+/*******************************************************************************************************/
+MesasToolBarMesa.propTypes = {
+  resetPages: PropTypes.func.isRequired
 }
 
 /*******************************************************************************************************/

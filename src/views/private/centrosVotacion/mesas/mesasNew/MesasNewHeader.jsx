@@ -5,18 +5,12 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  Button,
-  Icon,
-  makeStyles,
-  Typography,
-  useTheme
-} from '@material-ui/core'
+import { Button, Icon, makeStyles, Typography, useTheme } from '@material-ui/core'
 import SaveIcon from '@material-ui/icons/Save'
 import AssistantIcon from '@material-ui/icons/Assistant'
 import Animate from 'components/core/Animate'
 import clsx from 'clsx'
-import { startGetAccionesModulo } from 'redux/actions/auth'
+import { startGetAccionesSubModulo } from 'redux/actions/auth'
 
 /*******************************************************************************************************/
 // Definimos los estilos del componente //
@@ -48,24 +42,17 @@ const MesasNewHeader = props => {
   // Instanciamos los estilos
   const styles = useStyles()
 
-  // Array de Permisos de Acciones del Módulo
+  // Array de Permisos de Acciones del SubMódulo
   const [accionesPerm, setAccionesPerm] = useState(null)
 
-  // Efecto para obtener las acciones del módulo
+  // Efecto para obtener las acciones del submódulo
   useEffect(() => {
-    dispatch(startGetAccionesModulo('centros-votacion')).then(res =>
-      setAccionesPerm(res)
-    )
+    dispatch(startGetAccionesSubModulo('centros-votacion', 'mesas')).then(res => setAccionesPerm(res))
   }, [dispatch])
 
   // Renderizamos el componente
   return (
-    <div
-      className={clsx(
-        'flex flex-1 w-full items-center justify-between',
-        styles.root
-      )}
-    >
+    <div className={clsx('flex flex-1 w-full items-center justify-between', styles.root)}>
       <div className="flex flex-col items-start max-w-full">
         <Animate animation="transition.slideRightIn" delay={300}>
           <Typography
@@ -75,9 +62,7 @@ const MesasNewHeader = props => {
             to="/centros-votacion"
             color="inherit"
           >
-            <Icon className="text-20">
-              {theme.direction === 'ltr' ? 'arrow_back' : 'arrow_forward'}
-            </Icon>
+            <Icon className="text-20">{theme.direction === 'ltr' ? 'arrow_back' : 'arrow_forward'}</Icon>
             <span className="mx-4">Centros de Votación</span>
           </Typography>
         </Animate>
@@ -88,15 +73,12 @@ const MesasNewHeader = props => {
           </Animate>
           <div className="flex flex-col min-w-0 mx-8 sm:mc-16">
             <Animate animation="transition.slideLeftIn" delay={300}>
-              <Typography className="text-16 sm:text-20 truncate">
-                Nuevo Centro de Votación
-              </Typography>
+              <Typography className="text-16 sm:text-20 truncate">Nuevo Centro de Votación</Typography>
             </Animate>
           </div>
         </div>
       </div>
-      {(rol.super ||
-        (accionesPerm && accionesPerm.indexOf('crear') !== -1)) && (
+      {(rol.super || (accionesPerm && accionesPerm.indexOf('crear') !== -1)) && (
         <Animate animation="transition.slideRightIn" delay={300}>
           <Button
             type="submit"

@@ -3,6 +3,7 @@
 /*******************************************************************************************************/
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import PropTypes from 'prop-types'
 import { FormControl, InputLabel, Input, InputAdornment, IconButton } from '@material-ui/core'
 import clsx from 'clsx'
 import SearchIcon from '@material-ui/icons/Search'
@@ -12,7 +13,10 @@ import { startSetPersonerosSearch } from 'redux/actions/personeros'
 /*******************************************************************************************************/
 // Definimos la Vista del componente Centros de Votación - Personeros ToolBar - Nombres y Apellidos //
 /*******************************************************************************************************/
-const PersonerosToolBarNomApe = () => {
+const PersonerosToolBarNomApe = props => {
+  // Obtenemos las propiedades del componente
+  const { resetPages } = props
+
   // Llamamos al dispatch de redux
   const dispatch = useDispatch()
 
@@ -59,6 +63,7 @@ const PersonerosToolBarNomApe = () => {
   // Función para realizar la búsqueda
   const handleSearchQuery = () => {
     dispatch(startSetPersonerosSearch('nombres', [nombres, apellidos]))
+    resetPages()
   }
 
   // Renderizamos el componente
@@ -98,6 +103,13 @@ const PersonerosToolBarNomApe = () => {
       </FormControl>
     </div>
   )
+}
+
+/*******************************************************************************************************/
+// Definimos los tipos de propiedades del componente //
+/*******************************************************************************************************/
+PersonerosToolBarNomApe.propTypes = {
+  resetPages: PropTypes.func.isRequired
 }
 
 /*******************************************************************************************************/

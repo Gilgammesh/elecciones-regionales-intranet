@@ -3,6 +3,7 @@
 /*******************************************************************************************************/
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import PropTypes from 'prop-types'
 import { FormControl, InputLabel, Input, InputAdornment, IconButton } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 import validateInputRegexp from 'helpers/validateInputRegexp'
@@ -11,7 +12,10 @@ import { startSetPersonerosSearch } from 'redux/actions/personeros'
 /*******************************************************************************************************/
 // Definimos la Vista del componente Centros de Votación - Personeros ToolBar - Celular //
 /*******************************************************************************************************/
-const PersonerosToolBarCelular = () => {
+const PersonerosToolBarCelular = props => {
+  // Obtenemos las propiedades del componente
+  const { resetPages } = props
+
   // Llamamos al dispatch de redux
   const dispatch = useDispatch()
 
@@ -45,6 +49,7 @@ const PersonerosToolBarCelular = () => {
   // Función para realizar la búsqueda
   const handleSearchQuery = () => {
     dispatch(startSetPersonerosSearch('celular', celular))
+    resetPages()
   }
 
   // Renderizamos el componente
@@ -72,6 +77,13 @@ const PersonerosToolBarCelular = () => {
       />
     </FormControl>
   )
+}
+
+/*******************************************************************************************************/
+// Definimos los tipos de propiedades del componente //
+/*******************************************************************************************************/
+PersonerosToolBarCelular.propTypes = {
+  resetPages: PropTypes.func.isRequired
 }
 
 /*******************************************************************************************************/

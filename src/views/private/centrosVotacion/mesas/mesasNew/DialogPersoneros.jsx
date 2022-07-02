@@ -3,7 +3,6 @@
 /*******************************************************************************************************/
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch } from 'react-redux'
 import {
   Button,
   Dialog,
@@ -26,9 +25,6 @@ import { fetchData } from 'services/fetch'
 import DialogPersonerosNombres from './DialogPersonerosNombres'
 import DialogPersonerosApellidos from './DialogPersonerosApellidos'
 import DialogPersonerosDni from './DialogPersonerosDni'
-import { validateFetchData } from 'helpers/validateFetchData'
-import { Toast } from 'configs/settings'
-import { startSetMesasChange } from 'redux/actions/mesas'
 import { pageIni, rowsPerPageIni } from 'constants/mesas'
 
 /*******************************************************************************************************/
@@ -62,14 +58,11 @@ const headers = [
 ]
 
 /*******************************************************************************************************/
-// Definimos la Vista del componente Centros de Votación - Mesas - Personeros Disponibles //
+// Definimos la Vista del componente Centros de Votación - Mesas - Nuevo - Personeros Disponibles //
 /*******************************************************************************************************/
 const DialogPersoneros = props => {
   // Obtenemos las propiedades del componente
-  const { open, setOpen, mesa, tipo, action } = props
-
-  // Llamamos al dispatch de redux
-  const dispatch = useDispatch()
+  const { open, setOpen, formValues, setForm, departamento, setPersDet } = props
 
   // Estado de los parámetros de búsqueda
   const [nombres, setNombres] = useState('')
@@ -136,7 +129,7 @@ const DialogPersoneros = props => {
       // Obtenemos la lista de los personeros con fetch
       let url = `centros-votacion/mesas/personeros?page=${page + 1}&pageSize=${rowsPerPage}`
       // Agregamos los parámetros
-      url += `&departamento=${mesa.departamento._id}`
+      url += `&departamento=${departamento}`
       url += `&nombres=${query.nombres}`
       url += `&apellidos=${query.apellidos}`
       url += `&dni=${query.dni}`
@@ -160,7 +153,7 @@ const DialogPersoneros = props => {
     return () => {
       mounted = false
     }
-  }, [open, mesa, query, page, rowsPerPage])
+  }, [open, departamento, query, page, rowsPerPage])
 
   // Función para prevenir el mouse para abajo
   const handleMouseDownSearch = evt => {
@@ -174,27 +167,20 @@ const DialogPersoneros = props => {
     setRowsPerPage(rowsPerPageIni)
   }
 
+  // Función para seleccionar los datos del personero
+  const handleSelectPers = row => {
+    setPersId(row._id)
+    setPersDet(`${row.nombres} ${row.apellidos}`)
+  }
+
   // Función para asignar el personero a la mesa o local de votación
   const handleAssignPerson = async () => {
-    // Actualizamos la data del personero
-    const result = await fetchData(`centros-votacion/mesas/${mesa._id}`, { isTokenReq: true }, 'PUT', {
-      tipoPers: tipo,
-      actionPers: action,
-      personero: persId,
-      mesa
+    setForm({
+      ...formValues,
+      personero_mesa: persId
     })
-    // Validamos el resultado
-    if (validateFetchData(result)) {
-      // Avisamos cambio en la lista de mesas de votación
-      dispatch(startSetMesasChange())
-      // Avisamos con un toast alert
-      Toast.fire({
-        icon: 'success',
-        title: `Se asignó el personero de ${tipo} correctamente`
-      })
-      // Cerramos el modal
-      handleClose()
-    }
+    // Cerramos el modal
+    handleClose()
   }
 
   // Renderizamos el componente
@@ -253,7 +239,7 @@ const DialogPersoneros = props => {
                         key={row._id}
                         style={{ cursor: 'pointer' }}
                         selected={persId === row._id}
-                        onClick={() => setPersId(row._id)}
+                        onClick={() => handleSelectPers(row)}
                       >
                         <TableCell className="py-2" component="th" scope="row">
                           {index + 1 + page * rowsPerPage}
@@ -322,9 +308,10 @@ const DialogPersoneros = props => {
 DialogPersoneros.propTypes = {
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
-  mesa: PropTypes.object.isRequired,
-  tipo: PropTypes.string.isRequired,
-  action: PropTypes.string.isRequired
+  formValues: PropTypes.object.isRequired,
+  setForm: PropTypes.func.isRequired,
+  departamento: PropTypes.string.isRequired,
+  setPersDet: PropTypes.func.isRequired
 }
 
 /*******************************************************************************************************/

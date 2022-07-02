@@ -89,7 +89,7 @@ const headers = [
 /*******************************************************************************************************/
 const MesasTableHead = props => {
   // Obtenemos las propiedades del componente
-  const { order, onRequestSort } = props
+  const { order, onRequestSort, resetPages } = props
 
   // Llamamos al dispatch de redux
   const dispatch = useDispatch()
@@ -105,6 +105,7 @@ const MesasTableHead = props => {
   // Función para refrescar la tabla
   const refreshTable = () => {
     dispatch(startResetMesas())
+    resetPages()
   }
 
   // Renderizamos el componente
@@ -158,7 +159,8 @@ const MesasTableHead = props => {
 /*******************************************************************************************************/
 MesasTableHead.propTypes = {
   order: PropTypes.object.isRequired,
-  onRequestSort: PropTypes.func.isRequired
+  onRequestSort: PropTypes.func.isRequired,
+  resetPages: PropTypes.func.isRequired
 }
 
 /*******************************************************************************************************/

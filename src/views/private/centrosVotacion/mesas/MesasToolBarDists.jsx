@@ -3,6 +3,7 @@
 /*******************************************************************************************************/
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import PropTypes from 'prop-types'
 import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core'
 import { fetchData } from 'services/fetch'
 import { startSetMesasSearch, startSetMesasDistrito } from 'redux/actions/mesas'
@@ -10,7 +11,10 @@ import { startSetMesasSearch, startSetMesasDistrito } from 'redux/actions/mesas'
 /*******************************************************************************************************/
 // Definimos la Vista del componente Centros de Votación - Mesas ToolBar - Distritos //
 /*******************************************************************************************************/
-const MesasToolBarDists = () => {
+const MesasToolBarDists = props => {
+  // Obtenemos las propiedades del componente
+  const { resetPages } = props
+
   // Llamamos al dispatch de redux
   const dispatch = useDispatch()
 
@@ -63,6 +67,7 @@ const MesasToolBarDists = () => {
     const { value } = evt.target
     dispatch(startSetMesasSearch('', ''))
     dispatch(startSetMesasDistrito(value))
+    resetPages()
   }
 
   // Renderizamos el componente
@@ -90,6 +95,13 @@ const MesasToolBarDists = () => {
       </Select>
     </FormControl>
   )
+}
+
+/*******************************************************************************************************/
+// Definimos los tipos de propiedades del componente //
+/*******************************************************************************************************/
+MesasToolBarDists.propTypes = {
+  resetPages: PropTypes.func.isRequired
 }
 
 /*******************************************************************************************************/
