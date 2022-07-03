@@ -23,12 +23,10 @@ export interface IInitTheme {
 // Definimos los ajustes de la aplicación //
 /*******************************************************************************************************/
 // Url Base de la App
-export const appBaseUrl: string =
-  process.env.REACT_APP_ELEC_URL || 'http://localhost:3000'
+export const appBaseUrl: string = process.env.REACT_APP_ELEC_URL || 'http://localhost:3000'
 // export const appBaseUrl: string = process.env.REACT_APP_ELEC_URL_ || 'http://localhost:3000';
 // Url Base de la API o endpoint de los servicios
-export const apiBaseUrl: string =
-  process.env.REACT_APP_API_ELEC_URL || 'http://localhost:4000'
+export const apiBaseUrl: string = process.env.REACT_APP_API_ELEC_URL || 'http://localhost:4000'
 // export const apiBaseUrl: string = process.env.REACT_APP_API_ELEC_URL_ || 'http://localhost:4000';
 // Url de la Api de Geolocation DB
 export const apiGeolocUrl: string = process.env.REACT_APP_GEOLOC_URL || ''
