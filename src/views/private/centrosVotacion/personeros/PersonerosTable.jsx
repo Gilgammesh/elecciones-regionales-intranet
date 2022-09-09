@@ -108,18 +108,21 @@ const PersonerosTable = props => {
       // Finalizamos carga de la tabla
       setLoading(false)
     }
-    // Si existe un socket o cambia y si existe número de página y filas por página
+    // Si existe número de página y filas por página
     if (socket && page >= 0 && rowsPerPage >= 1) {
       // Obtenemos los personeros
       getPersoneros()
-      // Si un personero fue creado
-      socket.on('centros-votacion-personero-creado', () => getPersoneros())
-      // Si un personero fue actualizado
-      socket.on('centros-votacion-personero-actualizado', () => getPersoneros())
-      // Si un personero fue eliminado
-      socket.on('centros-votacion-personero-eliminado', () => getPersoneros())
-      // Si los personeros fueron importados de excel
-      socket.on('centros-votacion-personeros-importados', () => getPersoneros())
+      // Si existe un socket
+      if (socket) {
+        // Si un personero fue creado
+        socket.on('centros-votacion-personero-creado', () => getPersoneros())
+        // Si un personero fue actualizado
+        socket.on('centros-votacion-personero-actualizado', () => getPersoneros())
+        // Si un personero fue eliminado
+        socket.on('centros-votacion-personero-eliminado', () => getPersoneros())
+        // Si los personeros fueron importados de excel
+        socket.on('centros-votacion-personeros-importados', () => getPersoneros())
+      }
     }
     // Limpiamos el montaje
     return () => {

@@ -2,7 +2,7 @@
 // Importamos las dependencias //
 /*******************************************************************************************************/
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Avatar, Button, Icon, ListItemIcon, ListItemText, MenuItem, Popover, Typography } from '@material-ui/core'
 import { startLogout } from 'redux/actions/auth'
@@ -16,8 +16,14 @@ const UserMenu = () => {
   // Llamamos al dispatch de redux
   const dispatch = useDispatch()
 
+  // Llamamos al history de las rutas
+  const history = useHistory()
+
   // Recuperamos el state de authentication de usuario
   const usuario = useSelector(state => state.auth.usuario)
+
+  // Obtenemos el socket de conexión con la Api
+  const socket = useSelector(state => state.socketio)
 
   // Estado inicial del menú de usuario desplegable
   const [userMenu, setUserMenu] = useState(null)
@@ -45,6 +51,8 @@ const UserMenu = () => {
   const handleLogout = () => {
     userMenuClose()
     dispatch(startLogout())
+    history.push('/auth')
+    socket.disconnect()
   }
 
   // Renderizamos el componente

@@ -41,30 +41,21 @@ export const fetchData = async (
   // method: método de la petición al servidor ('GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE')
   // formData: objeto donde se recibe datos del cuerpo de la petición.
 
-  // Fuente de donde se origina la consulta
-  const source: string = 'intranet'
-
-  // Url de origen de la consulta
-  const origin: string = appBaseUrl
-
   // Intentamos obtener la IPv4 del usuario
-  let ipv4: string = ''
+  let ipv4 = ''
   try {
     const resGeo = await fetch(apiGeolocUrl)
     const dataGeo = await resGeo.json()
-    ipv4 = dataGeo.IPv4
+    ipv4 = dataGeo.IPv4 as string
   } catch (error) {
     ipv4 = '127.0.0.0'
   }
 
   // Dispositivo del origen
-  let device: string = ''
+  let device = ''
   if (isMobile) device = 'Mobile'
   if (isTablet) device = 'Tablet'
   if (isDesktop) device = 'Desktop'
-
-  // Navegador de donde se realiza la consulta
-  const browser: string = browserName
 
   // Definimos el resultado inicial
   let result: IResultFetch = { status: false, msg: '' }
@@ -77,11 +68,11 @@ export const fetchData = async (
 
   // Definimos las cabeceras de la petición
   let headers: HeadersInit = {
-    Source: source,
-    Origin: origin,
+    Source: 'intranet',
+    Origin: appBaseUrl,
     Ip: ipv4,
     Device: device,
-    Browser: browser
+    Browser: browserName
   }
   // Si el contenido es de tipo JSON
   if (contentType === 'application/json') {

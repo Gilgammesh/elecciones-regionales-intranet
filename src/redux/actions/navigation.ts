@@ -4,20 +4,13 @@
 import types from 'configs/types'
 import { Dispatch } from 'redux'
 import { IAuthUsuarioReducer } from 'redux/reducers/authReducer'
-import {
-  IModuloReducer,
-  INavigationModReducer,
-  INavigationSubModReducer
-} from 'redux/reducers/navigationReducer'
+import { IModuloReducer, INavigationModReducer, INavigationSubModReducer } from 'redux/reducers/navigationReducer'
 import { IPermisoModReducer } from 'redux/reducers/permisosReducer'
 
 /*******************************************************************************************************/
 // Función para generar la Navegación de los módulos permitidos del usuario //
 /*******************************************************************************************************/
-export const generateNavigationPerm = async (
-  modulos: Array<IModuloReducer>,
-  permisos: Array<IPermisoModReducer>
-) => {
+export const generateNavigationPerm = async (modulos: Array<IModuloReducer>, permisos: Array<IPermisoModReducer>) => {
   // Obtenemos el array de permisos de los módulos
   const promisesPerm = permisos.map(ele => ele.modulo)
   const arrayPermisos = await Promise.all(promisesPerm)
@@ -36,9 +29,7 @@ export const generateNavigationPerm = async (
           const submodulos = ele.children
 
           // Obtenemos el array de permisos de los submódulos del módulo
-          const result: IPermisoModReducer | undefined = permisos.find(
-            ele2 => ele2.modulo === ele.tag
-          )
+          const result: IPermisoModReducer | undefined = permisos.find(ele2 => ele2.modulo === ele.tag)
           // Si existe un resultado
           if (result) {
             const promisesPerm_ = result.permisos.map(ele3 => ele3.submodulo)

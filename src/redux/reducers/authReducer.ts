@@ -34,7 +34,7 @@ export interface IAuthUsuarioReducer {
   }
 }
 export interface IAuthLoggedUsuarioReducer extends IAuthUsuarioReducer {
-  isLogged: boolean
+  isLogged?: boolean
 }
 export interface IAuthReducer {
   token: string
@@ -48,7 +48,6 @@ export interface IAuthReducer {
 const initialState: IAuthReducer = {
   token: getToken(), // Token del usuario
   usuario: {
-    isLogged: false,
     _id: '',
     nombres: '',
     apellidos: '',
