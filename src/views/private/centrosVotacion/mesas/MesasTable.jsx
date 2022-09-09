@@ -134,18 +134,21 @@ const MesasTable = props => {
       // Finalizamos carga de la tabla
       setLoading(false)
     }
-    // Si existe un socket o cambia y si existe número de página y filas por página
-    if (socket && page >= 0 && rowsPerPage >= 1) {
+    // Si existe número de página y filas por página
+    if (page >= 0 && rowsPerPage >= 1) {
       // Obtenemos las mesas de votación
       getMesas()
-      // Si una mesa de votación fue creada
-      socket.on('centros-votacion-mesa-creada', () => getMesas())
-      // Si una mesa de votación fue actualizada
-      socket.on('centros-votacion-mesa-actualizada', () => getMesas())
-      // Si una mesa de votación fue eliminada
-      socket.on('centros-votacion-mesa-eliminada', () => getMesas())
-      // Si las mesas de votación fueron importadas de excel
-      socket.on('centros-votacion-mesas-importadas', () => getMesas())
+      // Si existe un socket
+      if (socket) {
+        // Si una mesa de votación fue creada
+        socket.on('centros-votacion-mesa-creada', () => getMesas())
+        // Si una mesa de votación fue actualizada
+        socket.on('centros-votacion-mesa-actualizada', () => getMesas())
+        // Si una mesa de votación fue eliminada
+        socket.on('centros-votacion-mesa-eliminada', () => getMesas())
+        // Si las mesas de votación fueron importadas de excel
+        socket.on('centros-votacion-mesas-importadas', () => getMesas())
+      }
     }
     // Limpiamos el montaje
     return () => {
@@ -263,27 +266,29 @@ const MesasTable = props => {
                         ) : (
                           <Typography className={clsx(styles.red, 'mr-10')}>--Sin asignar--</Typography>
                         )}
-                        <Tooltip
-                          title={row.personero_mesa ? 'Cambiar' : 'Asignar'}
-                          placement="bottom-start"
-                          enterDelay={100}
-                        >
-                          <IconButton
-                            color="default"
-                            style={{ padding: '6px' }}
-                            aria-label="add change personero"
-                            onClick={() =>
-                              handleOpenPers(
-                                row,
-                                TiposPersonero.MESA,
-                                row.personero_mesa ? ActionsPersonero.CHANGE : ActionsPersonero.ADD
-                              )
-                            }
+                        {(rol.super || (accionesPerm && accionesPerm.indexOf('editar') !== -1)) && (
+                          <Tooltip
+                            title={row.personero_mesa ? 'Cambiar' : 'Asignar'}
+                            placement="bottom-start"
+                            enterDelay={100}
                           >
-                            <PersonAddIcon />
-                          </IconButton>
-                        </Tooltip>
-                        {row.personero_mesa && (
+                            <IconButton
+                              color="default"
+                              style={{ padding: '6px' }}
+                              aria-label="add change personero"
+                              onClick={() =>
+                                handleOpenPers(
+                                  row,
+                                  TiposPersonero.MESA,
+                                  row.personero_mesa ? ActionsPersonero.CHANGE : ActionsPersonero.ADD
+                                )
+                              }
+                            >
+                              <PersonAddIcon />
+                            </IconButton>
+                          </Tooltip>
+                        )}
+                        {row.personero_mesa && (rol.super || (accionesPerm && accionesPerm.indexOf('editar') !== -1)) && (
                           <Tooltip title="Quitar" placement="bottom-start" enterDelay={100}>
                             <IconButton
                               style={{ padding: '6px', color: '#F44343' }}
@@ -315,27 +320,29 @@ const MesasTable = props => {
                         ) : (
                           <Typography className={clsx(styles.red, 'mr-10')}>--Sin asignar--</Typography>
                         )}
-                        <Tooltip
-                          title={row.personero_local ? 'Cambiar' : 'Asignar'}
-                          placement="bottom-start"
-                          enterDelay={100}
-                        >
-                          <IconButton
-                            color="default"
-                            style={{ padding: '6px' }}
-                            aria-label="add change personero"
-                            onClick={() =>
-                              handleOpenPers(
-                                row,
-                                TiposPersonero.LOCAL,
-                                row.personero_local ? ActionsPersonero.CHANGE : ActionsPersonero.ADD
-                              )
-                            }
+                        {(rol.super || (accionesPerm && accionesPerm.indexOf('editar') !== -1)) && (
+                          <Tooltip
+                            title={row.personero_local ? 'Cambiar' : 'Asignar'}
+                            placement="bottom-start"
+                            enterDelay={100}
                           >
-                            <PersonAddIcon />
-                          </IconButton>
-                        </Tooltip>
-                        {row.personero_local && (
+                            <IconButton
+                              color="default"
+                              style={{ padding: '6px' }}
+                              aria-label="add change personero"
+                              onClick={() =>
+                                handleOpenPers(
+                                  row,
+                                  TiposPersonero.LOCAL,
+                                  row.personero_local ? ActionsPersonero.CHANGE : ActionsPersonero.ADD
+                                )
+                              }
+                            >
+                              <PersonAddIcon />
+                            </IconButton>
+                          </Tooltip>
+                        )}
+                        {row.personero_local && (rol.super || (accionesPerm && accionesPerm.indexOf('editar') !== -1)) && (
                           <Tooltip title="Quitar" placement="bottom-start" enterDelay={100}>
                             <IconButton
                               style={{ padding: '6px', color: '#F44343' }}

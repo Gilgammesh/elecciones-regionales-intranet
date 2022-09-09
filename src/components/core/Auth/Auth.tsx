@@ -31,6 +31,9 @@ const Auth = (props: Props) => {
   // Recuperamos el state de los settings del usuario
   const settings = useSelector((state: IRootReducers) => state.settings)
 
+  // Obtenemos el socket de conexión con la Api
+  const socket = useSelector((state: IRootReducers) => state.socketio)
+
   // Estado inicial si espera por validar la autenticacion
   const [waitAuthCheck, setWaitAuthCheck] = useState(true)
 
@@ -52,11 +55,14 @@ const Auth = (props: Props) => {
             setWaitAuthCheck(false)
           } else {
             dispatch(startLogout())
+            history.push('/auth')
             setWaitAuthCheck(false)
           }
         }
       })
     } else {
+      dispatch(startLogout())
+      history.push('/auth')
       setWaitAuthCheck(false)
     }
 
@@ -70,6 +76,17 @@ const Auth = (props: Props) => {
   useEffect(() => {
     localStorage.setItem(store_settings, JSON.stringify(settings))
   }, [settings])
+
+  // Monitoreamos los eventos del socket
+  useEffect(() => {
+    // Si existe un socket
+    if (socket) {
+      // Si una sesión fue cerrada
+      socket.on('admin-sesion-cerrada', () => {
+        dispatch(startLogout())
+      })
+    }
+  }, [socket, dispatch])
 
   if (waitAuthCheck) {
     return <SplashScreen />

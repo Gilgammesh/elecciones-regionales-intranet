@@ -4,15 +4,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
-import {
-  Icon,
-  Table,
-  TableBody,
-  TableCell,
-  TablePagination,
-  TableRow,
-  Typography
-} from '@material-ui/core'
+import { Icon, Table, TableBody, TableCell, TablePagination, TableRow, Typography } from '@material-ui/core'
 import Scrollbars from 'components/core/Scrollbars'
 import SesionesTableHead from './SesionesTableHead'
 import _ from 'lodash'
@@ -54,12 +46,9 @@ const SesionesTable = props => {
       // Iniciamos carga de la tabla
       setLoading(true)
       // Obtenemos la lista de las sesiones con fetch
-      const result = await fetchData(
-        `admin/sesiones?page=${page + 1}&pageSize=${rowsPerPage}`,
-        {
-          isTokenReq: true
-        }
-      )
+      const result = await fetchData(`admin/sesiones?page=${page + 1}&pageSize=${rowsPerPage}`, {
+        isTokenReq: true
+      })
       // Si existe un resultado y el status es positivo
       if (result && mounted && result.data.status) {
         // Actualizamos el total de registros de la lista
@@ -71,14 +60,21 @@ const SesionesTable = props => {
       // Finalizamos carga de la tabla
       setLoading(false)
     }
-    // Si existe un socket o cambia y si existe número de página y filas por página
-    if (socket && page >= 0 && rowsPerPage >= 1) {
+    // Si existe número de página y filas por página
+    if (page >= 0 && rowsPerPage >= 1) {
       // Obtenemos las sesiones
       getSesiones()
-      // Si una sesión fue actualizada
-      socket.on('monitor-sesion-actualizada', () => {
-        getSesiones()
-      })
+      // Si existe un socket
+      if (socket) {
+        // Si una sesión fue creada
+        socket.on('admin-sesion-creada', () => {
+          getSesiones()
+        })
+        // Si una sesión fue actualizada
+        socket.on('admin-sesion-actualizada', () => {
+          getSesiones()
+        })
+      }
     }
     // Limpiamos el montaje
     return () => {
@@ -123,76 +119,56 @@ const SesionesTable = props => {
           <SesionesTableHead order={order} onRequestSort={handleRequestSort} />
           {!loading && data && (
             <TableBody>
-              {_.orderBy(data, [order.id], [order.direction]).map(
-                (row, index) => {
-                  return (
-                    <TableRow
-                      className="h-32"
-                      hover
-                      tabIndex={-1}
-                      key={row._id}
-                    >
-                      <TableCell className="py-2" component="th" scope="row">
-                        {index + 1 + page * rowsPerPage}
-                      </TableCell>
-                      <TableCell className="py-2" component="th" scope="row">
-                        {`${row.usuario.apellidos}, ${row.usuario.nombres}`}
-                      </TableCell>
-                      <TableCell className="py-2" component="th" scope="row">
-                        {row.ultimo_ingreso}
-                      </TableCell>
-                      <TableCell className="py-2" component="th" scope="row">
-                        {row.fuente}
-                      </TableCell>
-                      <TableCell className="py-2" component="th" scope="row">
-                        {row.ip}
-                      </TableCell>
-                      <TableCell className="py-2" component="th" scope="row">
-                        {row.dispositivo}
-                      </TableCell>
-                      <TableCell className="py-2" component="th" scope="row">
-                        {row.navegador}
-                      </TableCell>
-                      <TableCell
-                        className="py-6 pr-40"
-                        component="th"
-                        scope="row"
-                        align="center"
-                        height={48}
-                      >
-                        {row.estado === 'online' && (
-                          <div className="flex flex-row justify-center items-center">
-                            <Icon className="text-green text-28">
-                              person_pin
-                            </Icon>
-                            <Typography className="ml-8 text-green font-500">
-                              en línea
-                            </Typography>
-                          </div>
-                        )}
-                        {row.estado === 'busy' && (
-                          <div className="flex flex-row justify-center items-center">
-                            <Icon className="text-orange text-28">
-                              person_pin
-                            </Icon>
-                            <Typography className="ml-8 text-orange font-500">
-                              ocupado
-                            </Typography>
-                          </div>
-                        )}
-                        {row.estado === 'offline' && (
-                          <div className="flex flex-row justify-center items-center">
-                            <Icon className="text-red text-28">person_pin</Icon>
-                            <Typography className="ml-8 text-red font-500">
-                              desconectado
-                            </Typography>
-                          </div>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  )
-                }
-              )}
+              {_.orderBy(data, [order.id], [order.direction]).map((row, index) => {
+                return (
+                  <TableRow className="h-32" hover tabIndex={-1} key={row._id}>
+                    <TableCell className="py-2" component="th" scope="row">
+                      {index + 1 + page * rowsPerPage}
+                    </TableCell>
+                    <TableCell className="py-2" component="th" scope="row">
+                      {`${row.usuario.apellidos}, ${row.usuario.nombres}`}
+                    </TableCell>
+                    <TableCell className="py-2" component="th" scope="row">
+                      {row.usuario.dni}
+                    </TableCell>
+                    <TableCell className="py-2" component="th" scope="row">
+                      {row.ultimo_ingreso}
+                    </TableCell>
+                    <TableCell className="py-2" component="th" scope="row">
+                      {row.fuente}
+                    </TableCell>
+                    <TableCell className="py-2" component="th" scope="row">
+                      {row.ip}
+                    </TableCell>
+                    <TableCell className="py-2" component="th" scope="row">
+                      {row.dispositivo}
+                    </TableCell>
+                    <TableCell className="py-2" component="th" scope="row">
+                      {row.navegador}
+                    </TableCell>
+                    <TableCell className="py-6 pr-40" component="th" scope="row" align="center" height={48}>
+                      {row.estado === 'online' && (
+                        <div className="flex flex-row justify-center items-center">
+                          <Icon className="text-green text-28">person_pin</Icon>
+                          <Typography className="ml-8 text-green font-500">en línea</Typography>
+                        </div>
+                      )}
+                      {row.estado === 'busy' && (
+                        <div className="flex flex-row justify-center items-center">
+                          <Icon className="text-orange text-28">person_pin</Icon>
+                          <Typography className="ml-8 text-orange font-500">ocupado</Typography>
+                        </div>
+                      )}
+                      {row.estado === 'offline' && (
+                        <div className="flex flex-row justify-center items-center">
+                          <Icon className="text-red text-28">person_pin</Icon>
+                          <Typography className="ml-8 text-red font-500">desconectado</Typography>
+                        </div>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                )
+              })}
             </TableBody>
           )}
         </Table>

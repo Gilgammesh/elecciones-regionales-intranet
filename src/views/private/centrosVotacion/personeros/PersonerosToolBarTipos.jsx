@@ -44,8 +44,6 @@ const PersonerosToolBarTipos = props => {
         <MenuItem value="todos">--Todos--</MenuItem>
         <MenuItem value="mesa">Personero de Mesa</MenuItem>
         <MenuItem value="local">Personero de Local</MenuItem>
-        <MenuItem value="distrito">Personero de Distrito</MenuItem>
-        <MenuItem value="provincia">Personero de Provincia</MenuItem>
       </Select>
     </FormControl>
   )

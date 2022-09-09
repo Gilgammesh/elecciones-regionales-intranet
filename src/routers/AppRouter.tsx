@@ -2,7 +2,7 @@
 // Importamos las dependencias //
 /*******************************************************************************************************/
 import React from 'react'
-import { Redirect, Switch } from 'react-router-dom'
+import { Switch } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import PublicRoute from 'components/core/Route/PublicRoute'
 import PrivateRoute from 'components/core/Route/PrivateRoute'
@@ -19,14 +19,28 @@ const AppRouter = () => {
   // Obtenemos si el usuario esta logueado
   const { isLogged } = auth.usuario
 
-  // Renderizamos el componente
-  return (
-    <Switch>
-      <PublicRoute path="/auth" component={PublicRouter} />
-      <PrivateRoute path="/" component={PrivateRouter} />
-      {isLogged ? <Redirect to="/centros-votacion/mesas" /> : <Redirect to="/auth/login" />}
-    </Switch>
-  )
+  // Si está logueado
+  if (isLogged === true) {
+    // Renderizamos el componente
+    return (
+      <Switch>
+        <PrivateRoute path="/" component={PrivateRouter} />
+      </Switch>
+    )
+  }
+
+  // Si no está logueado
+  if (isLogged === false) {
+    // Renderizamos el componente
+    return (
+      <Switch>
+        <PublicRoute path="/auth" component={PublicRouter} />
+      </Switch>
+    )
+  }
+
+  // Si el estado de logueo es indefinido
+  return <Switch />
 }
 
 /*******************************************************************************************************/

@@ -175,7 +175,8 @@ const DialogPersoneros = props => {
   }
 
   // Función para realizar la búsqueda
-  const handleSearchQuery = () => {
+  const handleSearchQuery = evt => {
+    evt.preventDefault()
     setQuery({ nombres, apellidos, dni })
     setPage(pageIni)
     setRowsPerPage(rowsPerPageIni)
@@ -214,12 +215,7 @@ const DialogPersoneros = props => {
                 <DialogPersonerosApellidos apellidos={apellidos} setApellidos={setApellidos} />
                 <DialogPersonerosDni dni={dni} setDni={setDni} />
                 <div>
-                  <IconButton
-                    type="submit"
-                    aria-label="toggle search"
-                    onClick={handleSearchQuery}
-                    onMouseDown={handleMouseDownSearch}
-                  >
+                  <IconButton type="submit" aria-label="toggle search" onMouseDown={handleMouseDownSearch}>
                     <SearchIcon />
                   </IconButton>
                 </div>

@@ -7,7 +7,7 @@ import { deleteToken, setToken, getToken } from 'helpers/authToken'
 import { fetchData } from 'services/fetch'
 import { validateFetchData } from 'helpers/validateFetchData'
 import { startResetNavigation, startSetNavigation } from './navigation'
-import { apiBaseUrl } from 'configs/settings'
+import { apiBaseUrl, apiGeolocUrl, appBaseUrl } from 'configs/settings'
 import { io } from 'socket.io-client'
 import { startSetSocketIO } from './socketio'
 import { Dispatch } from 'redux'
@@ -15,6 +15,7 @@ import { IAuthUsuarioReducer } from 'redux/reducers/authReducer'
 import { IPermisoModReducer } from 'redux/reducers/permisosReducer'
 import { IModuloReducer } from 'redux/reducers/navigationReducer'
 import { IRootReducers } from 'redux/store'
+import { browserName, isDesktop, isMobile, isTablet } from 'react-device-detect'
 
 /*******************************************************************************************************/
 // Interfac de Login //
@@ -33,9 +34,31 @@ export const startSetAuth = (
   modulos: Array<IModuloReducer>
 ) => {
   return async (dispatch: Dispatch) => {
+    // Intentamos obtener la IPv4 del usuario
+    let ipv4 = ''
+    try {
+      const resGeo = await fetch(apiGeolocUrl)
+      const dataGeo = await resGeo.json()
+      ipv4 = dataGeo.IPv4 as string
+    } catch (error) {
+      ipv4 = '127.0.0.0'
+    }
+    // Dispositivo del origen
+    let device = ''
+    if (isMobile) device = 'Mobile'
+    if (isTablet) device = 'Tablet'
+    if (isDesktop) device = 'Desktop'
+
     // Establecemos el socket de conexión con el api
-    const socket = io(apiBaseUrl, {
-      auth: { token: getToken() }
+    const socket = io(apiBaseUrl, { 
+      auth: {
+        token: getToken(),
+        source: 'intranet',
+        origin: appBaseUrl,
+        ip: ipv4,
+        device,
+        browser: browserName
+      }
     })
     // Si establecimos conexión, guardamos el socket en el store
     socket.on('connect', async () => {
@@ -53,25 +76,39 @@ export const startSetAuth = (
 /*******************************************************************************************************/
 // Función para el evento Iniciar Login //
 /*******************************************************************************************************/
-export const startLogin = (
-  body: ILogin,
-  history: RouteComponentProps['history']
-) => {
+export const startLogin = (body: ILogin, history: RouteComponentProps['history']) => {
   return async (dispatch: Dispatch) => {
     // Hacemos la petición al servidor con los datos del usuario
-    const result = await fetchData(
-      'auth/login',
-      { isTokenReq: false },
-      'POST',
-      body
-    )
+    const result = await fetchData('auth/login', { isTokenReq: false }, 'POST', body)
     // Validamos el resultado de la petición
     if (validateFetchData(result)) {
       // Si existe un data en el resultado
       if (result.data) {
+        // Intentamos obtener la IPv4 del usuario
+        let ipv4 = ''
+        try {
+          const resGeo = await fetch(apiGeolocUrl)
+          const dataGeo = await resGeo.json()
+          ipv4 = dataGeo.IPv4 as string
+        } catch (error) {
+          ipv4 = '127.0.0.0'
+        }
+        // Dispositivo del origen
+        let device = ''
+        if (isMobile) device = 'Mobile'
+        if (isTablet) device = 'Tablet'
+        if (isDesktop) device = 'Desktop'
+
         // Establecemos el socket de conexión con el api
         const socket = io(apiBaseUrl, {
-          auth: { token: result.data.token }
+          auth: {
+            token: result.data.token,
+            source: 'intranet',
+            origin: appBaseUrl,
+            ip: ipv4,
+            device,
+            browser: browserName
+          }
         })
         // Si establecimos conexión, guardamos el socket en el store
         socket.on('connect', () => {
@@ -81,21 +118,13 @@ export const startLogin = (
         setToken(result.data.token)
 
         // Establecemos la navegación
-        dispatch<any>(
-          startSetNavigation(
-            result.data.usuario,
-            result.data.permisos,
-            result.data.modulos
-          )
-        )
+        dispatch<any>(startSetNavigation(result.data.usuario, result.data.permisos, result.data.modulos))
 
-        // Redireccionamos 
+        // Redireccionamos
         history.replace('/centros-votacion/mesas')
 
         // Establecemos los datos del usuario
-        dispatch(
-          login(result.data.token, result.data.usuario, result.data.permisos)
-        )
+        dispatch(login(result.data.token, result.data.usuario, result.data.permisos))
       }
     }
   }
@@ -106,10 +135,6 @@ export const startLogin = (
 /*******************************************************************************************************/
 export const startLogout = () => {
   return async (dispatch: Dispatch) => {
-    // Guardamos la sesión del usuario
-    await fetchData(`admin/sesiones`, { isTokenReq: true }, 'PUT', {
-      estado: 'offline'
-    })
     // Eliminamos el token
     deleteToken()
 
@@ -152,10 +177,7 @@ export const startGetAccionesModulo = (modulo: string) => {
 /*******************************************************************************************************/
 // Función para el evento Iniciar Obtener acciones de un submódulo de un Módulo //
 /*******************************************************************************************************/
-export const startGetAccionesSubModulo = (
-  modulo: string,
-  submodulo: string
-) => {
+export const startGetAccionesSubModulo = (modulo: string, submodulo: string) => {
   return async (dispatch: Dispatch, getState: () => IRootReducers) => {
     // Obtenemos los permisos del Rol de usuario
     const { permisos } = getState().auth
@@ -188,10 +210,7 @@ export const startGetAccionesSubModulo = (
 /*******************************************************************************************************/
 // Acción para el evento Establecer los datos de Autenticación //
 /*******************************************************************************************************/
-export const setAuth = (
-  usuario: IAuthUsuarioReducer,
-  permisos: Array<IPermisoModReducer>
-) => {
+export const setAuth = (usuario: IAuthUsuarioReducer, permisos: Array<IPermisoModReducer>) => {
   return {
     type: types.setAuth,
     payload: {
@@ -204,11 +223,7 @@ export const setAuth = (
 /*******************************************************************************************************/
 // Accion para el evento login //
 /*******************************************************************************************************/
-export const login = (
-  token: string,
-  usuario: IAuthUsuarioReducer,
-  permisos: Array<IPermisoModReducer>
-) => {
+export const login = (token: string, usuario: IAuthUsuarioReducer, permisos: Array<IPermisoModReducer>) => {
   return {
     type: types.login,
     payload: {
