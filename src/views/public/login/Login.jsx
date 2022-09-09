@@ -7,6 +7,7 @@ import clsx from 'clsx'
 import Animate from 'components/core/Animate'
 import LoginLeft from './LoginLeft'
 // import LoginLeft from './LoginLeft_';
+// import LoginLeft from './LoginLeft__';
 import LoginRight from './LoginRight'
 import background from 'assets/images/backgrounds/login-bg.jpg'
 
