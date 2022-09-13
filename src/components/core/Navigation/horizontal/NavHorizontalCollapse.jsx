@@ -6,14 +6,7 @@ import PropTypes from 'prop-types'
 import * as ReactDOM from 'react-dom'
 import { withRouter } from 'react-router-dom'
 import { Manager, Popper, Reference } from 'react-popper'
-import {
-  Grow,
-  Icon,
-  IconButton,
-  ListItem,
-  ListItemText,
-  Paper
-} from '@material-ui/core'
+import { Grow, Icon, IconButton, ListItem, ListItemText, Paper } from '@material-ui/core'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 import useDebounce from 'hooks/useDebounce'
 import clsx from 'clsx'
@@ -69,10 +62,7 @@ const isUrlInChildren = (parent, url) => {
       }
     }
 
-    if (
-      parent.children[i].url === url ||
-      url.includes(parent.children[i].url)
-    ) {
+    if (parent.children[i].url === url || url.includes(parent.children[i].url)) {
       return true
     }
   }
@@ -124,30 +114,17 @@ const NavHorizontalCollapse = props => {
                 role="button"
               >
                 {item.icon && (
-                  <Icon
-                    color="action"
-                    className="list-item-icon text-16 flex-shrink-0"
-                  >
+                  <Icon color="action" className="list-item-icon text-16 flex-shrink-0">
                     {item.icon}
                   </Icon>
                 )}
 
-                <ListItemText
-                  className="list-item-text"
-                  primary={item.title}
-                  classes={{ primary: 'text-13' }}
-                />
+                <ListItemText className="list-item-text" primary={item.title} classes={{ primary: 'text-13' }} />
 
                 {item.badge && <NavBadge className="mx-4" badge={item.badge} />}
-                <IconButton
-                  disableRipple
-                  className="w-16 h-16 ltr:ml-4 rtl:mr-4 p-0"
-                  color="inherit"
-                >
+                <IconButton disableRipple className="w-16 h-16 ltr:ml-4 rtl:mr-4 p-0" color="inherit">
                   <Icon className="text-16 arrow-icon">
-                    {theme.direction === 'ltr'
-                      ? 'keyboard_arrow_right'
-                      : 'keyboard_arrow_left'}
+                    {theme.direction === 'ltr' ? 'keyboard_arrow_right' : 'keyboard_arrow_left'}
                   </Icon>
                 </IconButton>
               </ListItem>
@@ -155,11 +132,7 @@ const NavHorizontalCollapse = props => {
           )}
         </Reference>
         {ReactDOM.createPortal(
-          <Popper
-            placement={theme.direction === 'ltr' ? 'right' : 'left'}
-            eventsEnabled={opened}
-            positionFixed
-          >
+          <Popper placement={theme.direction === 'ltr' ? 'right' : 'left'} eventsEnabled={opened} positionFixed>
             {({ ref, style, placement, arrowProps }) =>
               opened && (
                 <div
@@ -173,24 +146,10 @@ const NavHorizontalCollapse = props => {
                     [styles.popperClose]: !opened
                   })}
                 >
-                  <Grow
-                    in={opened}
-                    id="menu-list-grow"
-                    style={{ transformOrigin: '0 0 0' }}
-                  >
-                    <Paper
-                      onMouseEnter={() => handleToggle(true)}
-                      onMouseLeave={() => handleToggle(false)}
-                    >
+                  <Grow in={opened} id="menu-list-grow" style={{ transformOrigin: '0 0 0' }}>
+                    <Paper onMouseEnter={() => handleToggle(true)} onMouseLeave={() => handleToggle(false)}>
                       {item.children && (
-                        <ul
-                          className={clsx(
-                            styles.children,
-                            'popper-navigation-list',
-                            dense && 'dense',
-                            'px-0'
-                          )}
-                        >
+                        <ul className={clsx(styles.children, 'popper-navigation-list', dense && 'dense', 'px-0')}>
                           {item.children.map(_item => (
                             <NavItem
                               key={_item.id}

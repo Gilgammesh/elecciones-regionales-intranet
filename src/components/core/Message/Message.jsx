@@ -5,13 +5,7 @@ import React, { memo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
 import { amber, blue, green } from '@material-ui/core/colors'
-import {
-  Icon,
-  IconButton,
-  Snackbar,
-  SnackbarContent,
-  Typography
-} from '@material-ui/core'
+import { Icon, IconButton, Snackbar, SnackbarContent, Typography } from '@material-ui/core'
 import clsx from 'clsx'
 import { startHideMessage } from 'redux/actions/message'
 
@@ -83,19 +77,12 @@ const Message = () => {
         className={clsx(styles[options.variant])}
         message={
           <div className="flex items-center">
-            {variantIcon[options.variant] && (
-              <Icon color="inherit">{variantIcon[options.variant]}</Icon>
-            )}
+            {variantIcon[options.variant] && <Icon color="inherit">{variantIcon[options.variant]}</Icon>}
             <Typography className="mx-8">{options.message}</Typography>
           </div>
         }
         action={[
-          <IconButton
-            key="close"
-            aria-label="Close"
-            color="inherit"
-            onClick={() => dispatch(startHideMessage())}
-          >
+          <IconButton key="close" aria-label="Close" color="inherit" onClick={() => dispatch(startHideMessage())}>
             <Icon>close</Icon>
           </IconButton>
         ]}

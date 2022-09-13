@@ -172,10 +172,7 @@ const PageCarded = forwardRef((props, ref) => {
 
   // Renderizamos el componente
   return (
-    <div
-      className={clsx(styles.root, props.innerScroll && styles.innerScroll)}
-      ref={rootRef}
-    >
+    <div className={clsx(styles.root, props.innerScroll && styles.innerScroll)} ref={rootRef}>
       <div className={styles.topBg} />
 
       <div className="flex container w-full">
@@ -196,26 +193,17 @@ const PageCarded = forwardRef((props, ref) => {
           className={clsx(
             styles.contentWrapper,
             isLeftSidebar &&
-              (props.leftSidebarVariant === undefined ||
-                props.leftSidebarVariant === 'permanent') &&
+              (props.leftSidebarVariant === undefined || props.leftSidebarVariant === 'permanent') &&
               'lg:ltr:pl-0 lg:rtl:pr-0',
             isRightSidebar &&
-              (props.rightSidebarVariant === undefined ||
-                props.rightSidebarVariant === 'permanent') &&
+              (props.rightSidebarVariant === undefined || props.rightSidebarVariant === 'permanent') &&
               'lg:pr-0'
           )}
         >
           <PageCardedHeader header={props.header} classes={styles} />
 
-          <div
-            className={clsx(
-              styles.contentCard,
-              props.innerScroll && 'inner-scroll'
-            )}
-          >
-            {props.contentToolbar && (
-              <div className={styles.toolbar}>{props.contentToolbar}</div>
-            )}
+          <div className={clsx(styles.contentCard, props.innerScroll && 'inner-scroll')}>
+            {props.contentToolbar && <div className={styles.toolbar}>{props.contentToolbar}</div>}
 
             {props.content && (
               <Scrollbars

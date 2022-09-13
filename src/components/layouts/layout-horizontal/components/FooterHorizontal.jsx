@@ -43,9 +43,7 @@ const FooterHorizontal = props => {
         style={{ backgroundColor: footerTheme.palette.background.paper }}
         elevation={2}
       >
-        <Toolbar
-          className={clsx(styles.toolbar, 'px-12 py-0 flex items-center')}
-        >
+        <Toolbar className={clsx(styles.toolbar, 'px-12 py-0 flex items-center')}>
           <div className="flex flex-1"></div>
           <div className="px-12 mr-28">
             <DevelopedBy />

@@ -12,10 +12,7 @@ const DevelopedBy = () => {
   // Renderizamos el componente
   return (
     <div className="flex items-center">
-      <Typography
-        component="span"
-        className="normal-case font-bold flex text-white"
-      >
+      <Typography component="span" className="normal-case font-bold flex text-white">
         Desarrollado por:&nbsp;&nbsp;
       </Typography>
       <IconButton

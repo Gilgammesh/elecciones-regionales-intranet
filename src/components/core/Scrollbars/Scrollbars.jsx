@@ -209,6 +209,4 @@ Scrollbars.defaultProps = {
 /*******************************************************************************************************/
 // Exportamos el componente //
 /*******************************************************************************************************/
-export default connect(mapStateToProps, null, null, { forwardRef: true })(
-  withRouterAndRef(Scrollbars)
-)
+export default connect(mapStateToProps, null, null, { forwardRef: true })(withRouterAndRef(Scrollbars))

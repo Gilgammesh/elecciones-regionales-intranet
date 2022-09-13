@@ -3,13 +3,7 @@
 /*******************************************************************************************************/
 import React, { memo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  FormControl,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-  Typography
-} from '@material-ui/core'
+import { FormControl, FormControlLabel, Radio, RadioGroup, Typography } from '@material-ui/core'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 import clsx from 'clsx'
 import LayoutConfigs from 'components/layouts/LayoutConfigs'
@@ -53,23 +47,15 @@ const SchemePreview = ({ theme, className, id, onSelect }) => {
   const _theme = useTheme()
 
   // Establecemos las variables de color de la paleta de temas pasada y el tema actual
-  const primaryColor = theme.palette.primary[500]
-    ? theme.palette.primary[500]
-    : theme.palette.primary.main
+  const primaryColor = theme.palette.primary[500] ? theme.palette.primary[500] : theme.palette.primary.main
   const primaryColorLight = theme.palette.primary.light
   const primaryColorContrast = _theme.palette.getContrastText(primaryColor)
-  const secondaryColor = theme.palette.secondary[500]
-    ? theme.palette.secondary[500]
-    : theme.palette.secondary.main
+  const secondaryColor = theme.palette.secondary[500] ? theme.palette.secondary[500] : theme.palette.secondary.main
   const secondaryColorContrast = _theme.palette.getContrastText(secondaryColor)
   const backgroundColor = theme.palette.background.default
-  const backgroundColorContrast = _theme.palette.getContrastText(
-    theme.palette.background.default
-  )
+  const backgroundColorContrast = _theme.palette.getContrastText(theme.palette.background.default)
   const paperColor = theme.palette.primary.main
-  const paperColorContrast = _theme.palette.getContrastText(
-    theme.palette.primary.main
-  )
+  const paperColorContrast = _theme.palette.getContrastText(theme.palette.primary.main)
 
   // Renderizamos el componente
   return (
@@ -120,9 +106,7 @@ const SchemePreview = ({ theme, className, id, onSelect }) => {
           <span className="text-12 opacity-75">Fondo</span>
         </div>
       </button>
-      <Typography className="font-bold w-full text-center mt-12">
-        {theme.title}
-      </Typography>
+      <Typography className="font-bold w-full text-center mt-12">{theme.title}</Typography>
     </div>
   )
 }
@@ -190,12 +174,7 @@ const Settings = props => {
         onChange={handleLayoutSelect}
       >
         {Object.entries(LayoutConfigs).map(([key, layout]) => (
-          <FormControlLabel
-            key={key}
-            value={key}
-            control={<Radio />}
-            label={layout.title}
-          />
+          <FormControlLabel key={key} value={key} control={<Radio />} label={layout.title} />
         ))}
       </RadioGroup>
     </FormControl>
@@ -213,10 +192,7 @@ const Settings = props => {
       <br />
       <hr />
       <br />
-      <Typography
-        className={clsx(styles.formColorTitle, 'mb-6')}
-        variant="subtitle1"
-      >
+      <Typography className={clsx(styles.formColorTitle, 'mb-6')} variant="subtitle1">
         Colores
       </Typography>
       <div className="flex flex-wrap w-full -mx-8">
@@ -224,11 +200,7 @@ const Settings = props => {
           .filter(([key]) => key.includes('navbar'))
           .map(([key, val]) => (
             <div key={key} className="w-1/2 p-8">
-              <SchemePreview
-                id={key}
-                theme={val}
-                onSelect={handleSchemeSelect}
-              />
+              <SchemePreview id={key} theme={val} onSelect={handleSchemeSelect} />
             </div>
           ))}
       </div>

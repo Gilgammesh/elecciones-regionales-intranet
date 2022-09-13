@@ -154,16 +154,11 @@ const PageSimple = forwardRef((props, ref) => {
 
   // Renderizamos el componente
   return (
-    <div
-      className={clsx(styles.root, props.innerScroll && styles.innerScroll)}
-      ref={rootRef}
-    >
+    <div className={clsx(styles.root, props.innerScroll && styles.innerScroll)} ref={rootRef}>
       <div className={clsx(styles.header, styles.topBg)} />
 
       <div className="flex flex-auto flex-col container z-10 h-full">
-        {props.header && props.sidebarInner && (
-          <PageSimpleHeader header={props.header} classes={styles} />
-        )}
+        {props.header && props.sidebarInner && <PageSimpleHeader header={props.header} classes={styles} />}
 
         <div className={styles.wrapper}>
           {(props.leftSidebarHeader || props.leftSidebarContent) && (
@@ -180,21 +175,12 @@ const PageSimple = forwardRef((props, ref) => {
             />
           )}
 
-          <Scrollbars
-            className={styles.contentWrapper}
-            enable={props.innerScroll && !props.sidebarInner}
-          >
-            {props.header && !props.sidebarInner && (
-              <PageSimpleHeader header={props.header} classes={styles} />
-            )}
+          <Scrollbars className={styles.contentWrapper} enable={props.innerScroll && !props.sidebarInner}>
+            {props.header && !props.sidebarInner && <PageSimpleHeader header={props.header} classes={styles} />}
 
-            {props.contentToolbar && (
-              <div className={styles.toolbar}>{props.contentToolbar}</div>
-            )}
+            {props.contentToolbar && <div className={styles.toolbar}>{props.contentToolbar}</div>}
 
-            {props.content && (
-              <div className={styles.content}>{props.content}</div>
-            )}
+            {props.content && <div className={styles.content}>{props.content}</div>}
           </Scrollbars>
 
           {(props.rightSidebarHeader || props.rightSidebarContent) && (

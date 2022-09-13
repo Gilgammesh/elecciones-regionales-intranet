@@ -15,10 +15,7 @@ const useStyles = makeStyles(theme => ({
   '@global': {
     'code:not([class*="language-"])': {
       color: theme.palette.secondary.dark,
-      backgroundColor:
-        theme.palette.type === 'light'
-          ? 'rgba(255, 255, 255, .9)'
-          : 'rgba(0, 0, 0, .9)',
+      backgroundColor: theme.palette.type === 'light' ? 'rgba(255, 255, 255, .9)' : 'rgba(0, 0, 0, .9)',
       padding: '2px 3px',
       borderRadius: 2,
       lineHeight: 1.7
@@ -82,10 +79,7 @@ const Layout = props => {
   }
 
   // Definimos el layout
-  const AppLayout = useMemo(
-    () => Layouts[settings.layout.style],
-    [settings.layout.style]
-  )
+  const AppLayout = useMemo(() => Layouts[settings.layout.style], [settings.layout.style])
 
   // Renderizamos el componente y pasamos las propiedades a los hijos
   return <AppLayout classes={{ root: styles.root }}>{props.children}</AppLayout>

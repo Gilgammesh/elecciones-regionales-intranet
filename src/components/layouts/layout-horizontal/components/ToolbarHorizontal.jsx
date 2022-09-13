@@ -40,12 +40,7 @@ const ToolbarHorizontal = props => {
   // Renderizamos el componente con el tema
   return (
     <ThemeProvider theme={toolbarTheme}>
-      <AppBar
-        id="fuse-toolbar"
-        className={clsx(styles.root, 'flex relative z-10')}
-        color="default"
-        elevation={2}
-      >
+      <AppBar id="fuse-toolbar" className={clsx(styles.root, 'flex relative z-10')} color="default" elevation={2}>
         <Toolbar className="container p-0 lg:px-24">
           {config.navbar.display && (
             <Hidden lgUp>

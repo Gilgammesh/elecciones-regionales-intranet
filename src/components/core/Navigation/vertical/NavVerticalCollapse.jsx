@@ -4,13 +4,7 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
-import {
-  Collapse,
-  Icon,
-  IconButton,
-  ListItem,
-  ListItemText
-} from '@material-ui/core'
+import { Collapse, Icon, IconButton, ListItem, ListItemText } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 import NavLinkAdapter from 'components/core/NavLinkAdapter'
@@ -24,10 +18,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     padding: 0,
     '&.open': {
-      backgroundColor:
-        theme.palette.type === 'dark'
-          ? 'rgba(255,255,255,.065)'
-          : 'rgba(0,0,0,.065)'
+      backgroundColor: theme.palette.type === 'dark' ? 'rgba(255,255,255,.065)' : 'rgba(0,0,0,.065)'
     }
   },
   item: props => ({
@@ -66,10 +57,7 @@ const isUrlInChildren = (parent, url) => {
         return true
       }
     }
-    if (
-      parent.children[i].url === url ||
-      url.includes(parent.children[i].url)
-    ) {
+    if (parent.children[i].url === url || url.includes(parent.children[i].url)) {
       return true
     }
   }
@@ -120,11 +108,7 @@ const NavVerticalCollapse = props => {
           </Icon>
         )}
 
-        <ListItemText
-          className="list-item-text"
-          primary={item.title}
-          classes={{ primary: 'text-13' }}
-        />
+        <ListItemText className="list-item-text" primary={item.title} classes={{ primary: 'text-13' }} />
 
         {item.badge && <NavBadge className="mx-4" badge={item.badge} />}
 
@@ -142,12 +126,7 @@ const NavVerticalCollapse = props => {
       {item.children && (
         <Collapse in={open} className="collapse-children">
           {item.children.map(_item => (
-            <NavItem
-              key={_item.id}
-              type={`vertical-${_item.type}`}
-              item={_item}
-              nestedLevel={nestedLevel + 1}
-            />
+            <NavItem key={_item.id} type={`vertical-${_item.type}`} item={_item} nestedLevel={nestedLevel + 1} />
           ))}
         </Collapse>
       )}

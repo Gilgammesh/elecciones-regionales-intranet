@@ -96,7 +96,7 @@
     "@types/velocity-animate": "^2.0.1",
     "babel-eslint": "10.1.0",
     "cross-env": "7.0.2",
-    "eslint": "^6.8.0",
+    "eslint": "^7.11.0",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-prettier": "^6.10.0",
     "eslint-import-resolver-node": "^0.3.3",
@@ -121,8 +121,7 @@
     "purge-tailwind": "node ./purge-tailwindcss.ts",
     "clean": "rimraf build",
     "test": "react-scripts test --env=node",
-    "eject": "react-scripts eject",
-    "lint": "eslint ./src"
+    "eject": "react-scripts eject"
   },
   "browserslist": {
     "production": [

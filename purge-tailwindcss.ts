@@ -19,13 +19,7 @@ class TailwindExtractor {
 // Propiedades del PurgeCSS //
 /*******************************************************************************************************/
 const purgecss = new Purgecss({
-  content: [
-    './src/**/*.html',
-    './src/**/*.js',
-    './src/**/*.jsx',
-    './src/**/*.ts',
-    './src/**/*.tsx'
-  ],
+  content: ['./src/**/*.html', './src/**/*.js', './src/**/*.jsx', './src/**/*.ts', './src/**/*.tsx'],
   css: ['./src/styles/tailwind.css'],
   whitelist: ['pl-24', 'pl-40', 'pl-56', 'pl-72', 'pl-80'],
   extractors: [

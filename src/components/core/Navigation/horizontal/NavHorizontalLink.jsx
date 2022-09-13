@@ -67,9 +67,7 @@ const NavHorizontalLink = props => {
         classes={{ primary: 'text-13 list-item-text-primary' }}
       />
 
-      {item.badge && (
-        <NavBadge className="ltr:ml-8 rtl:mr-8" badge={item.badge} />
-      )}
+      {item.badge && <NavBadge className="ltr:ml-8 rtl:mr-8" badge={item.badge} />}
     </ListItem>
   )
 }

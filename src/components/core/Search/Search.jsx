@@ -41,20 +41,14 @@ const renderInputComponent = inputProps => {
                 inputRef(node)
               },
               classes: {
-                input: clsx(
-                  classes.input,
-                  'py-0 px-16 h-48 ltr:pr-48 rtl:pl-48'
-                ),
+                input: clsx(classes.input, 'py-0 px-16 h-48 ltr:pr-48 rtl:pl-48'),
                 notchedOutline: 'rounded-8'
               }
             }}
             variant="outlined"
             {...other}
           />
-          <Icon
-            className="absolute top-0 ltr:right-0 rtl:left-0 h-48 w-48 p-12 pointer-events-none"
-            color="action"
-          >
+          <Icon className="absolute top-0 ltr:right-0 rtl:left-0 h-48 w-48 p-12 pointer-events-none" color="action">
             search
           </Icon>
         </>
@@ -93,9 +87,7 @@ const renderSuggestion = (suggestion, { query, isHighlighted }) => {
         {suggestion.icon ? (
           <Icon>{suggestion.icon}</Icon>
         ) : (
-          <span className="text-20 w-24 font-bold uppercase text-center">
-            {suggestion.title[0]}
-          </span>
+          <span className="text-20 w-24 font-bold uppercase text-center">{suggestion.title[0]}</span>
         )}
       </ListItemIcon>
       <ListItemText
@@ -126,8 +118,7 @@ const getSuggestions = (value, data) => {
   return inputLength === 0
     ? []
     : data.filter(suggestion => {
-        const keep =
-          count < 10 && match(suggestion.title, inputValue).length > 0
+        const keep = count < 10 && match(suggestion.title, inputValue).length > 0
         if (keep) {
           count += 1
         }
@@ -313,11 +304,7 @@ const Search = props => {
 
   // Función para el evento de clickear dentro de la caja o fuera de ella
   const handleClickAway = event => {
-    return (
-      (!suggestionsNode.current ||
-        !suggestionsNode.current.contains(event.target)) &&
-      hideSearch()
-    )
+    return (!suggestionsNode.current || !suggestionsNode.current.contains(event.target)) && hideSearch()
   }
 
   // Propiedades de la autosugerencia
@@ -336,12 +323,7 @@ const Search = props => {
   return (
     <div className={clsx(styles.root, 'flex', props.className)}>
       <Tooltip title="Presione para buscar" placement="bottom">
-        <div
-          onClick={showSearch}
-          onKeyDown={showSearch}
-          role="button"
-          tabIndex={0}
-        >
+        <div onClick={showSearch} onKeyDown={showSearch} role="button" tabIndex={0}>
           {props.trigger}
         </div>
       </Tooltip>
@@ -380,17 +362,11 @@ const Search = props => {
                         square
                         {...options.containerProps}
                         style={{
-                          width: popperNode.current
-                            ? popperNode.current.clientWidth
-                            : null
+                          width: popperNode.current ? popperNode.current.clientWidth : null
                         }}
                       >
                         {options.children}
-                        {state.noSuggestions && (
-                          <Typography className="px-16 py-12">
-                            No results..
-                          </Typography>
-                        )}
+                        {state.noSuggestions && <Typography className="px-16 py-12">No results..</Typography>}
                       </Paper>
                     </div>
                   </Popper>

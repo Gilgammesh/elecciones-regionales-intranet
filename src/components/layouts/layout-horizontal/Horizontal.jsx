@@ -86,15 +86,11 @@ const Horizontal = props => {
       {config.leftSidePanel.display && <LeftSideHorizontal />}
 
       <div className="flex flex-1 flex-col overflow-hidden relative">
-        {config.toolbar.display && config.toolbar.position === 'above' && (
-          <ToolbarHorizontal />
-        )}
+        {config.toolbar.display && config.toolbar.position === 'above' && <ToolbarHorizontal />}
 
         {config.navbar.display && <NavbarWrapperHorizontal />}
 
-        {config.toolbar.display && config.toolbar.position === 'below' && (
-          <ToolbarHorizontal />
-        )}
+        {config.toolbar.display && config.toolbar.position === 'below' && <ToolbarHorizontal />}
 
         <Scrollbars className={styles.content} scrollToTopOnRouteChange>
           <Dialog />

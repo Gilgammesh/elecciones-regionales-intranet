@@ -64,16 +64,12 @@ const useStyles = makeStyles(theme => ({
 function ChatPanel(props) {
   const dispatch = useDispatch()
   const contacts = useSelector(selectContacts)
-  const selectedContactId = useSelector(
-    ({ chatPanel }) => chatPanel.contacts.selectedContactId
-  )
+  const selectedContactId = useSelector(({ chatPanel }) => chatPanel.contacts.selectedContactId)
   const state = useSelector(({ chatPanel }) => chatPanel.state)
   const ref = useRef()
 
   const classes = useStyles(props)
-  const selectedContact = contacts.find(
-    _contact => _contact.id === selectedContactId
-  )
+  const selectedContact = contacts.find(_contact => _contact.id === selectedContactId)
 
   const handleDocumentKeyDown = useCallback(
     event => {
@@ -123,19 +119,12 @@ function ChatPanel(props) {
 
   return (
     <div className={classes.root}>
-      <div
-        className={clsx(classes.panel, { opened: state }, 'flex flex-col')}
-        ref={ref}
-      >
+      <div className={clsx(classes.panel, { opened: state }, 'flex flex-col')} ref={ref}>
         <AppBar position="static" elevation={1}>
           <Toolbar className="px-4">
             {(!state || !selectedContactId) && (
               <div className="flex flex-1 items-center px-4">
-                <IconButton
-                  className=""
-                  color="inherit"
-                  onClick={ev => dispatch(openChatPanel())}
-                >
+                <IconButton className="" color="inherit" onClick={ev => dispatch(openChatPanel())}>
                   <Icon className="text-32">chat</Icon>
                 </IconButton>
                 {!selectedContactId && (
@@ -154,10 +143,7 @@ function ChatPanel(props) {
               </div>
             )}
             <div className="flex px-4">
-              <IconButton
-                onClick={ev => dispatch(closeChatPanel())}
-                color="inherit"
-              >
+              <IconButton onClick={ev => dispatch(closeChatPanel())} color="inherit">
                 <Icon>close</Icon>
               </IconButton>
             </div>

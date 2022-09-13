@@ -25,17 +25,12 @@ const PageCardedSidebarContent = props => {
     <>
       {props.header && (
         <ThemeProvider theme={contrastTheme}>
-          <div className={clsx(classes.sidebarHeader, props.variant)}>
-            {props.header}
-          </div>
+          <div className={clsx(classes.sidebarHeader, props.variant)}>{props.header}</div>
         </ThemeProvider>
       )}
 
       {props.content && (
-        <Scrollbars
-          className={classes.sidebarContent}
-          enable={props.innerScroll}
-        >
+        <Scrollbars className={classes.sidebarContent} enable={props.innerScroll}>
           {props.content}
         </Scrollbars>
       )}

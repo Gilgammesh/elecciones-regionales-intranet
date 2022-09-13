@@ -7,11 +7,7 @@ import { Drawer, Hidden } from '@material-ui/core'
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles'
 import clsx from 'clsx'
 import { getNavbarTheme } from 'configs/themes'
-import {
-  startNavbarOpenFolded,
-  startNavbarCloseFolded,
-  startNavbarCloseMobile
-} from 'redux/actions/navbar'
+import { startNavbarOpenFolded, startNavbarCloseFolded, startNavbarCloseMobile } from 'redux/actions/navbar'
 import NavbarMobileToggleFab from 'components/layouts/shared-components/NavbarMobileToggleFab'
 import NavbarVertical from './NavbarVertical'
 import { navbarWidth } from 'configs/settings'
@@ -164,10 +160,7 @@ const NavbarWrapperVertical = props => {
   return (
     <>
       <ThemeProvider theme={navbarTheme}>
-        <div
-          id="app-navbar"
-          className={clsx(styles.wrapper, folded && styles.wrapperFolded)}
-        >
+        <div id="app-navbar" className={clsx(styles.wrapper, folded && styles.wrapperFolded)}>
           <Hidden mdDown>
             <div
               className={clsx(
@@ -177,12 +170,8 @@ const NavbarWrapperVertical = props => {
                 foldedAndOpened && styles.foldedAndOpened,
                 foldedAndClosed && styles.foldedAndClosed
               )}
-              onMouseEnter={() =>
-                foldedAndClosed && dispatch(startNavbarOpenFolded())
-              }
-              onMouseLeave={() =>
-                foldedAndOpened && dispatch(startNavbarCloseFolded())
-              }
+              onMouseEnter={() => foldedAndClosed && dispatch(startNavbarOpenFolded())}
+              onMouseLeave={() => foldedAndOpened && dispatch(startNavbarCloseFolded())}
               style={{
                 backgroundColor: navbarTheme.palette.background.default
               }}

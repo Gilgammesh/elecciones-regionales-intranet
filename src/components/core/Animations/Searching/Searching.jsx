@@ -35,12 +35,7 @@ const Searching = props => {
 
   // Renderizamos el componente
   return (
-    <div
-      className={clsx(
-        'flex justify-center items-center',
-        model === 'stretch' ? 'w-full' : 'flex-grow'
-      )}
-    >
+    <div className={clsx('flex justify-center items-center', model === 'stretch' ? 'w-full' : 'flex-grow')}>
       <Lottie {...props} config={animationOptions} />
     </div>
   )

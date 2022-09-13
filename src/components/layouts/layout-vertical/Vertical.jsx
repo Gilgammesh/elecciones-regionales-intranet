@@ -49,13 +49,12 @@ const useStyles = makeStyles(theme => ({
       '& $content': {}
     },
     '& .navigation': {
-      '& .list-subheader-text, & .list-item-text, & .item-badge, & .arrow-icon':
-        {
-          transition: theme.transitions.create('opacity', {
-            duration: theme.transitions.duration.shortest,
-            easing: theme.transitions.easing.easeInOut
-          })
-        }
+      '& .list-subheader-text, & .list-item-text, & .item-badge, & .arrow-icon': {
+        transition: theme.transitions.create('opacity', {
+          duration: theme.transitions.duration.shortest,
+          easing: theme.transitions.easing.easeInOut
+        })
+      }
     }
   },
   wrapper: {
@@ -98,31 +97,24 @@ const Vertical = props => {
 
   // Renderizamos el componente
   return (
-    <div
-      id="app-layout"
-      className={clsx(styles.root, config.mode, `scroll-${config.scroll}`)}
-    >
+    <div id="app-layout" className={clsx(styles.root, config.mode, `scroll-${config.scroll}`)}>
       {config.leftSidePanel.display && <LeftSideVertical />}
 
       <div className="flex flex-1 flex-col overflow-hidden relative">
-        {config.toolbar.display && config.toolbar.position === 'above' && (
-          <ToolbarVertical />
-        )}
+        {config.toolbar.display && config.toolbar.position === 'above' && <ToolbarVertical />}
 
         <div className={styles.wrapper}>
-          {config.navbar.display && config.navbar.position === 'left' && (
-            <NavbarWrapperVertical />
-          )}
+          {config.navbar.display && config.navbar.position === 'left' && <NavbarWrapperVertical />}
 
           <div className={styles.contentWrapper}>
-            {config.toolbar.display &&
-              config.toolbar.position === 'below' &&
-              config.toolbar.style === 'fixed' && <ToolbarVertical />}
+            {config.toolbar.display && config.toolbar.position === 'below' && config.toolbar.style === 'fixed' && (
+              <ToolbarVertical />
+            )}
 
             <Scrollbars className={styles.content} scrollToTopOnRouteChange>
-              {config.toolbar.display &&
-                config.toolbar.position === 'below' &&
-                config.toolbar.style !== 'fixed' && <ToolbarVertical />}
+              {config.toolbar.display && config.toolbar.position === 'below' && config.toolbar.style !== 'fixed' && (
+                <ToolbarVertical />
+              )}
 
               <Dialog />
 
@@ -140,9 +132,7 @@ const Vertical = props => {
             {/* <SettingsPanel /> */}
           </div>
 
-          {config.navbar.display && config.navbar.position === 'right' && (
-            <NavbarWrapperVertical />
-          )}
+          {config.navbar.display && config.navbar.position === 'right' && <NavbarWrapperVertical />}
         </div>
 
         {/* {config.footer.display && config.footer.position === 'above' && <FooterVertical />} */}

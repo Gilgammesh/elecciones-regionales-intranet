@@ -23,9 +23,7 @@ const withRouterAndRef = WrappedComponent => {
     withRef: true
   })
   // Retornamos componente con la ruta y la referencia
-  return forwardRef((props, ref) => (
-    <ComponentWithRouter {...props} forwardRef={ref} />
-  ))
+  return forwardRef((props, ref) => <ComponentWithRouter {...props} forwardRef={ref} />)
 }
 
 /*******************************************************************************************************/

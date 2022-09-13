@@ -49,12 +49,7 @@ function QuickPanel(props) {
   }, [dispatch])
 
   return (
-    <Drawer
-      classes={{ paper: classes.root }}
-      open={state}
-      anchor="right"
-      onClose={ev => dispatch(toggleQuickPanel())}
-    >
+    <Drawer classes={{ paper: classes.root }} open={state} anchor="right" onClose={ev => dispatch(toggleQuickPanel())}>
       <Scrollbars>
         <ListSubheader component="div">Today</ListSubheader>
 

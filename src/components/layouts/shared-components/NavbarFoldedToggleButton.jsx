@@ -23,13 +23,7 @@ const NavbarFoldedToggleButton = props => {
       className={props.className}
       onClick={() => {
         dispatch(
-          startSetSettings(
-            _.set(
-              settings,
-              'layout.config.navbar.folded',
-              !settings.layout.config.navbar.folded
-            )
-          )
+          startSetSettings(_.set(settings, 'layout.config.navbar.folded', !settings.layout.config.navbar.folded))
         )
       }}
       color="inherit"

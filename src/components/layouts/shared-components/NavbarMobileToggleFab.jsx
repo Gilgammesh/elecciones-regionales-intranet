@@ -28,13 +28,10 @@ const useStyles = makeStyles(theme => ({
     borderRadius: 38,
     padding: 8,
     backgroundColor: theme.palette.background.paper,
-    transition: theme.transitions.create(
-      ['background-color', 'border-radius', 'width', 'min-width', 'padding'],
-      {
-        easing: theme.transitions.easing.easeInOut,
-        duration: theme.transitions.duration.shorter
-      }
-    ),
+    transition: theme.transitions.create(['background-color', 'border-radius', 'width', 'min-width', 'padding'], {
+      easing: theme.transitions.easing.easeInOut,
+      duration: theme.transitions.duration.shorter
+    }),
     '&:hover': {
       width: 52,
       paddingLeft: 8,
@@ -75,16 +72,9 @@ const NavbarMobileToggleFab = props => {
 
   // Renderizamos el componente
   return (
-    <Tooltip
-      title="Show Navigation"
-      placement={config.navbar.position === 'left' ? 'right' : 'left'}
-    >
+    <Tooltip title="Show Navigation" placement={config.navbar.position === 'left' ? 'right' : 'left'}>
       <Fab
-        className={clsx(
-          styles.mobileButton,
-          config.navbar.position,
-          props.className
-        )}
+        className={clsx(styles.mobileButton, config.navbar.position, props.className)}
         onClick={ev => dispatch(startNavbarToggleMobile())}
         disableRipple
       >

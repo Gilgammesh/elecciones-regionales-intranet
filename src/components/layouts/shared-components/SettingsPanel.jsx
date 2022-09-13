@@ -2,14 +2,7 @@
 // Importamos las dependencias //
 /*******************************************************************************************************/
 import React, { forwardRef, memo, useState } from 'react'
-import {
-  Button,
-  Dialog,
-  Icon,
-  IconButton,
-  Slide,
-  Typography
-} from '@material-ui/core'
+import { Button, Dialog, Icon, IconButton, Slide, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { red } from '@material-ui/core/colors'
 import clsx from 'clsx'
@@ -136,10 +129,7 @@ const SettingsPanel = () => {
         }}
       >
         <Scrollbars className="p-24 sm:p-32">
-          <IconButton
-            className="fixed top-0 ltr:right-0 rtl:left-0 z-10"
-            onClick={handleClose}
-          >
+          <IconButton className="fixed top-0 ltr:right-0 rtl:left-0 z-10" onClick={handleClose}>
             <Icon>close</Icon>
           </IconButton>
 

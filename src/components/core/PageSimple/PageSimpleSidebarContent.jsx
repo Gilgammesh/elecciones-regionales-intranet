@@ -37,9 +37,7 @@ const PageSimpleSidebarContent = props => {
         </ThemeProvider>
       )}
 
-      {props.content && (
-        <div className={classes.sidebarContent}>{props.content}</div>
-      )}
+      {props.content && <div className={classes.sidebarContent}>{props.content}</div>}
     </Scrollbars>
   )
 }

@@ -39,9 +39,7 @@ const NavbarVertical = props => {
 
   // Renderizamos el componente
   return (
-    <div
-      className={clsx('flex flex-col overflow-hidden h-full', props.className)}
-    >
+    <div className={clsx('flex flex-col overflow-hidden h-full', props.className)}>
       <AppBar
         color="primary"
         position="static"
@@ -63,10 +61,7 @@ const NavbarVertical = props => {
         </Hidden>
       </AppBar>
 
-      <Scrollbars
-        className={clsx(styles.content)}
-        option={{ suppressScrollX: true }}
-      >
+      <Scrollbars className={clsx(styles.content)} option={{ suppressScrollX: true }}>
         <UserNavbarHeader />
 
         <Navigation layout="vertical" />

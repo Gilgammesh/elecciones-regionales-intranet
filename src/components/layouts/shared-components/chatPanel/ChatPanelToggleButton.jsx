@@ -15,10 +15,7 @@ const ChatPanelToggleButton = props => {
 
   // Renderizamos el componente
   return (
-    <IconButton
-      className="w-40 h-40"
-      onClick={() => dispatch(startToggleChatPanel())}
-    >
+    <IconButton className="w-40 h-40" onClick={() => dispatch(startToggleChatPanel())}>
       {props.children}
     </IconButton>
   )

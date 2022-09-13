@@ -30,14 +30,8 @@ const Building = () => {
       contentToolbar={<div className="px-24"></div>}
       content={
         <div className="flex flex-col justify-center items-center text-center p-24">
-          <img
-            src={construccion}
-            className="w-256 sm:w-400 mt-20"
-            alt="en construccion"
-          />
-          <h1 className="text-black font-600 mt-20">
-            La sección se encuentra en construcción
-          </h1>
+          <img src={construccion} className="w-256 sm:w-400 mt-20" alt="en construccion" />
+          <h1 className="text-black font-600 mt-20">La sección se encuentra en construcción</h1>
         </div>
       }
     />

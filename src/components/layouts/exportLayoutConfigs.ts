@@ -2,9 +2,7 @@
 // Importamos las dependencias //
 /*******************************************************************************************************/
 import vertical, { IConfigVertical } from './layout-vertical/VerticalConfig'
-import horizontal, {
-  IConfigHorizontal
-} from './layout-horizontal/HorizontalConfig'
+import horizontal, { IConfigHorizontal } from './layout-horizontal/HorizontalConfig'
 
 /*******************************************************************************************************/
 // Interface de Configuraciones de Layouts //

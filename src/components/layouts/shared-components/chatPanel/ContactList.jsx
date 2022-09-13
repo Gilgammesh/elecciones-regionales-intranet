@@ -81,9 +81,7 @@ const useStyles = makeStyles(theme => ({
 function ContactList(props) {
   const dispatch = useDispatch()
   const contacts = useSelector(selectContacts)
-  const selectedContactId = useSelector(
-    ({ chatPanel }) => chatPanel.contacts.selectedContactId
-  )
+  const selectedContactId = useSelector(({ chatPanel }) => chatPanel.contacts.selectedContactId)
   const user = useSelector(({ chatPanel }) => chatPanel.user)
 
   const classes = useStyles()
@@ -108,9 +106,7 @@ function ContactList(props) {
             active: selectedContactId === contact.id
           })}
         >
-          {contact.unread && (
-            <div className={classes.unreadBadge}>{contact.unread}</div>
-          )}
+          {contact.unread && <div className={classes.unreadBadge}>{contact.unread}</div>}
           <div className={clsx(contact.status, classes.status)} />
           <Avatar src={contact.avatar} alt={contact.name}>
             {!contact.avatar || contact.avatar === '' ? contact.name[0] : ''}
@@ -122,10 +118,7 @@ function ContactList(props) {
 
   return (
     <FuseScrollbars
-      className={clsx(
-        classes.root,
-        'flex flex-shrink-0 flex-col overflow-y-auto py-8'
-      )}
+      className={clsx(classes.root, 'flex flex-shrink-0 flex-col overflow-y-auto py-8')}
       ref={contactListScroll}
     >
       {contacts.length > 0 && (
@@ -139,21 +132,13 @@ function ContactList(props) {
             {user &&
               user.chatList &&
               user.chatList.map(chat => {
-                const contact = contacts.find(
-                  _contact => _contact.id === chat.contactId
-                )
+                const contact = contacts.find(_contact => _contact.id === chat.contactId)
                 return <ContactButton key={contact.id} contact={contact} />
               })}
             <Divider className="mx-24 my-8" />
             {contacts.map(contact => {
-              const chatContact = user.chatList.find(
-                _chat => _chat.contactId === contact.id
-              )
-              return !chatContact ? (
-                <ContactButton key={contact.id} contact={contact} />
-              ) : (
-                ''
-              )
+              const chatContact = user.chatList.find(_chat => _chat.contactId === contact.id)
+              return !chatContact ? <ContactButton key={contact.id} contact={contact} /> : ''
             })}
           </FuseAnimateGroup>
         </>

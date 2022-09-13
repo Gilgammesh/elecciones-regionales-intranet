@@ -18,9 +18,7 @@ const PageCardedHeader = props => {
   // Renderizamos el componente
   return (
     <div className={props.classes.header}>
-      {props.header && (
-        <ThemeProvider theme={contrastTheme}>{props.header}</ThemeProvider>
-      )}
+      {props.header && <ThemeProvider theme={contrastTheme}>{props.header}</ThemeProvider>}
     </div>
   )
 }

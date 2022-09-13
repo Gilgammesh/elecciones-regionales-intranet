@@ -40,9 +40,7 @@ const PageSimpleSidebar = (props, ref) => {
             paper: clsx(
               classes.sidebar,
               props.variant,
-              props.position === 'left'
-                ? classes.leftSidebar
-                : classes.rightSidebar
+              props.position === 'left' ? classes.leftSidebar : classes.rightSidebar
             )
           }}
           ModalProps={{
@@ -70,9 +68,7 @@ const PageSimpleSidebar = (props, ref) => {
               paper: clsx(
                 classes.sidebar,
                 props.variant,
-                props.position === 'left'
-                  ? classes.leftSidebar
-                  : classes.rightSidebar
+                props.position === 'left' ? classes.leftSidebar : classes.rightSidebar
               )
             }}
           >

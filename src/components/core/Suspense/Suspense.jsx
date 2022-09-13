@@ -10,11 +10,7 @@ import Loading from 'components/core/Loading'
 /*******************************************************************************************************/
 const Suspense = props => {
   // Renderizamos el componente
-  return (
-    <React.Suspense fallback={<Loading {...props.loadingProps} />}>
-      {props.children}
-    </React.Suspense>
-  )
+  return <React.Suspense fallback={<Loading {...props.loadingProps} />}>{props.children}</React.Suspense>
 }
 
 /*******************************************************************************************************/

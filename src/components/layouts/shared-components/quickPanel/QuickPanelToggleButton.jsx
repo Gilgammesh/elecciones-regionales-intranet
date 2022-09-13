@@ -2,14 +2,7 @@
 // Importamos las dependencias //
 /*******************************************************************************************************/
 import React, { forwardRef, useState } from 'react'
-import {
-  Icon,
-  IconButton,
-  Dialog,
-  Slide,
-  Typography,
-  Tooltip
-} from '@material-ui/core'
+import { Icon, IconButton, Dialog, Slide, Typography, Tooltip } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import Scrollbars from 'components/core/Scrollbars'
 import clsx from 'clsx'
@@ -83,10 +76,7 @@ const QuickPanelToggleButton = props => {
   return (
     <>
       <Tooltip title="Apariencia" placement="bottom-start" enterDelay={100}>
-        <IconButton
-          className={clsx('w-40 h-40', styles.settingsButton)}
-          onClick={handleOpen}
-        >
+        <IconButton className={clsx('w-40 h-40', styles.settingsButton)} onClick={handleOpen}>
           <Icon className={styles.buttonIcon}>palette</Icon>
         </IconButton>
       </Tooltip>
@@ -103,10 +93,7 @@ const QuickPanelToggleButton = props => {
         }}
       >
         <Scrollbars className="p-24 sm:p-32">
-          <IconButton
-            className="fixed top-0 ltr:right-0 rtl:left-0 z-10"
-            onClick={handleClose}
-          >
+          <IconButton className="fixed top-0 ltr:right-0 rtl:left-0 z-10" onClick={handleClose}>
             <Icon>close</Icon>
           </IconButton>
 
