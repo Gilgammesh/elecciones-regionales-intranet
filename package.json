@@ -121,7 +121,8 @@
     "purge-tailwind": "node ./purge-tailwindcss.ts",
     "clean": "rimraf build",
     "test": "react-scripts test --env=node",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint ./src"
   },
   "browserslist": {
     "production": [

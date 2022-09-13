@@ -41,30 +41,32 @@ const Auth = (props: Props) => {
   useEffect(() => {
     let mounted = true
 
-    // Obtenemos el token del usuario en caso exista
-    const token = getToken()
-
-    // Si existe un token verificamos
-    if (token && token !== '') {
-      // Validamos el token en el servidor
-      fetchData('auth/check', { isTokenReq: false }, 'POST', { token }).then(result => {
-        if (result && mounted && result.data) {
-          if (result.data.status) {
-            dispatch(startSetAuth(result.data.usuario, result.data.permisos, result.data.modulos))
-            history.push(localStorage.getItem(store_lastpath) || '')
-            setWaitAuthCheck(false)
-          } else {
-            dispatch(startLogout())
-            history.push('/auth')
-            setWaitAuthCheck(false)
+    const authToken = () => {
+      // Obtenemos el token del usuario en caso exista
+      const token = getToken()
+      // Si existe un token verificamos
+      if (token && token !== '') {
+        // Validamos el token en el servidor
+        fetchData('auth/check', { isTokenReq: false }, 'POST', { token }).then(result => {
+          if (result && mounted && result.data) {
+            if (result.data.status) {
+              dispatch(startSetAuth(result.data.usuario, result.data.permisos, result.data.modulos))
+              history.push(localStorage.getItem(store_lastpath) || '')
+              setWaitAuthCheck(false)
+            } else {
+              dispatch(startLogout())
+              history.push('/auth')
+              setWaitAuthCheck(false)
+            }
           }
-        }
-      })
-    } else {
-      dispatch(startLogout())
-      history.push('/auth')
-      setWaitAuthCheck(false)
+        })
+      } else {
+        dispatch(startLogout())
+        history.push('/auth')
+        setWaitAuthCheck(false)
+      }
     }
+    authToken()
 
     // Limpiamos el mounted
     return () => {
