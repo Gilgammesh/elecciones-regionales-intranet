@@ -5,21 +5,10 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  Icon,
-  IconButton,
-  Table,
-  TableBody,
-  TableCell,
-  TablePagination,
-  TableRow,
-  Tooltip,
-  Typography
-} from '@material-ui/core'
+import { IconButton, Table, TableBody, TableCell, TablePagination, TableRow, Tooltip } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { red } from '@material-ui/core/colors'
 import Scrollbars from 'components/core/Scrollbars'
-import PersonerosTableHead from './PersonerosTableHead'
+import GobernadoresTableHead from './GobernadoresTableHead'
 import _ from 'lodash'
 import { fetchData } from 'services/fetch'
 import EditIcon from '@material-ui/icons/Edit'
@@ -28,21 +17,34 @@ import ProgressLinear from 'components/core/Progress/ProgressLinear'
 import { Swal, Toast } from 'configs/settings'
 import { validateFetchData } from 'helpers/validateFetchData'
 import { startGetAccionesSubModulo } from 'redux/actions/auth'
-import { startResetPersoneros } from 'redux/actions/personeros'
 
 /*******************************************************************************************************/
 // Definimos los estilos del componente //
 /*******************************************************************************************************/
 const useStyles = makeStyles(() => ({
-  red: {
-    color: red[500]
+  avatar: {
+    width: '40px',
+    height: '50px',
+    borderRadius: '50px'
+  },
+  avatarImg: {
+    display: 'block',
+    borderRadius: '40px',
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover'
+  },
+  partido: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center'
   }
 }))
 
 /*******************************************************************************************************/
-// Definimos la Vista del componente Centros de Votación - Personeros Table //
+// Definimos la Vista del componente Gobernadores Table //
 /*******************************************************************************************************/
-const PersonerosTable = props => {
+const GobernadoresTable = props => {
   // Obtenemos las propiedades del componente
   const { data, setData, page, setPage, rowsPerPage, setRowsPerPage, resetPages } = props
 
@@ -58,8 +60,9 @@ const PersonerosTable = props => {
   // Obtenemos el Rol de Usuario
   const { rol } = useSelector(state => state.auth.usuario)
 
-  // Obtenemos los estados por defecto de la vista personeros
-  const { search, tipo, estado, departamento, change } = useSelector(state => state.personeros)
+  // Obtenemos los estados por defecto de la vista gobernadores
+  // const { search, tipo, departamento } = useSelector(state => state.gobernadores)
+  const { search, tipo, departamento } = useSelector(state => state.personeros)
 
   // Total de registros de la tablas
   const [totalReg, setTotalReg] = useState(0)
@@ -78,24 +81,19 @@ const PersonerosTable = props => {
 
   // Efecto para obtener las acciones del submódulo
   useEffect(() => {
-    dispatch(startGetAccionesSubModulo('centros-votacion', 'personeros')).then(res => setAccionesPerm(res))
+    dispatch(startGetAccionesSubModulo('organizaciones-politicas', 'gobernadores')).then(res => setAccionesPerm(res))
   }, [dispatch])
 
-  // Efecto para obtener la lista de los personeros
+  // Efecto para obtener la lista de los gobernadores
   useEffect(() => {
     // Estado inicial de montaje
     let mounted = true
-    // Función para obtener todos los personeros
-    const getPersoneros = async () => {
+    // Función para obtener todos los gobernadores de las organizaciones politicas
+    const getGobernadores = async () => {
       // Iniciamos carga de la tabla
       setLoading(true)
-      // Obtenemos la lista de los personeros con fetch
-      let url = `centros-votacion/personeros?page=${page + 1}&pageSize=${rowsPerPage}`
-      // Agregamos los parámetros
-      url += `&searchTipo=${search.tipo}&searchValue=${search.value}`
-      url += `&tipo=${tipo}`
-      url += `&estado=${estado}`
-      url += `&departamento=${departamento}`
+      // Obtenemos la lista de los gobernadores con fetch
+      let url = `organizaciones-politicas/gobernadores?page=${page + 1}&pageSize=${rowsPerPage}`
       const result = await fetchData(url, { isTokenReq: true })
       // Si existe un resultado y el status es positivo
       if (result && mounted && result.data.status) {
@@ -107,27 +105,26 @@ const PersonerosTable = props => {
       // Finalizamos carga de la tabla
       setLoading(false)
     }
-    // Si existe número de página y filas por página
+    // Si existe un socket, número de página y filas por página
     if (socket && page >= 0 && rowsPerPage >= 1) {
-      // Obtenemos los personeros
-      getPersoneros()
-      // Si existe un socket
-      if (socket) {
-        // Si un personero fue creado
-        socket.on('centros-votacion-personero-creado', () => getPersoneros())
-        // Si un personero fue actualizado
-        socket.on('centros-votacion-personero-actualizado', () => getPersoneros())
-        // Si un personero fue eliminado
-        socket.on('centros-votacion-personero-eliminado', () => getPersoneros())
-        // Si los personeros fueron importados de excel
-        socket.on('centros-votacion-personeros-importados', () => getPersoneros())
+      // Obtenemos los gobernadores
+      getGobernadores()
+      // Si un gobernador fue creado
+      socket.on('organizaciones-politicas-gobernador-creado', () => getGobernadores())
+      // Si un gobernador fue actualizado
+      socket.on('organizaciones-politicas-gobernador-actualizado', () => getGobernadores())
+      // Si un gobernador fue eliminado
+      socket.on('organizaciones-politicas-gobernador-eliminado', () => getGobernadores())
+
+      // Limpiamos el montaje y los eventos con socket
+      return () => {
+        mounted = false
+        socket.off('organizaciones-politicas-gobernador-creado')
+        socket.off('organizaciones-politicas-gobernador-actualizado')
+        socket.off('organizaciones-politicas-gobernador-eliminado')
       }
     }
-    // Limpiamos el montaje
-    return () => {
-      mounted = false
-    }
-  }, [socket, search, tipo, estado, departamento, change, page, rowsPerPage, setData])
+  }, [socket, search, tipo, departamento, page, rowsPerPage, setData])
 
   // Función para ordenar una columna
   const handleRequestSort = (event, property) => {
@@ -161,7 +158,7 @@ const PersonerosTable = props => {
   // Función para remover una fila de la tabla
   const handleRemoveRow = id => {
     Swal.fire({
-      title: '¿Está seguro que quiere eliminar el personero?',
+      title: '¿Está seguro que quiere eliminar el gobernador?',
       showConfirmButton: true,
       showDenyButton: true,
       confirmButtonText: `SI`,
@@ -169,11 +166,9 @@ const PersonerosTable = props => {
     }).then(async result => {
       if (result.isConfirmed) {
         // Eliminamos la acción
-        const result = await fetchData(`centros-votacion/personeros/${id}`, { isTokenReq: true }, 'DELETE')
+        const result = await fetchData(`organizaciones-politicas/gobernadores/${id}`, { isTokenReq: true }, 'DELETE')
         // Validamos el resultado
         if (validateFetchData(result)) {
-          // Reseteamos los estados de personeros
-          dispatch(startResetPersoneros())
           // Avisamos con un toast alert
           Toast.fire({
             icon: 'success',
@@ -189,7 +184,7 @@ const PersonerosTable = props => {
     <div className="w-full flex flex-col">
       <Scrollbars className="flex-grow overflow-x-auto">
         <Table stickyHeader className="min-w-xl" aria-labelledby="tableTitle">
-          <PersonerosTableHead order={order} onRequestSort={handleRequestSort} resetPages={resetPages} />
+          <GobernadoresTableHead order={order} onRequestSort={handleRequestSort} resetPages={resetPages} />
           {!loading && data && (
             <TableBody>
               {_.orderBy(data, [order.id], [order.direction]).map((row, index) => {
@@ -197,6 +192,11 @@ const PersonerosTable = props => {
                   <TableRow className="h-32" hover tabIndex={-1} key={row._id}>
                     <TableCell className="py-2" component="th" scope="row">
                       {index + 1 + page * rowsPerPage}
+                    </TableCell>
+                    <TableCell className="py-4" component="th" scope="row">
+                      <div className={styles.avatar}>
+                        <img className={styles.avatarImg} alt="logo" src={row.foto} />
+                      </div>
                     </TableCell>
                     <TableCell className="py-2" component="th" scope="row">
                       {row.nombres}
@@ -208,35 +208,17 @@ const PersonerosTable = props => {
                       {row.dni}
                     </TableCell>
                     <TableCell className="py-2" component="th" scope="row">
-                      {row.celular}
-                    </TableCell>
-                    <TableCell className="py-2" component="th" scope="row">
-                      {row.asignado ? (
-                        `Personero de ${_.capitalize(row.tipo)}`
-                      ) : (
-                        <Typography className={styles.red}>--Sin asignar--</Typography>
-                      )}
-                    </TableCell>
-                    <TableCell className="py-2" component="th" scope="row">
-                      {row.asignado ? row.asignadoA : <Typography className={styles.red}>--Sin asignar--</Typography>}
-                    </TableCell>
-                    {rol.super && (
-                      <TableCell className="py-2" component="th" scope="row">
-                        {row.departamento.nombre}
-                      </TableCell>
-                    )}
-                    <TableCell className="py-2 pr-40" component="th" scope="row" align="center">
-                      {row.estado ? (
-                        <Icon className="text-green text-20">check_circle</Icon>
-                      ) : (
-                        <Icon className="text-red text-20">cancel</Icon>
-                      )}
+                      <div className={styles.partido}>
+                        <img alt="logo" src={row.organizacion.logo} width="40" height="auto" />
+                        &nbsp;&nbsp;
+                        {row.organizacion.nombre}
+                      </div>
                     </TableCell>
                     <TableCell className="py-2" component="th" scope="row" align="center" width={140} height={48}>
                       {(rol.super || (accionesPerm && accionesPerm.indexOf('editar') !== -1)) && (
-                        <Link to={`/centros-votacion/personeros/editar/${row._id}`}>
+                        <Link to={`/organizaciones-politicas/gobernadores/editar/${row._id}`}>
                           <Tooltip title="Editar" placement="bottom-start" enterDelay={100}>
-                            <IconButton color="primary" aria-label="editar personero">
+                            <IconButton color="primary" aria-label="editar gobernador">
                               <EditIcon />
                             </IconButton>
                           </Tooltip>
@@ -246,7 +228,7 @@ const PersonerosTable = props => {
                         <Tooltip title="Eliminar" placement="bottom-start" enterDelay={100}>
                           <IconButton
                             style={{ color: '#F44343' }}
-                            aria-label="eliminar personero"
+                            aria-label="eliminar gobernador"
                             onClick={() => handleRemoveRow(row._id)}
                           >
                             <DeleteIcon />
@@ -291,7 +273,7 @@ const PersonerosTable = props => {
 /*******************************************************************************************************/
 // Definimos los tipos de propiedades del componente //
 /*******************************************************************************************************/
-PersonerosTable.propTypes = {
+GobernadoresTable.propTypes = {
   data: PropTypes.array.isRequired,
   setData: PropTypes.func.isRequired,
   page: PropTypes.number.isRequired,
@@ -304,4 +286,4 @@ PersonerosTable.propTypes = {
 /*******************************************************************************************************/
 // Exportamos el componente //
 /*******************************************************************************************************/
-export default PersonerosTable
+export default GobernadoresTable

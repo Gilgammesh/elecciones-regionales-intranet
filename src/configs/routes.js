@@ -32,6 +32,10 @@ import UsuariosEditView from 'views/private/usuarios/usuariosEdit'
 //////////////////////////////////////////////////////////////////////////////////////////////
 //---- MÓDULO ORGANIZACIONES POLÍTICAS -----------------------------------------------------//
 //////////////////////////////////////////////////////////////////////////////////////////////
+import OrganizacionesView from 'views/private/organizacionesPoliticas/organizaciones'
+import OrganizacionesNewView from 'views/private/organizacionesPoliticas/organizaciones/organizacionesNew'
+import OrganizacionesEditView from 'views/private/organizacionesPoliticas/organizaciones/organizacionesEdit'
+import GobernadoresView from 'views/private/organizacionesPoliticas/gobernadores'
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 //---- MÓDULO CENTROS DE VOTACIÓN ----------------------------------------------------------//
@@ -145,7 +149,36 @@ const routes = {
   },
   'organizaciones-politicas': {
     path: '/organizaciones-politicas',
-    component: Building
+    rutas: {
+      personeros: {
+        path: '/organizaciones-politicas/organizaciones',
+        component: OrganizacionesView,
+        children: [
+          {
+            path: '/organizaciones-politicas/organizaciones/nuevo',
+            component: OrganizacionesNewView
+          },
+          {
+            path: '/organizaciones-politicas/organizaciones/editar/:id',
+            component: OrganizacionesEditView
+          }
+        ]
+      },
+      gobernadores: {
+        path: '/organizaciones-politicas/gobernadores',
+        component: GobernadoresView,
+        children: [
+          {
+            path: '/organizaciones-politicas/gobernadores/nuevo',
+            component: Building
+          },
+          {
+            path: '/organizaciones-politicas/gobernadores/editar/:id',
+            component: Building
+          }
+        ]
+      }
+    }
   },
   'centros-votacion': {
     path: '/centros-votacion',

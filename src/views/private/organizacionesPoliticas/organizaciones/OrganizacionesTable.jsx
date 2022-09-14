@@ -3,23 +3,35 @@
 /*******************************************************************************************************/
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { useSelector } from 'react-redux'
-import { Icon, Table, TableBody, TableCell, TablePagination, TableRow, Typography } from '@material-ui/core'
+import { Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { IconButton, Table, TableBody, TableCell, TablePagination, TableRow, Tooltip } from '@material-ui/core'
 import Scrollbars from 'components/core/Scrollbars'
-import SesionesTableHead from './SesionesTableHead'
+import OrganizacionesTableHead from './OrganizacionesTableHead'
 import _ from 'lodash'
 import { fetchData } from 'services/fetch'
+import EditIcon from '@material-ui/icons/Edit'
+import DeleteIcon from '@material-ui/icons/Delete'
 import ProgressLinear from 'components/core/Progress/ProgressLinear'
+import { Swal, Toast } from 'configs/settings'
+import { validateFetchData } from 'helpers/validateFetchData'
+import { startGetAccionesSubModulo } from 'redux/actions/auth'
 
 /*******************************************************************************************************/
-// Definimos la Vista del componente Monitor - Sesiones Table //
+// Definimos la Vista del componente Organizaciones Table //
 /*******************************************************************************************************/
-const SesionesTable = props => {
+const OrganizacionesTable = props => {
   // Obtenemos las propiedades del componente
   const { setList, data, setData } = props
 
+  // Llamamos al dispatch de redux
+  const dispatch = useDispatch()
+
   // Obtenemos el socket de conexión con la Api
   const socket = useSelector(state => state.socketio)
+
+  // Obtenemos el Rol de Usuario
+  const { rol } = useSelector(state => state.auth.usuario)
 
   // Estado para definir el número de página de la tabla
   const [page, setPage] = useState(0)
@@ -37,18 +49,29 @@ const SesionesTable = props => {
   // Estado de carga de la tabla
   const [loading, setLoading] = useState(true)
 
-  // Efecto para obtener la lista de las Sesiones
+  // Array de Permisos de Acciones del SubMódulo
+  const [accionesPerm, setAccionesPerm] = useState(null)
+
+  // Efecto para obtener las acciones del submódulo
+  useEffect(() => {
+    dispatch(startGetAccionesSubModulo('organizaciones-politicas', 'organizaciones')).then(res => setAccionesPerm(res))
+  }, [dispatch])
+
+  // Efecto para obtener la lista de las Organizaciones
   useEffect(() => {
     // Estado inicial de montaje
     let mounted = true
-    // Función para obtener todas las sesiones
-    const getSesiones = async () => {
+    // Función para obtener todas las organizaciones politicas
+    const getOrganizaciones = async () => {
       // Iniciamos carga de la tabla
       setLoading(true)
-      // Obtenemos la lista de las sesiones con fetch
-      const result = await fetchData(`admin/sesiones?fuente=intranet&page=${page + 1}&pageSize=${rowsPerPage}`, {
-        isTokenReq: true
-      })
+      // Obtenemos la lista de las organizaciones politicas con fetch
+      const result = await fetchData(
+        `organizaciones-politicas/organizaciones?page=${page + 1}&pageSize=${rowsPerPage}`,
+        {
+          isTokenReq: true
+        }
+      )
       // Si existe un resultado y el status es positivo
       if (result && mounted && result.data.status) {
         // Actualizamos el total de registros de la lista
@@ -60,25 +83,24 @@ const SesionesTable = props => {
       // Finalizamos carga de la tabla
       setLoading(false)
     }
-    // Si existe número de página y filas por página
-    if (page >= 0 && rowsPerPage >= 1) {
-      // Obtenemos las sesiones
-      getSesiones()
-      // Si existe un socket
-      if (socket) {
-        // Si una sesión fue creada
-        socket.on('admin-sesion-creada', () => {
-          getSesiones()
-        })
-        // Si una sesión fue actualizada
-        socket.on('admin-sesion-actualizada', () => {
-          getSesiones()
-        })
+    // Si existe un socket, número de página y filas por página
+    if (socket && page >= 0 && rowsPerPage >= 1) {
+      // Obtenemos las organizaciones politicas
+      getOrganizaciones()
+      // Si una organización política fue creada
+      socket.on('organizaciones-politicas-organizacion-creada', () => getOrganizaciones())
+      // Si una organización política fue actualizada
+      socket.on('organizaciones-politicas-organizacion-actualizada', () => getOrganizaciones())
+      // Si una organización política fue eliminada
+      socket.on('organizaciones-politicas-organizacion-eliminada', () => getOrganizaciones())
+
+      // Limpiamos el montaje y los eventos con socket
+      return () => {
+        mounted = false
+        socket.off('organizaciones-politicas-organizacion-creada')
+        socket.off('organizaciones-politicas-organizacion-actualizada')
+        socket.off('organizaciones-politicas-organizacion-eliminada')
       }
-    }
-    // Limpiamos el montaje
-    return () => {
-      mounted = false
     }
   }, [socket, page, rowsPerPage, setList, setData])
 
@@ -103,7 +125,7 @@ const SesionesTable = props => {
     setPage(value)
   }
 
-  // Función para cambiar el número de fila de una página
+  // Función para cambiar el tamaño de registros de una página
   const handleChangeRowsPerPage = evt => {
     // Reiniciamos a la página inicial
     setPage(0)
@@ -111,12 +133,36 @@ const SesionesTable = props => {
     setRowsPerPage(evt.target.value)
   }
 
+  // Función para remover una fila de la tabla
+  const handleRemoveRow = id => {
+    Swal.fire({
+      title: '¿Está seguro que quiere eliminar la organización política?',
+      showConfirmButton: true,
+      showDenyButton: true,
+      confirmButtonText: `SI`,
+      denyButtonText: `NO`
+    }).then(async result => {
+      if (result.isConfirmed) {
+        // Eliminamos la acción
+        const result = await fetchData(`organizaciones-politicas/organizaciones/${id}`, { isTokenReq: true }, 'DELETE')
+        // Validamos el resultado
+        if (validateFetchData(result)) {
+          // Avisamos con un toast alert
+          Toast.fire({
+            icon: 'success',
+            title: result.data.msg
+          })
+        }
+      }
+    })
+  }
+
   // Renderizamos el componente
   return (
     <div className="w-full flex flex-col">
       <Scrollbars className="flex-grow overflow-x-auto">
         <Table stickyHeader className="min-w-xl" aria-labelledby="tableTitle">
-          <SesionesTableHead order={order} onRequestSort={handleRequestSort} />
+          <OrganizacionesTableHead order={order} onRequestSort={handleRequestSort} />
           {!loading && data && (
             <TableBody>
               {_.orderBy(data, [order.id], [order.direction]).map((row, index) => {
@@ -125,45 +171,38 @@ const SesionesTable = props => {
                     <TableCell className="py-2" component="th" scope="row">
                       {index + 1 + page * rowsPerPage}
                     </TableCell>
-                    <TableCell className="py-2" component="th" scope="row">
-                      {`${row.usuario.apellidos}, ${row.usuario.nombres}`}
+                    <TableCell className="py-4" component="th" scope="row">
+                      <img alt="log" src={row.logo} width="50" height="auto" />
                     </TableCell>
                     <TableCell className="py-2" component="th" scope="row">
-                      {row.usuario.dni}
+                      {row.orden}
                     </TableCell>
                     <TableCell className="py-2" component="th" scope="row">
-                      {row.ultimo_ingreso}
+                      {row.nombre}
                     </TableCell>
                     <TableCell className="py-2" component="th" scope="row">
-                      {row.fuente}
+                      {row.siglas}
                     </TableCell>
-                    <TableCell className="py-2" component="th" scope="row">
-                      {row.ip}
-                    </TableCell>
-                    <TableCell className="py-2" component="th" scope="row">
-                      {row.dispositivo}
-                    </TableCell>
-                    <TableCell className="py-2" component="th" scope="row">
-                      {row.navegador}
-                    </TableCell>
-                    <TableCell className="py-6 pr-40" component="th" scope="row" align="center" height={48}>
-                      {row.estado === 'online' && (
-                        <div className="flex flex-row justify-center items-center">
-                          <Icon className="text-green text-28">person_pin</Icon>
-                          <Typography className="ml-8 text-green font-500">en línea</Typography>
-                        </div>
+                    <TableCell className="py-2" component="th" scope="row" align="center" width={140} height={48}>
+                      {(rol.super || (accionesPerm && accionesPerm.indexOf('editar') !== -1)) && (
+                        <Link to={`/organizaciones-politicas/organizaciones/editar/${row._id}`}>
+                          <Tooltip title="Editar" placement="bottom-start" enterDelay={100}>
+                            <IconButton color="primary" aria-label="editar organizacion">
+                              <EditIcon />
+                            </IconButton>
+                          </Tooltip>
+                        </Link>
                       )}
-                      {row.estado === 'busy' && (
-                        <div className="flex flex-row justify-center items-center">
-                          <Icon className="text-orange text-28">person_pin</Icon>
-                          <Typography className="ml-8 text-orange font-500">ocupado</Typography>
-                        </div>
-                      )}
-                      {row.estado === 'offline' && (
-                        <div className="flex flex-row justify-center items-center">
-                          <Icon className="text-red text-28">person_pin</Icon>
-                          <Typography className="ml-8 text-red font-500">desconectado</Typography>
-                        </div>
+                      {(rol.super || (accionesPerm && accionesPerm.indexOf('eliminar') !== -1)) && (
+                        <Tooltip title="Eliminar" placement="bottom-start" enterDelay={100}>
+                          <IconButton
+                            style={{ color: '#F44343' }}
+                            aria-label="eliminar organizacion"
+                            onClick={() => handleRemoveRow(row._id)}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </Tooltip>
                       )}
                     </TableCell>
                   </TableRow>
@@ -203,7 +242,7 @@ const SesionesTable = props => {
 /*******************************************************************************************************/
 // Definimos los tipos de propiedades del componente //
 /*******************************************************************************************************/
-SesionesTable.propTypes = {
+OrganizacionesTable.propTypes = {
   setList: PropTypes.func.isRequired,
   data: PropTypes.array.isRequired,
   setData: PropTypes.func.isRequired
@@ -212,4 +251,4 @@ SesionesTable.propTypes = {
 /*******************************************************************************************************/
 // Exportamos el componente //
 /*******************************************************************************************************/
-export default SesionesTable
+export default OrganizacionesTable

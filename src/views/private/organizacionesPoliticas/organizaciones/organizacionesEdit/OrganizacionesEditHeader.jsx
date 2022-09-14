@@ -7,10 +7,10 @@ import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Icon, makeStyles, Typography, useTheme } from '@material-ui/core'
 import SaveIcon from '@material-ui/icons/Save'
-import AssistantIcon from '@material-ui/icons/Assistant'
+import ContactMailIcon from '@material-ui/icons/ContactMail'
 import Animate from 'components/core/Animate'
 import clsx from 'clsx'
-import { startGetAccionesModulo } from 'redux/actions/auth'
+import { startGetAccionesSubModulo } from 'redux/actions/auth'
 
 /*******************************************************************************************************/
 // Definimos los estilos del componente //
@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
 /*******************************************************************************************************/
 // Definimos la Vista del componente Elección Editar Header //
 /*******************************************************************************************************/
-const EleccionesEditHeader = props => {
+const OrganizacionesEditHeader = props => {
   // Obtenemos las propiedades
   const { isFormValid } = props
 
@@ -42,12 +42,12 @@ const EleccionesEditHeader = props => {
   // Instanciamos los estilos
   const styles = useStyles()
 
-  // Array de Permisos de Acciones del Módulo
+  // Array de Permisos de Acciones del SubMódulo
   const [accionesPerm, setAccionesPerm] = useState(null)
 
-  // Efecto para obtener las acciones del módulo
+  // Efecto para obtener las acciones del submódulo
   useEffect(() => {
-    dispatch(startGetAccionesModulo('elecciones')).then(res => setAccionesPerm(res))
+    dispatch(startGetAccionesSubModulo('organizaciones-politicas', 'organizaciones')).then(res => setAccionesPerm(res))
   }, [dispatch])
 
   // Renderizamos el componente
@@ -59,20 +59,20 @@ const EleccionesEditHeader = props => {
             className="normal-case flex items-center sm:mb-12"
             component={Link}
             role="button"
-            to="/elecciones"
+            to="/organizaciones-politicas/organizaciones"
             color="inherit"
           >
             <Icon className="text-20">{theme.direction === 'ltr' ? 'arrow_back' : 'arrow_forward'}</Icon>
-            <span className="mx-4">Elecciones</span>
+            <span className="mx-4">Organizaciones</span>
           </Typography>
         </Animate>
         <div className="flex items-center max-w-full">
           <Animate animation="transition.expandIn" delay={300}>
-            <AssistantIcon fontSize="large" />
+            <ContactMailIcon fontSize="large" />
           </Animate>
           <div className="flex flex-col min-w-0 mx-8 sm:mc-16">
             <Animate animation="transition.slideLeftIn" delay={300}>
-              <Typography className="text-16 sm:text-20 truncate">Editar Elección</Typography>
+              <Typography className="text-16 sm:text-20 truncate">Editar Organización</Typography>
             </Animate>
           </div>
         </div>
@@ -97,11 +97,11 @@ const EleccionesEditHeader = props => {
 /*******************************************************************************************************/
 // Definimos los tipos de propiedades del componente //
 /*******************************************************************************************************/
-EleccionesEditHeader.propTypes = {
+OrganizacionesEditHeader.propTypes = {
   isFormValid: PropTypes.bool.isRequired
 }
 
 /*******************************************************************************************************/
 // Exportamos el componente //
 /*******************************************************************************************************/
-export default EleccionesEditHeader
+export default OrganizacionesEditHeader

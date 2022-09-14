@@ -3,14 +3,13 @@
 /*******************************************************************************************************/
 import React, { useState } from 'react'
 import PageCarded from 'components/core/PageCarded'
-import MesasHeader from './MesasHeader'
-import MesasToolBar from './MesasToolBar'
-import MesasTable from './MesasTable'
+import GobernadoresHeader from './GobernadoresHeader'
+import GobernadoresTable from './GobernadoresTable'
 
 /*******************************************************************************************************/
-// Definimos la Vista del componente Centros de Votación - Mesas //
+// Definimos la Vista del componente Gobernadores //
 /*******************************************************************************************************/
-const Mesas = () => {
+const Gobernadores = () => {
   // Estado inicial del contenido de la tabla
   const [data, setData] = useState([])
 
@@ -33,10 +32,10 @@ const Mesas = () => {
         contentCard: 'overflow-hidden',
         header: 'min-h-72 h-72 sm:h-136 sm:min-h-136'
       }}
-      header={<MesasHeader />}
-      contentToolbar={<MesasToolBar resetPages={resetPages} />}
+      header={<GobernadoresHeader />}
+      // contentToolbar={<GobernadoresToolBar resetPages={resetPages} />}
       content={
-        <MesasTable
+        <GobernadoresTable
           data={data}
           setData={setData}
           page={page}
@@ -54,4 +53,4 @@ const Mesas = () => {
 /*******************************************************************************************************/
 // Exportamos el componente //
 /*******************************************************************************************************/
-export default Mesas
+export default Gobernadores
