@@ -57,34 +57,9 @@ import CentrosMesasEditView from 'views/private/centrosVotacion/mesas/mesasEdit'
 import Building from 'components/core/Building'
 
 /*******************************************************************************************************/
-// Interface de los Módulos y SubMódulos de las Rutas //
-/*******************************************************************************************************/
-export interface IRoutesChildren {
-  path: string
-  component: React.ComponentType
-}
-export interface IRoutesSubModulo {
-  path: string
-  component: React.ComponentType
-  children?: Array<IRoutesChildren>
-}
-export interface IRoutesSubModulos {
-  [key: string]: IRoutesSubModulo
-}
-export interface IRoutesModulo {
-  path: string
-  component?: React.ComponentType
-  rutas?: IRoutesSubModulos
-  children?: Array<IRoutesChildren>
-}
-export interface IRoutesModulos {
-  [key: string]: IRoutesModulo
-}
-
-/*******************************************************************************************************/
 // Definimos las rutas de navegación de la aplicación //
 /*******************************************************************************************************/
-const routes: IRoutesModulos = {
+const routes = {
   admin: {
     path: '/admin',
     rutas: {
