@@ -4,13 +4,9 @@
 import React, { useEffect } from 'react'
 import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
-import {
-  createGenerateClassName,
-  jssPreset,
-  StylesProvider
-} from '@material-ui/core/styles'
+import { createGenerateClassName, jssPreset, StylesProvider } from '@material-ui/core/styles'
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'
-import { create, JssOptions, Plugin, InsertionPoint } from 'jss'
+import { create } from 'jss'
 import jssExtend from 'jss-plugin-extend'
 import rtl from 'jss-rtl'
 import store from './redux/store'
@@ -26,12 +22,10 @@ import { store_lastpath, store_changepath, language } from 'configs/settings'
 // Creamos y definimos las propiedades de jss (Style Sheets con Javascript) //
 /*******************************************************************************************************/
 const preset = jssPreset().plugins
-const jssOptions: JssOptions = {
+const jssOptions = {
   ...jssPreset(),
-  plugins: [...preset, jssExtend(), rtl()] as ReadonlyArray<Plugin>,
-  insertionPoint: document.getElementById(
-    'jss-insertion-point'
-  ) as InsertionPoint
+  plugins: [...preset, jssExtend(), rtl()],
+  insertionPoint: document.getElementById('jss-insertion-point')
 }
 const jss = create(jssOptions)
 
@@ -52,21 +46,14 @@ const App = () => {
   useEffect(() => {
     window.addEventListener('beforeunload', ev => {
       ev.preventDefault()
-      localStorage.setItem(
-        store_lastpath,
-        localStorage.getItem(store_changepath) || ''
-      )
+      localStorage.setItem(store_lastpath, localStorage.getItem(store_changepath) || '')
     })
   }, [])
 
   return (
     <StylesProvider jss={jss} generateClassName={generateClassName}>
       <Provider store={store}>
-        <MuiPickersUtilsProvider
-          libInstance={moment}
-          utils={MomentUtils}
-          locale={language}
-        >
+        <MuiPickersUtilsProvider libInstance={moment} utils={MomentUtils} locale={language}>
           <BrowserRouter>
             <Auth>
               <Theme>

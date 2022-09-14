@@ -44,13 +44,12 @@ const useStyles = makeStyles(theme => ({
       '& $content': {}
     },
     '& .navigation': {
-      '& .list-subheader-text, & .list-item-text, & .item-badge, & .arrow-icon':
-        {
-          transition: theme.transitions.create('opacity', {
-            duration: theme.transitions.duration.shortest,
-            easing: theme.transitions.easing.easeInOut
-          })
-        }
+      '& .list-subheader-text, & .list-item-text, & .item-badge, & .arrow-icon': {
+        transition: theme.transitions.create('opacity', {
+          duration: theme.transitions.duration.shortest,
+          easing: theme.transitions.easing.easeInOut
+        })
+      }
     }
   },
   wrapper: {
@@ -96,10 +95,7 @@ const LoginView = () => {
 
   // Renderizamos el componente
   return (
-    <div
-      id="app-layout"
-      className={clsx(styles.root, 'fullwidth', 'scroll-content')}
-    >
+    <div id="app-layout" className={clsx(styles.root, 'fullwidth', 'scroll-content')}>
       <div className="flex flex-1 flex-col overflow-hidden relative">
         <div className={styles.wrapper}>
           <div className={styles.contentWrapper}>
