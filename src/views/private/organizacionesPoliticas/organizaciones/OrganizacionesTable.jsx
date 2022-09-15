@@ -22,7 +22,7 @@ import { startGetAccionesSubModulo } from 'redux/actions/auth'
 /*******************************************************************************************************/
 const OrganizacionesTable = props => {
   // Obtenemos las propiedades del componente
-  const { setList, data, setData } = props
+  const { data, setData, page, setPage, rowsPerPage, setRowsPerPage, resetPages } = props
 
   // Llamamos al dispatch de redux
   const dispatch = useDispatch()
@@ -33,10 +33,9 @@ const OrganizacionesTable = props => {
   // Obtenemos el Rol de Usuario
   const { rol } = useSelector(state => state.auth.usuario)
 
-  // Estado para definir el número de página de la tabla
-  const [page, setPage] = useState(0)
-  // Estado para definir el número de filas por página
-  const [rowsPerPage, setRowsPerPage] = useState(10)
+  // Obtenemos los estados por defecto de las organizaciones
+  const { nombre, change } = useSelector(state => state.organizaciones)
+
   // Total de registros de la tablas
   const [totalReg, setTotalReg] = useState(0)
 
@@ -66,18 +65,17 @@ const OrganizacionesTable = props => {
       // Iniciamos carga de la tabla
       setLoading(true)
       // Obtenemos la lista de las organizaciones politicas con fetch
-      const result = await fetchData(
-        `organizaciones-politicas/organizaciones?page=${page + 1}&pageSize=${rowsPerPage}`,
-        {
-          isTokenReq: true
-        }
-      )
+      let url = `organizaciones-politicas/organizaciones?page=${page + 1}&pageSize=${rowsPerPage}`
+      // Agregamos los parámetros
+      url += `&nombre=${nombre}`
+      const result = await fetchData(url, {
+        isTokenReq: true
+      })
       // Si existe un resultado y el status es positivo
       if (result && mounted && result.data.status) {
         // Actualizamos el total de registros de la lista
         setTotalReg(result.data.totalRegistros)
         // Actualizamos la lista en la data local
-        setList(result.data.list)
         setData(result.data.list)
       }
       // Finalizamos carga de la tabla
@@ -102,7 +100,7 @@ const OrganizacionesTable = props => {
         socket.off('organizaciones-politicas-organizacion-eliminada')
       }
     }
-  }, [socket, page, rowsPerPage, setList, setData])
+  }, [socket, nombre, change, page, rowsPerPage, setData])
 
   // Función para ordenar una columna
   const handleRequestSort = (event, property) => {
@@ -162,7 +160,7 @@ const OrganizacionesTable = props => {
     <div className="w-full flex flex-col">
       <Scrollbars className="flex-grow overflow-x-auto">
         <Table stickyHeader className="min-w-xl" aria-labelledby="tableTitle">
-          <OrganizacionesTableHead order={order} onRequestSort={handleRequestSort} />
+          <OrganizacionesTableHead order={order} onRequestSort={handleRequestSort} resetPages={resetPages} />
           {!loading && data && (
             <TableBody>
               {_.orderBy(data, [order.id], [order.direction]).map((row, index) => {
@@ -243,9 +241,13 @@ const OrganizacionesTable = props => {
 // Definimos los tipos de propiedades del componente //
 /*******************************************************************************************************/
 OrganizacionesTable.propTypes = {
-  setList: PropTypes.func.isRequired,
   data: PropTypes.array.isRequired,
-  setData: PropTypes.func.isRequired
+  setData: PropTypes.func.isRequired,
+  page: PropTypes.number.isRequired,
+  setPage: PropTypes.func.isRequired,
+  rowsPerPage: PropTypes.number.isRequired,
+  setRowsPerPage: PropTypes.func.isRequired,
+  resetPages: PropTypes.func.isRequired
 }
 
 /*******************************************************************************************************/

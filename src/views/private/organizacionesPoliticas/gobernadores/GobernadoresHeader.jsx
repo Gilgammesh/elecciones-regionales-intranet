@@ -50,7 +50,7 @@ const GobernadoresHeader = () => {
             startIcon={<AddCircleIcon />}
           >
             <span className="hidden sm:flex">Añadir Gobernador</span>
-            <span className="flex sm:hidden">Nueva</span>
+            <span className="flex sm:hidden">Nuevo</span>
           </Button>
         </Animate>
       )}

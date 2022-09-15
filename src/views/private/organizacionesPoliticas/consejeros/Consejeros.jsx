@@ -3,14 +3,14 @@
 /*******************************************************************************************************/
 import React, { useState } from 'react'
 import PageCarded from 'components/core/PageCarded'
-import OrganizacionesHeader from './OrganizacionesHeader'
-import OrganizacionesTable from './OrganizacionesTable'
-import OrganizacionesToolBar from './OrganizacionesToolBar'
+import ConsejerosHeader from './ConsejerosHeader'
+import ConsejerosToolBar from './ConsejerosToolBar'
+import ConsejerosTable from './ConsejerosTable'
 
 /*******************************************************************************************************/
-// Definimos la Vista del componente Organizaciones //
+// Definimos la Vista del componente Consejeros //
 /*******************************************************************************************************/
-const Organizaciones = () => {
+const Consejeros = () => {
   // Estado inicial del contenido de la tabla
   const [data, setData] = useState([])
 
@@ -33,10 +33,10 @@ const Organizaciones = () => {
         contentCard: 'overflow-hidden',
         header: 'min-h-72 h-72 sm:h-136 sm:min-h-136'
       }}
-      header={<OrganizacionesHeader />}
-      contentToolbar={<OrganizacionesToolBar resetPages={resetPages} />}
+      header={<ConsejerosHeader />}
+      contentToolbar={<ConsejerosToolBar resetPages={resetPages} />}
       content={
-        <OrganizacionesTable
+        <ConsejerosTable
           data={data}
           setData={setData}
           page={page}
@@ -54,4 +54,4 @@ const Organizaciones = () => {
 /*******************************************************************************************************/
 // Exportamos el componente //
 /*******************************************************************************************************/
-export default Organizaciones
+export default Consejeros

@@ -24,9 +24,9 @@ const useStyles = makeStyles(theme => ({
 }))
 
 /*******************************************************************************************************/
-// Definimos la Vista del componente Organización Editar Header //
+// Definimos la Vista del componente Gobernador Editar Header //
 /*******************************************************************************************************/
-const OrganizacionesEditHeader = props => {
+const GobernadoresEditHeader = props => {
   // Obtenemos las propiedades
   const { isFormValid } = props
 
@@ -47,7 +47,7 @@ const OrganizacionesEditHeader = props => {
 
   // Efecto para obtener las acciones del submódulo
   useEffect(() => {
-    dispatch(startGetAccionesSubModulo('organizaciones-politicas', 'organizaciones')).then(res => setAccionesPerm(res))
+    dispatch(startGetAccionesSubModulo('organizaciones-politicas', 'gobernadores')).then(res => setAccionesPerm(res))
   }, [dispatch])
 
   // Renderizamos el componente
@@ -59,11 +59,11 @@ const OrganizacionesEditHeader = props => {
             className="normal-case flex items-center sm:mb-12"
             component={Link}
             role="button"
-            to="/organizaciones-politicas/organizaciones"
+            to="/organizaciones-politicas/gobernadores"
             color="inherit"
           >
             <Icon className="text-20">{theme.direction === 'ltr' ? 'arrow_back' : 'arrow_forward'}</Icon>
-            <span className="mx-4">Organizaciones</span>
+            <span className="mx-4">Gobernadores</span>
           </Typography>
         </Animate>
         <div className="flex items-center max-w-full">
@@ -72,7 +72,7 @@ const OrganizacionesEditHeader = props => {
           </Animate>
           <div className="flex flex-col min-w-0 mx-8 sm:mc-16">
             <Animate animation="transition.slideLeftIn" delay={300}>
-              <Typography className="text-16 sm:text-20 truncate">Editar Organización</Typography>
+              <Typography className="text-16 sm:text-20 truncate">Editar Gobernador</Typography>
             </Animate>
           </div>
         </div>
@@ -97,11 +97,11 @@ const OrganizacionesEditHeader = props => {
 /*******************************************************************************************************/
 // Definimos los tipos de propiedades del componente //
 /*******************************************************************************************************/
-OrganizacionesEditHeader.propTypes = {
+GobernadoresEditHeader.propTypes = {
   isFormValid: PropTypes.bool.isRequired
 }
 
 /*******************************************************************************************************/
 // Exportamos el componente //
 /*******************************************************************************************************/
-export default OrganizacionesEditHeader
+export default GobernadoresEditHeader

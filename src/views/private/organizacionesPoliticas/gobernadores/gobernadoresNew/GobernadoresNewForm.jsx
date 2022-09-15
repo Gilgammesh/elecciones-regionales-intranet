@@ -1,16 +1,15 @@
 /*******************************************************************************************************/
 // Importamos las dependencias //
 /*******************************************************************************************************/
-import React, { useEffect, useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { useParams } from 'react-router-dom'
-import { makeStyles } from '@material-ui/core/styles'
-import { Tooltip, Icon } from '@material-ui/core'
-import ProgressCircle from 'components/core/Progress/ProgressCircle'
-import TextFieldFormsy from 'components/core/Formsy/TextFieldFormsy'
+import { useSelector } from 'react-redux'
+import { Tooltip, Icon, MenuItem, InputAdornment, TextField } from '@material-ui/core'
 import clsx from 'clsx'
-import { fetchData } from 'services/fetch'
+import { makeStyles } from '@material-ui/core/styles'
+import TextFieldFormsy from 'components/core/Formsy/TextFieldFormsy'
 import { Swal } from 'configs/settings'
+import { fetchData } from 'services/fetch'
 
 /*******************************************************************************************************/
 // Definimos los estilos del componente //
@@ -54,69 +53,104 @@ const useStyles = makeStyles(theme => ({
 }))
 
 /*******************************************************************************************************/
-// Definimos la Vista del componente Organización Editar Formulario //
+// Definimos la Vista del componente Gobernador Nuevo Formulario //
 /*******************************************************************************************************/
-const OrganizacionesEditForm = props => {
-  // Obtenemos el id de la organización de los parámetros de la ruta
-  const { id } = useParams()
-
-  const { setFileState, formValues, handleInputChange, setForm } = props
+const GobernadoresNewForm = props => {
+  // Obtenemos las propiedades del componente
+  const { formValues, handleInputChange, setForm } = props
   // Obtenemos los valores del formulario
-  const { orden, nombre, siglas } = formValues
+  const { nombres, apellidos, dni, organizacion, departamento } = formValues
+
+  // Obtenemos los datos del Usuario logueado
+  const usuario = useSelector(state => state.auth.usuario)
 
   // Instanciamos los estilos
   const styles = useStyles()
 
-  // Estado inicial del logo de la organización
-  const [logo, setLogo] = useState({
+  // Estado inicial de la foto
+  const [foto, setFoto] = useState({
     url: '',
     type: ''
   })
 
-  // Estado de carga de los datos de la organización
-  const [loading, setLoading] = useState(true)
+  // Estado inicial de las organizaciones
+  const [organizaciones, setOrganizaciones] = useState([])
+  // Estado inicial de los departamentos
+  const [departamentos, setDepartamentos] = useState([])
 
-  // Efecto para obtener los datos de la organización con el id
+  // Efecto para obtener las organizaciones
   useEffect(() => {
     // Estado inicial de montaje
     let mounted = true
-    // Función para obtener los datos de una organización
-    const getOrganizacion = async () => {
-      // Obtenemos los datos de una organización con fetch
-      const result = await fetchData(`organizaciones-politicas/organizaciones/${id}`, { isTokenReq: true })
+    // Función para obtener la lista de organizaciones
+    const getOrganizaciones = async () => {
+      // Obtenemos las organizaciones con fetch
+      const result = await fetchData(
+        'organizaciones-politicas/gobernadores/organizaciones?page=1&pageSize=50&sort=nombre',
+        {
+          isTokenReq: true
+        }
+      )
       // Si existe un resultado y el status es positivo
       if (result && mounted && result.data.status) {
-        // Obtenemos la organizacion
-        const { organizacion } = result.data
-        // Si tiene un logo
-        if (organizacion.logo) {
-          setLogo({
-            url: organizacion.logo,
-            type: ''
-          })
-        }
-        // Guardamos los datos del formulario
-        setForm({
-          orden: organizacion.orden,
-          nombre: organizacion.nombre,
-          siglas: organizacion.siglas,
-          file: null
+        // Recorremos la lista de organizaciones
+        const promises = result.data.list.map(ele => {
+          // Retornamos el elemento construido
+          return (
+            <MenuItem key={ele._id} value={ele._id}>
+              {ele.nombre}
+            </MenuItem>
+          )
         })
-        // Finalizamos el estado de carga de los datos de la organización
-        setLoading(false)
+        const listOrganizaciones = await Promise.all(promises)
+        // Establecemos las organizaciones
+        setOrganizaciones(listOrganizaciones)
       }
     }
-    // Si existe un id
-    if (id) {
-      // Obtenemos los datos de la organizacion
-      getOrganizacion()
-    }
+    // Obtenemos las organizaciones
+    getOrganizaciones()
+    // Limpiamos el montaje
     return () => {
       mounted = false
     }
-  }, [id, setForm])
+  }, [])
 
-  // Función para agregar el logo de la organización a la vista
+  // Efecto para obtener los departamentos
+  useEffect(() => {
+    // Estado inicial de montaje
+    let mounted = true
+    // Función para obtener la lista de departamentos
+    const getDepartamentos = async () => {
+      // Obtenemos los departamentos con fetch
+      const result = await fetchData('ubigeo/departamentos?page=1&pageSize=50', { isTokenReq: true })
+      // Si existe un resultado y el status es positivo
+      if (result && mounted && result.data.status) {
+        // Recorremos la lista de departamentos
+        const promises = result.data.list.map(ele => {
+          // Retornamos el elemento construido
+          return (
+            <MenuItem key={ele._id} value={ele._id}>
+              {ele.nombre}
+            </MenuItem>
+          )
+        })
+        const listDepartamentos = await Promise.all(promises)
+        // Establecemos los departamentos
+        setDepartamentos(listDepartamentos)
+      }
+    }
+    // Si es un superusuario
+    if (usuario.rol.super) {
+      // Obtenemos los departamentos
+      getDepartamentos()
+    }
+    // Limpiamos el montaje
+    return () => {
+      mounted = false
+    }
+  }, [usuario.rol])
+
+  // Función para agregar la foto
   const handleUploadChange = evt => {
     // Obtenemos el archivo
     const file = evt.target.files[0]
@@ -128,10 +162,10 @@ const OrganizacionesEditForm = props => {
 
     // Convertimos el tamaño en bytes a MB
     const sizeInMB = (file.size / (1024 * 1024)).toFixed(2)
-    // Si el tamaño del logo es más de 2MB avisamos y retornamos
+    // Si el tamaño de la foto es más de 2MB avisamos y retornamos
     if (sizeInMB > 2) {
       Swal.fire({
-        title: 'El logo no puede tener mas de 2MB',
+        title: 'La foto no puede tener mas de 2MB',
         icon: 'error'
       })
       return
@@ -141,54 +175,38 @@ const OrganizacionesEditForm = props => {
     const reader = new FileReader()
     reader.readAsBinaryString(file)
 
-    // Leemos el logo y cargamos
+    // Leemos la foto y cargamos
     reader.onload = () => {
-      // Guardamos los datos del logo
-      setLogo({
+      // Guardamos los datos de la foto
+      setFoto({
         url: `data:${file.type};base64,${btoa(reader.result)}`,
         type: file.type
       })
-      // Guardamos el archivo del logo en el formulario
+      // Guardamos el archivo de la foto en el formulario
       setForm({
         ...formValues,
         file
       })
-      // Guardamos el estado del archivo del logo
-      setFileState('added')
     }
 
-    // Si hubo un error al leer el logo
+    // Si hubo un error al leer la foto
     reader.onerror = () => {
-      console.log('Error al cargar el logo')
+      console.log('Error al cargar la foto')
     }
   }
 
-  // Función para remover el logo de la organización de la vista
-  const handleRemoveLogo = () => {
-    // Limpiamos los datos del logo
-    setLogo({
+  // Función para remover la foto
+  const handleRemoveFoto = () => {
+    // Limpiamos los datos de la foto
+    setFoto({
       url: '',
       type: ''
     })
-    // Limpiamos la imagen del formulario
+    // Limpiamos la fotor del formulario
     setForm({
       ...formValues,
       file: null
     })
-    // Guardamos el estado del archivo del logo
-    setFileState('removed')
-  }
-
-  // Si los datos de la organización están cargando
-  if (loading) {
-    // Renderizamos el componente
-    return (
-      <div className="flex justify-center align-center w-full">
-        <div className="px-20 py-60">
-          <ProgressCircle />
-        </div>
-      </div>
-    )
   }
 
   // Renderizamos el componente
@@ -196,49 +214,90 @@ const OrganizacionesEditForm = props => {
     <div className="flex flex-col justify-center w-full p-16 sm:p-24">
       <div className="grid grid-cols-12 gap-16 mt-16 mb-16">
         <TextFieldFormsy
-          className="col-span-12 sm:col-span-1"
-          type="number"
-          name="orden"
-          label="Orden"
-          accept="onlyNumber"
-          value={orden}
+          className="col-span-12 sm:col-span-4"
+          type="text"
+          name="nombres"
+          label="Nombres"
+          accept="onlyLetterAndSpace"
+          value={nombres}
           onChange={handleInputChange}
           variant="outlined"
-          inputProps={{
-            maxLength: 2,
-            min: 1,
-            max: 99
-          }}
           required
         />
         <TextFieldFormsy
-          className="col-span-12 sm:col-span-5"
+          className="col-span-12 sm:col-span-4"
           type="text"
-          name="nombre"
-          label="Nombre"
+          name="apellidos"
+          label="Apellidos"
           accept="onlyLetterAndSpace"
-          value={nombre}
+          value={apellidos}
           onChange={handleInputChange}
           variant="outlined"
-          inputProps={{
-            maxLength: 30
-          }}
           required
         />
         <TextFieldFormsy
           className="col-span-12 sm:col-span-2"
           type="text"
-          name="siglas"
-          label="Siglas"
-          accept="onlyLetterAndSpace"
-          value={siglas}
+          name="dni"
+          label="DNI"
+          accept="onlyNumber"
+          value={dni}
+          onChange={handleInputChange}
+          validations={{
+            minLength: 8,
+            maxLength: 8
+          }}
+          validationErrors={{
+            minLength: 'El dni debe tener 08 dígitos',
+            maxLength: 'El dni debe tener 08 dígitos'
+          }}
+          inputProps={{
+            maxLength: 8
+          }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <Icon className="text-20" color="action">
+                  contact_mail
+                </Icon>
+              </InputAdornment>
+            )
+          }}
+          variant="outlined"
+          required
+        />
+      </div>
+      <div className="grid grid-cols-12 gap-16 mt-16 mb-16">
+        <TextField
+          select
+          className="col-span-12 sm:col-span-4"
+          name="organizacion"
+          label="Organización Política"
+          value={organizacion}
           onChange={handleInputChange}
           variant="outlined"
-        />
+          required
+        >
+          {organizaciones}
+        </TextField>
+        {usuario.rol.super && departamentos && (
+          <TextField
+            select
+            className="col-span-12 sm:col-span-4"
+            name="departamento"
+            label="Departamento"
+            value={departamento}
+            onChange={handleInputChange}
+            variant="outlined"
+            required
+          >
+            {departamentos}
+          </TextField>
+        )}
         <div className="flex flex-col col-span-12 sm:col-span-4">
-          <label className="ml-6">Logo</label>
+          <label className="ml-6">Foto</label>
           <div className="flex justify-center sm:justify-start flex-wrap -mx-8">
-            <Tooltip title="Añadir Logo" aria-label="add" arrow>
+            <Tooltip title="Añadir Foto" aria-label="add" arrow>
               <label
                 htmlFor="button-file"
                 className={clsx(
@@ -262,7 +321,7 @@ const OrganizacionesEditForm = props => {
                 </Icon>
               </label>
             </Tooltip>
-            {logo.url && (
+            {foto.url && (
               <div
                 role="button"
                 tabIndex={0}
@@ -271,10 +330,10 @@ const OrganizacionesEditForm = props => {
                   'flex items-center justify-center relative max-w-200 h-128 rounded-8 mx-8 mb-16 overflow-hidden cursor-pointer shadow-1 hover:shadow-5'
                 )}
               >
-                <Icon className={styles.imageClose} onClick={handleRemoveLogo}>
+                <Icon className={styles.imageClose} onClick={handleRemoveFoto}>
                   cancel
                 </Icon>
-                <img className="max-w-none w-auto h-full" src={logo.url} alt="logo" />
+                <img className="max-w-none w-auto h-full" src={foto.url} alt="foto" />
               </div>
             )}
           </div>
@@ -287,8 +346,7 @@ const OrganizacionesEditForm = props => {
 /*******************************************************************************************************/
 // Definimos los tipos de propiedades del componente //
 /*******************************************************************************************************/
-OrganizacionesEditForm.propTypes = {
-  setFileState: PropTypes.func.isRequired,
+GobernadoresNewForm.propTypes = {
   formValues: PropTypes.object.isRequired,
   handleInputChange: PropTypes.func.isRequired,
   setForm: PropTypes.func.isRequired
@@ -297,4 +355,4 @@ OrganizacionesEditForm.propTypes = {
 /*******************************************************************************************************/
 // Exportamos el componente //
 /*******************************************************************************************************/
-export default OrganizacionesEditForm
+export default GobernadoresNewForm

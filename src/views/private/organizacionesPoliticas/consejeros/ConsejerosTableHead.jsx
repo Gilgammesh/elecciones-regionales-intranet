@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import { TableCell, TableHead, TableRow, TableSortLabel, Tooltip, IconButton } from '@material-ui/core'
 import RefreshIcon from '@material-ui/icons/Refresh'
-import { startResetGobernadores } from 'redux/actions/gobernadores'
+import { startResetConsejeros } from 'redux/actions/consejeros'
 
 /*******************************************************************************************************/
 // Columnas cabecera de la Tabla //
@@ -41,6 +41,13 @@ const headers = [
     sort: false
   },
   {
+    id: 'numero',
+    align: 'left',
+    disablePadding: false,
+    label: 'Número',
+    sort: false
+  },
+  {
     id: 'dni',
     align: 'left',
     disablePadding: false,
@@ -62,6 +69,13 @@ const headers = [
     sort: false
   },
   {
+    id: 'provincia',
+    align: 'left',
+    disablePadding: false,
+    label: 'Provincia',
+    sort: false
+  },
+  {
     id: 'botones',
     align: 'center',
     disablePadding: false,
@@ -71,9 +85,9 @@ const headers = [
 ]
 
 /*******************************************************************************************************/
-// Definimos la Vista del componente Gobernadores Table Head //
+// Definimos la Vista del componente Consejeros Table Head //
 /*******************************************************************************************************/
-const GobernadoresTableHead = props => {
+const ConsejerosTableHead = props => {
   // Obtenemos las propiedades del componente
   const { order, onRequestSort, resetPages } = props
 
@@ -90,7 +104,7 @@ const GobernadoresTableHead = props => {
 
   // Función para refrescar la tabla
   const refreshTable = () => {
-    dispatch(startResetGobernadores())
+    dispatch(startResetConsejeros())
     resetPages()
   }
 
@@ -143,7 +157,7 @@ const GobernadoresTableHead = props => {
 /*******************************************************************************************************/
 // Definimos los tipos de propiedades del componente //
 /*******************************************************************************************************/
-GobernadoresTableHead.propTypes = {
+ConsejerosTableHead.propTypes = {
   order: PropTypes.object.isRequired,
   onRequestSort: PropTypes.func.isRequired,
   resetPages: PropTypes.func.isRequired
@@ -152,4 +166,4 @@ GobernadoresTableHead.propTypes = {
 /*******************************************************************************************************/
 // Exportamos el componente //
 /*******************************************************************************************************/
-export default GobernadoresTableHead
+export default ConsejerosTableHead

@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { IconButton, Table, TableBody, TableCell, TablePagination, TableRow, Tooltip } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import Scrollbars from 'components/core/Scrollbars'
-import GobernadoresTableHead from './GobernadoresTableHead'
+import ConsejerosTableHead from './ConsejerosTableHead'
 import _ from 'lodash'
 import { fetchData } from 'services/fetch'
 import EditIcon from '@material-ui/icons/Edit'
@@ -42,9 +42,9 @@ const useStyles = makeStyles(() => ({
 }))
 
 /*******************************************************************************************************/
-// Definimos la Vista del componente Gobernadores Table //
+// Definimos la Vista del componente Consejeros Table //
 /*******************************************************************************************************/
-const GobernadoresTable = props => {
+const ConsejerosTable = props => {
   // Obtenemos las propiedades del componente
   const { data, setData, page, setPage, rowsPerPage, setRowsPerPage, resetPages } = props
 
@@ -60,8 +60,8 @@ const GobernadoresTable = props => {
   // Obtenemos el Rol de Usuario
   const { rol } = useSelector(state => state.auth.usuario)
 
-  // Obtenemos los estados por defecto de los gobernadores
-  const { search, organizacion, departamento, change } = useSelector(state => state.gobernadores)
+  // Obtenemos los estados por defecto de los consejeros
+  const { search, organizacion, departamento, provincia, change } = useSelector(state => state.consejeros)
 
   // Total de registros de la tablas
   const [totalReg, setTotalReg] = useState(0)
@@ -80,23 +80,24 @@ const GobernadoresTable = props => {
 
   // Efecto para obtener las acciones del submódulo
   useEffect(() => {
-    dispatch(startGetAccionesSubModulo('organizaciones-politicas', 'gobernadores')).then(res => setAccionesPerm(res))
+    dispatch(startGetAccionesSubModulo('organizaciones-politicas', 'consejeros')).then(res => setAccionesPerm(res))
   }, [dispatch])
 
-  // Efecto para obtener la lista de los gobernadores
+  // Efecto para obtener la lista de los consejeros
   useEffect(() => {
     // Estado inicial de montaje
     let mounted = true
-    // Función para obtener todos los gobernadores de las organizaciones politicas
-    const getGobernadores = async () => {
+    // Función para obtener todos los consejeros de las organizaciones politicas
+    const getConsejeros = async () => {
       // Iniciamos carga de la tabla
       setLoading(true)
-      // Obtenemos la lista de los gobernadores con fetch
-      let url = `organizaciones-politicas/gobernadores?page=${page + 1}&pageSize=${rowsPerPage}`
+      // Obtenemos la lista de los consejeros con fetch
+      let url = `organizaciones-politicas/consejeros?page=${page + 1}&pageSize=${rowsPerPage}`
       // Agregamos los parámetros
       url += `&searchTipo=${search.tipo}&searchValue=${search.value}`
       url += `&organizacion=${organizacion}`
       url += `&departamento=${departamento}`
+      url += `&provincia=${provincia}`
       const result = await fetchData(url, { isTokenReq: true })
       // Si existe un resultado y el status es positivo
       if (result && mounted && result.data.status) {
@@ -110,24 +111,24 @@ const GobernadoresTable = props => {
     }
     // Si existe un socket, número de página y filas por página
     if (socket && page >= 0 && rowsPerPage >= 1) {
-      // Obtenemos los gobernadores
-      getGobernadores()
-      // Si un gobernador fue creado
-      socket.on('organizaciones-politicas-gobernador-creado', () => getGobernadores())
-      // Si un gobernador fue actualizado
-      socket.on('organizaciones-politicas-gobernador-actualizado', () => getGobernadores())
-      // Si un gobernador fue eliminado
-      socket.on('organizaciones-politicas-gobernador-eliminado', () => getGobernadores())
+      // Obtenemos los consejeros
+      getConsejeros()
+      // Si un consejero fue creado
+      socket.on('organizaciones-politicas-consejero-creado', () => getConsejeros())
+      // Si un consejero fue actualizado
+      socket.on('organizaciones-politicas-consejero-actualizado', () => getConsejeros())
+      // Si un consejero fue eliminado
+      socket.on('organizaciones-politicas-consejero-eliminado', () => getConsejeros())
 
       // Limpiamos el montaje y los eventos con socket
       return () => {
         mounted = false
-        socket.off('organizaciones-politicas-gobernador-creado')
-        socket.off('organizaciones-politicas-gobernador-actualizado')
-        socket.off('organizaciones-politicas-gobernador-eliminado')
+        socket.off('organizaciones-politicas-consejero-creado')
+        socket.off('organizaciones-politicas-consejero-actualizado')
+        socket.off('organizaciones-politicas-consejero-eliminado')
       }
     }
-  }, [socket, search, organizacion, departamento, change, page, rowsPerPage, setData])
+  }, [socket, search, organizacion, departamento, provincia, change, page, rowsPerPage, setData])
 
   // Función para ordenar una columna
   const handleRequestSort = (event, property) => {
@@ -161,7 +162,7 @@ const GobernadoresTable = props => {
   // Función para remover una fila de la tabla
   const handleRemoveRow = id => {
     Swal.fire({
-      title: '¿Está seguro que quiere eliminar el gobernador?',
+      title: '¿Está seguro que quiere eliminar el consejero?',
       showConfirmButton: true,
       showDenyButton: true,
       confirmButtonText: `SI`,
@@ -169,7 +170,7 @@ const GobernadoresTable = props => {
     }).then(async result => {
       if (result.isConfirmed) {
         // Eliminamos la acción
-        const result = await fetchData(`organizaciones-politicas/gobernadores/${id}`, { isTokenReq: true }, 'DELETE')
+        const result = await fetchData(`organizaciones-politicas/consejeros/${id}`, { isTokenReq: true }, 'DELETE')
         // Validamos el resultado
         if (validateFetchData(result)) {
           // Avisamos con un toast alert
@@ -187,7 +188,7 @@ const GobernadoresTable = props => {
     <div className="w-full flex flex-col">
       <Scrollbars className="flex-grow overflow-x-auto">
         <Table stickyHeader className="min-w-xl" aria-labelledby="tableTitle">
-          <GobernadoresTableHead order={order} onRequestSort={handleRequestSort} resetPages={resetPages} />
+          <ConsejerosTableHead order={order} onRequestSort={handleRequestSort} resetPages={resetPages} />
           {!loading && data && (
             <TableBody>
               {_.orderBy(data, [order.id], [order.direction]).map((row, index) => {
@@ -208,6 +209,9 @@ const GobernadoresTable = props => {
                       {row.apellidos}
                     </TableCell>
                     <TableCell className="py-2" component="th" scope="row">
+                      {row.numero}
+                    </TableCell>
+                    <TableCell className="py-2" component="th" scope="row">
                       {row.dni}
                     </TableCell>
                     <TableCell className="py-2" component="th" scope="row">
@@ -221,11 +225,14 @@ const GobernadoresTable = props => {
                         {row.departamento.nombre}
                       </TableCell>
                     )}
+                    <TableCell className="py-2" component="th" scope="row">
+                      {row.provincia.nombre}
+                    </TableCell>
                     <TableCell className="py-2" component="th" scope="row" align="center" width={140} height={48}>
                       {(rol.super || (accionesPerm && accionesPerm.indexOf('editar') !== -1)) && (
-                        <Link to={`/organizaciones-politicas/gobernadores/editar/${row._id}`}>
+                        <Link to={`/organizaciones-politicas/consejeros/editar/${row._id}`}>
                           <Tooltip title="Editar" placement="bottom-start" enterDelay={100}>
-                            <IconButton color="primary" aria-label="editar gobernador">
+                            <IconButton color="primary" aria-label="editar consejero">
                               <EditIcon />
                             </IconButton>
                           </Tooltip>
@@ -235,7 +242,7 @@ const GobernadoresTable = props => {
                         <Tooltip title="Eliminar" placement="bottom-start" enterDelay={100}>
                           <IconButton
                             style={{ color: '#F44343' }}
-                            aria-label="eliminar gobernador"
+                            aria-label="eliminar consejero"
                             onClick={() => handleRemoveRow(row._id)}
                           >
                             <DeleteIcon />
@@ -280,7 +287,7 @@ const GobernadoresTable = props => {
 /*******************************************************************************************************/
 // Definimos los tipos de propiedades del componente //
 /*******************************************************************************************************/
-GobernadoresTable.propTypes = {
+ConsejerosTable.propTypes = {
   data: PropTypes.array.isRequired,
   setData: PropTypes.func.isRequired,
   page: PropTypes.number.isRequired,
@@ -293,4 +300,4 @@ GobernadoresTable.propTypes = {
 /*******************************************************************************************************/
 // Exportamos el componente //
 /*******************************************************************************************************/
-export default GobernadoresTable
+export default ConsejerosTable

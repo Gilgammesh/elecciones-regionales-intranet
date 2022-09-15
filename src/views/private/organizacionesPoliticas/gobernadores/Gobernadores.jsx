@@ -4,6 +4,7 @@
 import React, { useState } from 'react'
 import PageCarded from 'components/core/PageCarded'
 import GobernadoresHeader from './GobernadoresHeader'
+import GobernadoresToolBar from './GobernadoresToolBar'
 import GobernadoresTable from './GobernadoresTable'
 
 /*******************************************************************************************************/
@@ -33,7 +34,7 @@ const Gobernadores = () => {
         header: 'min-h-72 h-72 sm:h-136 sm:min-h-136'
       }}
       header={<GobernadoresHeader />}
-      // contentToolbar={<GobernadoresToolBar resetPages={resetPages} />}
+      contentToolbar={<GobernadoresToolBar resetPages={resetPages} />}
       content={
         <GobernadoresTable
           data={data}

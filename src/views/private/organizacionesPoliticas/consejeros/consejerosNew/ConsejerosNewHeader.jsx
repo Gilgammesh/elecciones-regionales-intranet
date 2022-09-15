@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Icon, makeStyles, Typography, useTheme } from '@material-ui/core'
 import SaveIcon from '@material-ui/icons/Save'
-import ContactMailIcon from '@material-ui/icons/ContactMail'
+import GroupIcon from '@material-ui/icons/Group'
 import Animate from 'components/core/Animate'
 import clsx from 'clsx'
 import { startGetAccionesSubModulo } from 'redux/actions/auth'
@@ -24,9 +24,9 @@ const useStyles = makeStyles(theme => ({
 }))
 
 /*******************************************************************************************************/
-// Definimos la Vista del componente Organización Editar Header //
+// Definimos la Vista del componente Consejero Nuevo Header //
 /*******************************************************************************************************/
-const OrganizacionesEditHeader = props => {
+const ConsejerosNewHeader = props => {
   // Obtenemos las propiedades
   const { isFormValid } = props
 
@@ -47,7 +47,7 @@ const OrganizacionesEditHeader = props => {
 
   // Efecto para obtener las acciones del submódulo
   useEffect(() => {
-    dispatch(startGetAccionesSubModulo('organizaciones-politicas', 'organizaciones')).then(res => setAccionesPerm(res))
+    dispatch(startGetAccionesSubModulo('organizaciones-politicas', 'consejeros')).then(res => setAccionesPerm(res))
   }, [dispatch])
 
   // Renderizamos el componente
@@ -59,25 +59,25 @@ const OrganizacionesEditHeader = props => {
             className="normal-case flex items-center sm:mb-12"
             component={Link}
             role="button"
-            to="/organizaciones-politicas/organizaciones"
+            to="/organizaciones-politicas/consejeros"
             color="inherit"
           >
             <Icon className="text-20">{theme.direction === 'ltr' ? 'arrow_back' : 'arrow_forward'}</Icon>
-            <span className="mx-4">Organizaciones</span>
+            <span className="mx-4">Consejeros</span>
           </Typography>
         </Animate>
         <div className="flex items-center max-w-full">
           <Animate animation="transition.expandIn" delay={300}>
-            <ContactMailIcon fontSize="large" />
+            <GroupIcon fontSize="large" />
           </Animate>
           <div className="flex flex-col min-w-0 mx-8 sm:mc-16">
             <Animate animation="transition.slideLeftIn" delay={300}>
-              <Typography className="text-16 sm:text-20 truncate">Editar Organización</Typography>
+              <Typography className="text-16 sm:text-20 truncate">Nuevo Consejero</Typography>
             </Animate>
           </div>
         </div>
       </div>
-      {(rol.super || (accionesPerm && accionesPerm.indexOf('editar') !== -1)) && (
+      {(rol.super || (accionesPerm && accionesPerm.indexOf('crear') !== -1)) && (
         <Animate animation="transition.slideRightIn" delay={300}>
           <Button
             type="submit"
@@ -97,11 +97,11 @@ const OrganizacionesEditHeader = props => {
 /*******************************************************************************************************/
 // Definimos los tipos de propiedades del componente //
 /*******************************************************************************************************/
-OrganizacionesEditHeader.propTypes = {
+ConsejerosNewHeader.propTypes = {
   isFormValid: PropTypes.bool.isRequired
 }
 
 /*******************************************************************************************************/
 // Exportamos el componente //
 /*******************************************************************************************************/
-export default OrganizacionesEditHeader
+export default ConsejerosNewHeader

@@ -8,23 +8,20 @@ import { FormControl, InputLabel, Input, InputAdornment, IconButton } from '@mat
 import clsx from 'clsx'
 import SearchIcon from '@material-ui/icons/Search'
 import validateInputRegexp from 'helpers/validateInputRegexp'
-import { startSetPersonerosSearch } from 'redux/actions/personeros'
+import { startSetConsejerosSearch } from 'redux/actions/consejeros'
 
 /*******************************************************************************************************/
-// Definimos la Vista del componente Centros de Votación - Personeros ToolBar - Nombres y Apellidos //
+// Definimos la Vista del componente Consejeros ToolBar - Nombres y Apellidos //
 /*******************************************************************************************************/
-const PersonerosToolBarNomApe = props => {
+const ConsejerosToolBarNomApe = props => {
   // Obtenemos las propiedades del componente
   const { resetPages } = props
 
   // Llamamos al dispatch de redux
   const dispatch = useDispatch()
 
-  // Obtenemos el Rol de Usuario
-  const { rol } = useSelector(state => state.auth.usuario)
-
-  // Obtenemos los estados por defecto de los personeros
-  const { search } = useSelector(state => state.personeros)
+  // Obtenemos los datos por defecto de los consejeros
+  const { search } = useSelector(state => state.consejeros)
 
   // Estado de los nombres y apellidos de búsqueda
   const [nomApe, setNomApe] = useState({
@@ -62,27 +59,21 @@ const PersonerosToolBarNomApe = props => {
 
   // Función para realizar la búsqueda
   const handleSearchQuery = () => {
-    dispatch(startSetPersonerosSearch('nombres', [nombres, apellidos]))
+    dispatch(startSetConsejerosSearch('nombres', [nombres, apellidos]))
     resetPages()
   }
 
   // Renderizamos el componente
   return (
-    <div className={clsx('grid grid-cols-12 col-span-12', rol.super ? 'sm:col-span-3' : 'sm:col-span-4')}>
+    <div className={clsx('grid grid-cols-12 col-span-12', 'sm:col-span-4')}>
       <FormControl className="col-span-5">
-        <InputLabel htmlFor="input-centros-votacion-personeros-nombres">Nombres</InputLabel>
-        <Input
-          id="input-centros-votacion-personeros-nombres"
-          type="text"
-          name="nombres"
-          value={nombres}
-          onChange={handleInputChange}
-        />
+        <InputLabel htmlFor="input-consejeros-nombres">Nombres</InputLabel>
+        <Input id="input-consejeros-nombres" type="text" name="nombres" value={nombres} onChange={handleInputChange} />
       </FormControl>
       <FormControl className="col-span-7">
-        <InputLabel htmlFor="input-centros-votacion-personeros-apellidos">Apellidos</InputLabel>
+        <InputLabel htmlFor="input-consejeros-apellidos">Apellidos</InputLabel>
         <Input
-          id="input-centros-votacion-personeros-apellidos"
+          id="input-consejeros-apellidos"
           type="text"
           name="apellidos"
           value={apellidos}
@@ -108,11 +99,11 @@ const PersonerosToolBarNomApe = props => {
 /*******************************************************************************************************/
 // Definimos los tipos de propiedades del componente //
 /*******************************************************************************************************/
-PersonerosToolBarNomApe.propTypes = {
+ConsejerosToolBarNomApe.propTypes = {
   resetPages: PropTypes.func.isRequired
 }
 
 /*******************************************************************************************************/
 // Exportamos el componente //
 /*******************************************************************************************************/
-export default PersonerosToolBarNomApe
+export default ConsejerosToolBarNomApe
