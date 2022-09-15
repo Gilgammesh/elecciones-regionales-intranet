@@ -41,6 +41,9 @@ import GobernadoresEditView from 'views/private/organizacionesPoliticas/gobernad
 import ConsejerosView from 'views/private/organizacionesPoliticas/consejeros'
 import ConsejerosNewView from 'views/private/organizacionesPoliticas/consejeros/consejerosNew'
 import ConsejerosEditView from 'views/private/organizacionesPoliticas/consejeros/consejerosEdit'
+import AlcaldesView from 'views/private/organizacionesPoliticas/alcaldes'
+import AlcaldesNewView from 'views/private/organizacionesPoliticas/alcaldes/alcaldesNew'
+import AlcaldesEditView from 'views/private/organizacionesPoliticas/alcaldes/alcaldesEdit'
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 //---- MÓDULO CENTROS DE VOTACIÓN ----------------------------------------------------------//
@@ -199,15 +202,15 @@ const routes = {
       },
       alcaldes: {
         path: '/organizaciones-politicas/alcaldes',
-        component: Building,
+        component: AlcaldesView,
         children: [
           {
             path: '/organizaciones-politicas/alcaldes/nuevo',
-            component: Building
+            component: AlcaldesNewView
           },
           {
             path: '/organizaciones-politicas/alcaldes/editar/:id',
-            component: Building
+            component: AlcaldesEditView
           }
         ]
       }

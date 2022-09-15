@@ -6,12 +6,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core'
 import { fetchData } from 'services/fetch'
-import { startSetConsejerosSearch, startSetConsejerosProvincia } from 'redux/actions/consejeros'
+import { startSetAlcaldesSearch, startSetAlcaldesDistrito } from 'redux/actions/alcaldes'
 
 /*******************************************************************************************************/
-// Definimos la Vista del componente Consejeros ToolBar - Provincias //
+// Definimos la Vista del componente Alcaldes ToolBar - Distritos //
 /*******************************************************************************************************/
-const ConsejerosToolBarProvs = props => {
+const AlcaldesToolBarDist = props => {
   // Obtenemos las propiedades del componente
   const { resetPages } = props
 
@@ -21,78 +21,82 @@ const ConsejerosToolBarProvs = props => {
   // Obtenemos el rol del usuario logueado
   const usuario = useSelector(state => state.auth.usuario)
 
-  // Obtenemos los datos por defecto de los consejeros
-  const { departamento, provincia } = useSelector(state => state.consejeros)
+  // Obtenemos los datos por defecto de los alcaldes
+  const { departamento, provincia, distrito } = useSelector(state => state.alcaldes)
 
-  // Estado inicial de la lista de provincias
-  const [listProvincias, setListProvincias] = useState([])
+  // Estado inicial de la lista de distritos
+  const [listDistritos, setListDistritos] = useState([])
 
   // Efecto para obtener los departamentos
   useEffect(() => {
     // Inicializamos el montaje
     let mounted = true
-    // Función para obtener las provincias
-    const getProvincias = async dpto => {
-      // Obtenemos las provincias con fetch
-      const result = await fetchData(`ubigeo/provincias_?departamento=${dpto}&page=1&pageSize=100`, {
+    // Función para obtener los distritos
+    const getDistritos = async (dpto, prov) => {
+      // Obtenemos los distritos con fetch
+      const result = await fetchData(`ubigeo/distritos_?departamento=${dpto}&provincia=${prov}&page=1&pageSize=100`, {
         isTokenReq: true
       })
       // Si existe un resultado y el status es positivo
       if (result && mounted && result.data.status) {
-        // Establecemos las provincias
-        setListProvincias(result.data.list)
+        // Establecemos los distritos
+        setListDistritos(result.data.list)
       }
     }
     // Si es un superusuario
     if (usuario.rol.super) {
-      // Si departamento es igual a todos
-      if (departamento === 'todos') {
-        setListProvincias([])
-      } else {
-        // Obtenemos la lista de provincias con el departamento
-        getProvincias(departamento)
+      // Si departamento o provincia es igual a todos
+      if (departamento === 'todos' || provincia === 'todos') {
+        setListDistritos([])
+      }
+      if (provincia !== 'todos') {
+        // Obtenemos la lista de distritos con el departamento y provincia
+        getDistritos(departamento, provincia)
       }
     } else {
-      // Obtenemos la lista de provincias con el departamento
-      getProvincias(usuario.departamento._id)
+      if (provincia !== 'todos') {
+        // Obtenemos la lista de distritos con el departamento y provincia
+        getDistritos(usuario.departamento._id, provincia)
+      }
     }
-
     return () => {
       // Limpiamos el montaje
       mounted = false
     }
-  }, [usuario, departamento])
+  }, [usuario, departamento, provincia])
 
-  // Función para actualizar el valor de la provincia
+  // Función para actualizar el valor del distrito
   const handleChange = evt => {
     const { value } = evt.target
-    dispatch(startSetConsejerosSearch('', ''))
-    dispatch(startSetConsejerosProvincia(value))
+    dispatch(startSetAlcaldesSearch('', ''))
+    dispatch(startSetAlcaldesDistrito(value))
     resetPages()
   }
 
   // Renderizamos el componente
   return (
-    <FormControl className="col-span-12 sm:col-span-3">
-      <InputLabel shrink id="select-centros-votacion-provincia">
-        Provincia
+    <FormControl className="col-span-12 sm:col-span-2">
+      <InputLabel shrink id="select-centros-votacion-distrito">
+        Distrito
       </InputLabel>
       <Select
-        labelId="select-centros-votacion-provincia"
+        labelId="select-centros-votacion-distrito"
         className="col-span-12"
-        value={provincia}
+        value={distrito}
         onChange={handleChange}
         displayEmpty
       >
-        <MenuItem value="todos">--Todas--</MenuItem>
-        {listProvincias.length > 0 &&
-          listProvincias.map(ele => {
-            return (
-              <MenuItem key={ele._id} value={ele._id}>
-                {ele.nombre}
-              </MenuItem>
-            )
-          })}
+        <MenuItem value="todos">--Todos--</MenuItem>
+        {listDistritos.length > 0 &&
+          listDistritos
+            .filter(ele => ele.codigo !== '01')
+            .map(ele => {
+              return (
+                <MenuItem key={ele._id} value={ele._id}>
+                  {ele.nombre}
+                </MenuItem>
+              )
+            })}
       </Select>
     </FormControl>
   )
@@ -101,11 +105,11 @@ const ConsejerosToolBarProvs = props => {
 /*******************************************************************************************************/
 // Definimos los tipos de propiedades del componente //
 /*******************************************************************************************************/
-ConsejerosToolBarProvs.propTypes = {
+AlcaldesToolBarDist.propTypes = {
   resetPages: PropTypes.func.isRequired
 }
 
 /*******************************************************************************************************/
 // Exportamos el componente //
 /*******************************************************************************************************/
-export default ConsejerosToolBarProvs
+export default AlcaldesToolBarDist

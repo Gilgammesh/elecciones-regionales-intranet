@@ -20,7 +20,7 @@ const GobernadoresEdit = () => {
   // Llamamos al history de las rutas
   const history = useHistory()
 
-  // Obtenemos el id del usuario de los parámetros de la ruta
+  // Obtenemos el id del gobernador de los parámetros de la ruta
   const { id } = useParams()
 
   // Obtenemos los datos de Usuario

@@ -57,14 +57,14 @@ const useStyles = makeStyles(theme => ({
 /*******************************************************************************************************/
 // Definimos la Vista del componente Consjero Editar Formulario //
 /*******************************************************************************************************/
-const ConsejerosEditForm = props => {
-  // Obtenemos el id del consejero de los parámetros de la ruta
+const AlcaldesEditForm = props => {
+  // Obtenemos el id del alcalde de los parámetros de la ruta
   const { id } = useParams()
 
   // Obtenemos las propiedades del componente
   const { setFileState, formValues, handleInputChange, setForm } = props
   // Obtenemos los valores del formulario
-  const { numero, nombres, apellidos, dni, organizacion, departamento, provincia } = formValues
+  const { nombres, apellidos, dni, tipo, organizacion, departamento, provincia, distrito } = formValues
 
   // Obtenemos los datos del Usuario logueado
   const usuario = useSelector(state => state.auth.usuario)
@@ -84,8 +84,10 @@ const ConsejerosEditForm = props => {
   const [departamentos, setDepartamentos] = useState([])
   // Estado inicial de las provincias
   const [provincias, setProvincias] = useState([])
+  // Estado inicial de los distritos
+  const [distritos, setDistritos] = useState([])
 
-  // Estado de carga de los datos del consejero
+  // Estado de carga de los datos del alcalde
   const [loading, setLoading] = useState(true)
 
   // Efecto para obtener las organizaciones
@@ -96,7 +98,7 @@ const ConsejerosEditForm = props => {
     const getOrganizaciones = async () => {
       // Obtenemos las organizaciones con fetch
       const result = await fetchData(
-        'organizaciones-politicas/consejeros/organizaciones?page=1&pageSize=50&sort=nombre',
+        'organizaciones-politicas/alcaldes/organizaciones?page=1&pageSize=50&sort=nombre',
         {
           isTokenReq: true
         }
@@ -125,7 +127,7 @@ const ConsejerosEditForm = props => {
     }
   }, [])
 
-  // Efecto para obtener los departamentos y provincias
+  // Efecto para obtener los departamentos, provincias y distritos
   useEffect(() => {
     // Estado inicial de montaje
     let mounted = true
@@ -170,6 +172,29 @@ const ConsejerosEditForm = props => {
         setProvincias(listProvincias)
       }
     }
+    // Función para obtener los distritos
+    const getDistritos = async (dpto, prov) => {
+      // Obtenemos los distritos con fetch
+      const result = await fetchData(`ubigeo/distritos_?departamento=${dpto}&provincia=${prov}&page=1&pageSize=100`, {
+        isTokenReq: true
+      })
+      // Si existe un resultado y el status es positivo
+      if (result && mounted && result.data.status) {
+        // Recorremos la lista de distritos
+        const promises = result.data.list
+          .filter(ele => ele.codigo !== '01')
+          .map(ele => {
+            return (
+              <MenuItem key={ele._id} value={ele._id}>
+                {ele.nombre}
+              </MenuItem>
+            )
+          })
+        const listDistritos = await Promise.all(promises)
+        // Establecemos los distritos
+        setDistritos(listDistritos)
+      }
+    }
     // Si es un superusuario
     if (usuario.rol.super) {
       // Obtenemos los departamentos
@@ -178,55 +203,64 @@ const ConsejerosEditForm = props => {
       if (departamento && departamento !== '') {
         // Obtenemos la lista de provincias con el departamento
         getProvincias(departamento)
+        if (provincia && provincia !== '') {
+          // Obtenemos la lista de distritos con el departamento y la provincia
+          getDistritos(departamento, provincia)
+        }
       }
     } else {
       // Obtenemos la lista de provincias con el departamento del usuario logueado
       getProvincias(usuario.departamento._id)
+      if (provincia && provincia !== '') {
+        // Obtenemos la lista de distritos con el departamento y la provincia
+        getDistritos(usuario.departamento._id, provincia)
+      }
     }
     // Limpiamos el montaje
     return () => {
       mounted = false
     }
-  }, [usuario, departamento])
+  }, [usuario, departamento, provincia])
 
-  // Efecto para obtener los datos del consejero con el id
+  // Efecto para obtener los datos del alcalde con el id
   useEffect(() => {
     // Estado inicial de montaje
     let mounted = true
-    // Función para obtener los datos de un consejero
-    const getConsejero = async () => {
-      // Obtenemos los datos de un consejero con fetch
-      const result = await fetchData(`organizaciones-politicas/consejeros/${id}`, { isTokenReq: true })
+    // Función para obtener los datos de un alcalde
+    const getAlcalde = async () => {
+      // Obtenemos los datos de un alcalde con fetch
+      const result = await fetchData(`organizaciones-politicas/alcaldes/${id}`, { isTokenReq: true })
       // Si existe un resultado y el status es positivo
       if (result && mounted && result.data.status) {
-        // Obtenemos el consejero
-        const { consejero } = result.data
+        // Obtenemos el alcalde
+        const { alcalde } = result.data
         // Si tiene una foto
-        if (consejero.foto) {
+        if (alcalde.foto) {
           setFoto({
-            url: consejero.foto,
+            url: alcalde.foto,
             type: ''
           })
         }
         // Guardamos los datos del formulario
         setForm({
-          numero: consejero.numero,
-          nombres: consejero.nombres,
-          apellidos: consejero.apellidos,
-          dni: consejero.dni,
-          organizacion: consejero.organizacion ? consejero.organizacion._id : '',
-          departamento: consejero.departamento ? consejero.departamento._id : '',
-          provincia: consejero.provincia ? consejero.provincia._id : '',
+          nombres: alcalde.nombres,
+          apellidos: alcalde.apellidos,
+          dni: alcalde.dni,
+          tipo: alcalde.tipo,
+          organizacion: alcalde.organizacion ? alcalde.organizacion._id : '',
+          departamento: alcalde.departamento ? alcalde.departamento._id : '',
+          provincia: alcalde.provincia ? alcalde.provincia._id : '',
+          distrito: alcalde.distrito ? alcalde.distrito._id : '',
           file: null
         })
-        // Finalizamos el estado de carga de los datos del consejero
+        // Finalizamos el estado de carga de los datos del alcalde
         setLoading(false)
       }
     }
     // Si existe un id
     if (id) {
-      // Obtenemos los datos del consejero
-      getConsejero()
+      // Obtenemos los datos del alcalde
+      getAlcalde()
     }
     return () => {
       mounted = false
@@ -296,7 +330,7 @@ const ConsejerosEditForm = props => {
     setFileState('removed')
   }
 
-  // Si los datos del consejero están cargando
+  // Si los datos del alcalde están cargando
   if (loading) {
     // Renderizamos el componente
     return (
@@ -312,22 +346,6 @@ const ConsejerosEditForm = props => {
   return (
     <div className="flex flex-col justify-center w-full p-16 sm:p-24">
       <div className="grid grid-cols-12 gap-16 mt-16 mb-16">
-        <TextFieldFormsy
-          className="col-span-12 sm:col-span-1"
-          type="number"
-          name="numero"
-          label="Número"
-          accept="onlyNumber"
-          value={numero}
-          onChange={handleInputChange}
-          variant="outlined"
-          inputProps={{
-            maxLength: 2,
-            min: 1,
-            max: 99
-          }}
-          required
-        />
         <TextFieldFormsy
           className="col-span-12 sm:col-span-4"
           type="text"
@@ -385,15 +403,16 @@ const ConsejerosEditForm = props => {
       <div className="grid grid-cols-12 gap-16 mt-16 mb-16">
         <TextField
           select
-          className={clsx('col-span-12', usuario.rol.super ? 'sm:col-span-3' : 'sm:col-span-4')}
-          name="organizacion"
-          label="Organización Política"
-          value={organizacion}
+          className="col-span-12 sm:col-span-2"
+          name="tipo"
+          label="Tipo"
+          value={tipo}
           onChange={handleInputChange}
           variant="outlined"
           required
         >
-          {organizaciones}
+          <MenuItem value="provincial">Provincial</MenuItem>
+          <MenuItem value="distrital">Distrital</MenuItem>
         </TextField>
         {usuario.rol.super && departamentos && (
           <TextField
@@ -423,6 +442,34 @@ const ConsejerosEditForm = props => {
             {provincias}
           </TextField>
         )}
+        {tipo === 'distrital' && distritos && (
+          <TextField
+            select
+            className={clsx('col-span-12', usuario.rol.super ? 'sm:col-span-3' : 'sm:col-span-4')}
+            name="distrito"
+            label="Distrito"
+            value={distrito}
+            onChange={handleInputChange}
+            variant="outlined"
+            required
+          >
+            {distritos}
+          </TextField>
+        )}
+      </div>
+      <div className="grid grid-cols-12 gap-16 mt-16 mb-16">
+        <TextField
+          select
+          className={clsx('col-span-12', usuario.rol.super ? 'sm:col-span-4' : 'sm:col-span-4')}
+          name="organizacion"
+          label="Organización Política"
+          value={organizacion}
+          onChange={handleInputChange}
+          variant="outlined"
+          required
+        >
+          {organizaciones}
+        </TextField>
         <div className="flex flex-col col-span-12 sm:col-span-4">
           <label className="ml-6">Foto</label>
           <div className="flex justify-center sm:justify-start flex-wrap -mx-8">
@@ -475,7 +522,7 @@ const ConsejerosEditForm = props => {
 /*******************************************************************************************************/
 // Definimos los tipos de propiedades del componente //
 /*******************************************************************************************************/
-ConsejerosEditForm.propTypes = {
+AlcaldesEditForm.propTypes = {
   setFileState: PropTypes.func.isRequired,
   formValues: PropTypes.object.isRequired,
   handleInputChange: PropTypes.func.isRequired,
@@ -485,4 +532,4 @@ ConsejerosEditForm.propTypes = {
 /*******************************************************************************************************/
 // Exportamos el componente //
 /*******************************************************************************************************/
-export default ConsejerosEditForm
+export default AlcaldesEditForm

@@ -55,6 +55,13 @@ export interface ITypes {
   setConsejerosDepartamento: string
   setConsejerosProvincia: string
   resetConsejeros: string
+  setAlcaldesSearch: string
+  setAlcaldesTipo: string
+  setAlcaldesOrganizacion: string
+  setAlcaldesDepartamento: string
+  setAlcaldesProvincia: string
+  setAlcaldesDistrito: string
+  resetAlcaldes: string
 }
 
 /*******************************************************************************************************/
@@ -113,7 +120,14 @@ const types: ITypes = {
   setConsejerosOrganizacion: '[consejeros] set organizacion',
   setConsejerosDepartamento: '[consejeros] set departamento',
   setConsejerosProvincia: '[consejeros] set provincia',
-  resetConsejeros: '[consejeros] reset'
+  resetConsejeros: '[consejeros] reset',
+  setAlcaldesSearch: '[alcaldes] set search',
+  setAlcaldesTipo: '[alcaldes] set tipo',
+  setAlcaldesOrganizacion: '[alcaldes] set organizacion',
+  setAlcaldesDepartamento: '[alcaldes] set departamento',
+  setAlcaldesProvincia: '[alcaldes] set provincia',
+  setAlcaldesDistrito: '[alcaldes] set distrito',
+  resetAlcaldes: '[alcaldes] reset'
 }
 
 /*******************************************************************************************************/

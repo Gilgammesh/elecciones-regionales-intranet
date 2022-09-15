@@ -6,12 +6,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core'
 import { fetchData } from 'services/fetch'
-import { startSetConsejerosSearch, startSetConsejerosProvincia } from 'redux/actions/consejeros'
+import { startSetAlcaldesSearch, startSetAlcaldesProvincia } from 'redux/actions/alcaldes'
 
 /*******************************************************************************************************/
-// Definimos la Vista del componente Consejeros ToolBar - Provincias //
+// Definimos la Vista del componente Alcaldes ToolBar - Provincias //
 /*******************************************************************************************************/
-const ConsejerosToolBarProvs = props => {
+const AlcaldesToolBarProvs = props => {
   // Obtenemos las propiedades del componente
   const { resetPages } = props
 
@@ -21,8 +21,8 @@ const ConsejerosToolBarProvs = props => {
   // Obtenemos el rol del usuario logueado
   const usuario = useSelector(state => state.auth.usuario)
 
-  // Obtenemos los datos por defecto de los consejeros
-  const { departamento, provincia } = useSelector(state => state.consejeros)
+  // Obtenemos los datos por defecto de los alcaldes
+  const { departamento, provincia } = useSelector(state => state.alcaldes)
 
   // Estado inicial de la lista de provincias
   const [listProvincias, setListProvincias] = useState([])
@@ -66,14 +66,14 @@ const ConsejerosToolBarProvs = props => {
   // Función para actualizar el valor de la provincia
   const handleChange = evt => {
     const { value } = evt.target
-    dispatch(startSetConsejerosSearch('', ''))
-    dispatch(startSetConsejerosProvincia(value))
+    dispatch(startSetAlcaldesSearch('', ''))
+    dispatch(startSetAlcaldesProvincia(value, 'todos'))
     resetPages()
   }
 
   // Renderizamos el componente
   return (
-    <FormControl className="col-span-12 sm:col-span-3">
+    <FormControl className="col-span-12 sm:col-span-2">
       <InputLabel shrink id="select-centros-votacion-provincia">
         Provincia
       </InputLabel>
@@ -101,11 +101,11 @@ const ConsejerosToolBarProvs = props => {
 /*******************************************************************************************************/
 // Definimos los tipos de propiedades del componente //
 /*******************************************************************************************************/
-ConsejerosToolBarProvs.propTypes = {
+AlcaldesToolBarProvs.propTypes = {
   resetPages: PropTypes.func.isRequired
 }
 
 /*******************************************************************************************************/
 // Exportamos el componente //
 /*******************************************************************************************************/
-export default ConsejerosToolBarProvs
+export default AlcaldesToolBarProvs

@@ -20,7 +20,7 @@ const ConsejerosEdit = () => {
   // Llamamos al history de las rutas
   const history = useHistory()
 
-  // Obtenemos el id del usuario de los parámetros de la ruta
+  // Obtenemos el id del consejero de los parámetros de la ruta
   const { id } = useParams()
 
   // Obtenemos los datos de Usuario
@@ -55,7 +55,7 @@ const ConsejerosEdit = () => {
     Object.keys(formValues).forEach(key => {
       formData.append(key, formValues[key])
     })
-    // Actualizamos la data del gobernador
+    // Actualizamos la data del consejero
     const result = await fetchData(
       `organizaciones-politicas/consejeros/${id}?fileState=${fileState}`,
       { isTokenReq: true, contentType: 'multipart/form-data' },
