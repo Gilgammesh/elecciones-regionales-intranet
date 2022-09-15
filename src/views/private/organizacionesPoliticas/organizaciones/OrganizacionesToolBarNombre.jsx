@@ -45,7 +45,7 @@ const OrganizacionesToolBarNombre = props => {
 
   // Renderizamos el componente
   return (
-    <div className={clsx('grid grid-cols-12 col-span-12', 'sm:col-span-4')}>
+    <div className={clsx('grid grid-cols-12 col-span-12', 'sm:col-span-3')}>
       <FormControl className="col-span-12">
         <InputLabel htmlFor="input-organizaciones-nombre">Nombre</InputLabel>
         <Input
