@@ -29,12 +29,11 @@ import { Swal, Toast } from 'configs/settings'
 import { validateFetchData } from 'helpers/validateFetchData'
 import { startGetAccionesSubModulo } from 'redux/actions/auth'
 import { startResetPersoneros } from 'redux/actions/personeros'
-import { pageIni } from 'constants/personeros'
 
 /*******************************************************************************************************/
 // Definimos los estilos del componente //
 /*******************************************************************************************************/
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   red: {
     color: red[500]
   }
@@ -154,7 +153,7 @@ const PersonerosTable = props => {
   // Función para cambiar el tamaño de registros de una página
   const handleChangeRowsPerPage = evt => {
     // Reiniciamos a la página inicial
-    setPage(pageIni)
+    setPage(0)
     // Guardamos el número de registro por página
     setRowsPerPage(evt.target.value)
   }

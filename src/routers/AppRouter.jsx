@@ -8,14 +8,13 @@ import PublicRoute from 'components/core/Route/PublicRoute'
 import PrivateRoute from 'components/core/Route/PrivateRoute'
 import PrivateRouter from './PrivateRouter'
 import PublicRouter from './PublicRouter'
-import { IRootReducers } from '../redux/store'
 
 /*******************************************************************************************************/
 // Definimos las Rutas de la Aplicación //
 /*******************************************************************************************************/
 const AppRouter = () => {
   // Llamamos al state global de auth
-  const auth = useSelector((state: IRootReducers) => state.auth)
+  const auth = useSelector(state => state.auth)
   // Obtenemos si el usuario esta logueado
   const { isLogged } = auth.usuario
 

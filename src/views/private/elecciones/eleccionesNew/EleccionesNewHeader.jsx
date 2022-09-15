@@ -5,13 +5,7 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  Button,
-  Icon,
-  makeStyles,
-  Typography,
-  useTheme
-} from '@material-ui/core'
+import { Button, Icon, makeStyles, Typography, useTheme } from '@material-ui/core'
 import SaveIcon from '@material-ui/icons/Save'
 import AssistantIcon from '@material-ui/icons/Assistant'
 import Animate from 'components/core/Animate'
@@ -53,19 +47,12 @@ const EleccionesNewHeader = props => {
 
   // Efecto para obtener las acciones del módulo
   useEffect(() => {
-    dispatch(startGetAccionesModulo('usuarios')).then(res =>
-      setAccionesPerm(res)
-    )
+    dispatch(startGetAccionesModulo('elecciones')).then(res => setAccionesPerm(res))
   }, [dispatch])
 
   // Renderizamos el componente
   return (
-    <div
-      className={clsx(
-        'flex flex-1 w-full items-center justify-between',
-        styles.root
-      )}
-    >
+    <div className={clsx('flex flex-1 w-full items-center justify-between', styles.root)}>
       <div className="flex flex-col items-start max-w-full">
         <Animate animation="transition.slideRightIn" delay={300}>
           <Typography
@@ -75,9 +62,7 @@ const EleccionesNewHeader = props => {
             to="/elecciones"
             color="inherit"
           >
-            <Icon className="text-20">
-              {theme.direction === 'ltr' ? 'arrow_back' : 'arrow_forward'}
-            </Icon>
+            <Icon className="text-20">{theme.direction === 'ltr' ? 'arrow_back' : 'arrow_forward'}</Icon>
             <span className="mx-4">Elecciones</span>
           </Typography>
         </Animate>
@@ -87,15 +72,12 @@ const EleccionesNewHeader = props => {
           </Animate>
           <div className="flex flex-col min-w-0 mx-8 sm:mc-16">
             <Animate animation="transition.slideLeftIn" delay={300}>
-              <Typography className="text-16 sm:text-20 truncate">
-                Nueva Elección
-              </Typography>
+              <Typography className="text-16 sm:text-20 truncate">Nueva Elección</Typography>
             </Animate>
           </div>
         </div>
       </div>
-      {(rol.super ||
-        (accionesPerm && accionesPerm.indexOf('crear') !== -1)) && (
+      {(rol.super || (accionesPerm && accionesPerm.indexOf('crear') !== -1)) && (
         <Animate animation="transition.slideRightIn" delay={300}>
           <Button
             type="submit"

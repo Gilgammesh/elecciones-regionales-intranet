@@ -6,7 +6,6 @@ import PageCarded from 'components/core/PageCarded'
 import MesasHeader from './MesasHeader'
 import MesasToolBar from './MesasToolBar'
 import MesasTable from './MesasTable'
-import { pageIni, rowsPerPageIni } from 'constants/mesas'
 
 /*******************************************************************************************************/
 // Definimos la Vista del componente Centros de Votación - Mesas //
@@ -16,14 +15,14 @@ const Mesas = () => {
   const [data, setData] = useState([])
 
   // Estado para definir el número de página de la tabla
-  const [page, setPage] = useState(pageIni)
+  const [page, setPage] = useState(0)
   // Estado para definir el número de filas por página
-  const [rowsPerPage, setRowsPerPage] = useState(rowsPerPageIni)
+  const [rowsPerPage, setRowsPerPage] = useState(10)
 
   // Función para resetear las páginas de la tablas
   const resetPages = () => {
-    setPage(pageIni)
-    setRowsPerPage(rowsPerPageIni)
+    setPage(0)
+    setRowsPerPage(10)
   }
 
   // Renderizamos el componente

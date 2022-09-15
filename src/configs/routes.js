@@ -32,6 +32,18 @@ import UsuariosEditView from 'views/private/usuarios/usuariosEdit'
 //////////////////////////////////////////////////////////////////////////////////////////////
 //---- MÓDULO ORGANIZACIONES POLÍTICAS -----------------------------------------------------//
 //////////////////////////////////////////////////////////////////////////////////////////////
+import OrganizacionesView from 'views/private/organizacionesPoliticas/organizaciones'
+import OrganizacionesNewView from 'views/private/organizacionesPoliticas/organizaciones/organizacionesNew'
+import OrganizacionesEditView from 'views/private/organizacionesPoliticas/organizaciones/organizacionesEdit'
+import GobernadoresView from 'views/private/organizacionesPoliticas/gobernadores'
+import GobernadoresNewView from 'views/private/organizacionesPoliticas/gobernadores/gobernadoresNew'
+import GobernadoresEditView from 'views/private/organizacionesPoliticas/gobernadores/gobernadoresEdit'
+import ConsejerosView from 'views/private/organizacionesPoliticas/consejeros'
+import ConsejerosNewView from 'views/private/organizacionesPoliticas/consejeros/consejerosNew'
+import ConsejerosEditView from 'views/private/organizacionesPoliticas/consejeros/consejerosEdit'
+import AlcaldesView from 'views/private/organizacionesPoliticas/alcaldes'
+import AlcaldesNewView from 'views/private/organizacionesPoliticas/alcaldes/alcaldesNew'
+import AlcaldesEditView from 'views/private/organizacionesPoliticas/alcaldes/alcaldesEdit'
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 //---- MÓDULO CENTROS DE VOTACIÓN ----------------------------------------------------------//
@@ -57,34 +69,9 @@ import CentrosMesasEditView from 'views/private/centrosVotacion/mesas/mesasEdit'
 import Building from 'components/core/Building'
 
 /*******************************************************************************************************/
-// Interface de los Módulos y SubMódulos de las Rutas //
-/*******************************************************************************************************/
-export interface IRoutesChildren {
-  path: string
-  component: React.ComponentType
-}
-export interface IRoutesSubModulo {
-  path: string
-  component: React.ComponentType
-  children?: Array<IRoutesChildren>
-}
-export interface IRoutesSubModulos {
-  [key: string]: IRoutesSubModulo
-}
-export interface IRoutesModulo {
-  path: string
-  component?: React.ComponentType
-  rutas?: IRoutesSubModulos
-  children?: Array<IRoutesChildren>
-}
-export interface IRoutesModulos {
-  [key: string]: IRoutesModulo
-}
-
-/*******************************************************************************************************/
 // Definimos las rutas de navegación de la aplicación //
 /*******************************************************************************************************/
-const routes: IRoutesModulos = {
+const routes = {
   admin: {
     path: '/admin',
     rutas: {
@@ -170,7 +157,64 @@ const routes: IRoutesModulos = {
   },
   'organizaciones-politicas': {
     path: '/organizaciones-politicas',
-    component: Building
+    rutas: {
+      organizaciones: {
+        path: '/organizaciones-politicas/organizaciones',
+        component: OrganizacionesView,
+        children: [
+          {
+            path: '/organizaciones-politicas/organizaciones/nuevo',
+            component: OrganizacionesNewView
+          },
+          {
+            path: '/organizaciones-politicas/organizaciones/editar/:id',
+            component: OrganizacionesEditView
+          }
+        ]
+      },
+      gobernadores: {
+        path: '/organizaciones-politicas/gobernadores',
+        component: GobernadoresView,
+        children: [
+          {
+            path: '/organizaciones-politicas/gobernadores/nuevo',
+            component: GobernadoresNewView
+          },
+          {
+            path: '/organizaciones-politicas/gobernadores/editar/:id',
+            component: GobernadoresEditView
+          }
+        ]
+      },
+      consejeros: {
+        path: '/organizaciones-politicas/consejeros',
+        component: ConsejerosView,
+        children: [
+          {
+            path: '/organizaciones-politicas/consejeros/nuevo',
+            component: ConsejerosNewView
+          },
+          {
+            path: '/organizaciones-politicas/consejeros/editar/:id',
+            component: ConsejerosEditView
+          }
+        ]
+      },
+      alcaldes: {
+        path: '/organizaciones-politicas/alcaldes',
+        component: AlcaldesView,
+        children: [
+          {
+            path: '/organizaciones-politicas/alcaldes/nuevo',
+            component: AlcaldesNewView
+          },
+          {
+            path: '/organizaciones-politicas/alcaldes/editar/:id',
+            component: AlcaldesEditView
+          }
+        ]
+      }
+    }
   },
   'centros-votacion': {
     path: '/centros-votacion',

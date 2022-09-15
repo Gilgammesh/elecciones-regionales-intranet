@@ -40,9 +40,7 @@ const PersonerosHeader = () => {
 
   // Efecto para obtener las acciones del submódulo
   useEffect(() => {
-    dispatch(startGetAccionesSubModulo('centros-votacion', 'personeros')).then(
-      res => setAccionesPerm(res)
-    )
+    dispatch(startGetAccionesSubModulo('centros-votacion', 'personeros')).then(res => setAccionesPerm(res))
   }, [dispatch])
 
   // Función para abrir el Modal
@@ -63,17 +61,14 @@ const PersonerosHeader = () => {
           </Typography>
         </Animate>
       </div>
-      {(rol.super ||
-        (accionesPerm && accionesPerm.indexOf('crear') !== -1)) && (
+      {(rol.super || (accionesPerm && accionesPerm.indexOf('crear') !== -1)) && (
         <AnimateGroup animation="transition.slideRightIn" delay={300}>
           <Button
             className="whitespace-no-wrap normal-case"
             variant="contained"
             startIcon={<AssignmentIcon />}
             onClick={handleOpenMod}
-            disabled={
-              rol.super ? (departamento === 'todos' ? true : false) : false
-            }
+            disabled={rol.super ? (departamento === 'todos' ? true : false) : false}
           >
             <span className="hidden sm:flex">Importar Personeros</span>
             <span className="flex sm:hidden">Importar</span>
@@ -98,13 +93,7 @@ const PersonerosHeader = () => {
           setOpenErrors={setOpenErrors}
         />
       )}
-      {openErrors && (
-        <PersonerosDialogErrores
-          open={openErrors}
-          setOpen={setOpenErrors}
-          errors={errors}
-        />
-      )}
+      {openErrors && <PersonerosDialogErrores open={openErrors} setOpen={setOpenErrors} errors={errors} />}
     </div>
   )
 }

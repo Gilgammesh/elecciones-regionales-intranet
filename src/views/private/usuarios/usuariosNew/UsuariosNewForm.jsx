@@ -4,15 +4,7 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
-import {
-  Icon,
-  IconButton,
-  InputAdornment,
-  makeStyles,
-  MenuItem,
-  TextField,
-  Tooltip
-} from '@material-ui/core'
+import { Icon, IconButton, InputAdornment, makeStyles, MenuItem, TextField, Tooltip } from '@material-ui/core'
 import clsx from 'clsx'
 import TextFieldFormsy from 'components/core/Formsy/TextFieldFormsy'
 import { fetchData } from 'services/fetch'
@@ -71,17 +63,7 @@ const UsuariosNewForm = props => {
 
   // Obtenemos las propiedades del componente
   const { formValues, handleInputChange, setForm } = props
-  const {
-    nombres,
-    apellidos,
-    dni,
-    celular,
-    email,
-    genero,
-    password,
-    rol,
-    departamento
-  } = formValues
+  const { nombres, apellidos, dni, celular, email, genero, password, rol, departamento } = formValues
 
   // Estado para mostrar la contraseña
   const [showPassword, setShowPassword] = useState(false)
@@ -131,10 +113,7 @@ const UsuariosNewForm = props => {
     // Función para obtener la lista de departamentos
     const getDepartamentos = async () => {
       // Obtenemos los roles con fetch
-      const result = await fetchData(
-        'ubigeo/departamentos?page=1&pageSize=50',
-        { isTokenReq: true }
-      )
+      const result = await fetchData('ubigeo/departamentos?page=1&pageSize=50', { isTokenReq: true })
       // Si existe un resultado y el status es positivo
       if (result && mounted && result.data.status) {
         // Recorremos la lista de departamentos
@@ -210,13 +189,13 @@ const UsuariosNewForm = props => {
   }
 
   // Función para remover la imagen del usuario de la vista
-  const handleRemoveImage = evt => {
+  const handleRemoveImage = () => {
     // Limpiamos los datos de la imagen
     setImage({
       url: '',
       type: ''
     })
-    // Limipamos la imagen del formulario
+    // Limpiamos la imagen del formulario
     setForm({
       ...formValues,
       file: null
@@ -413,11 +392,7 @@ const UsuariosNewForm = props => {
                 <Icon className={styles.imageClose} onClick={handleRemoveImage}>
                   cancel
                 </Icon>
-                <img
-                  className="max-w-none w-auto h-full"
-                  src={image.url}
-                  alt="foto usuario"
-                />
+                <img className="max-w-none w-auto h-full" src={image.url} alt="foto usuario" />
               </div>
             )}
           </div>

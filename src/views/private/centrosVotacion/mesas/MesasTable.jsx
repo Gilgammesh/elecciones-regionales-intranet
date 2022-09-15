@@ -32,7 +32,6 @@ import { validateFetchData } from 'helpers/validateFetchData'
 import { startGetAccionesSubModulo } from 'redux/actions/auth'
 import { startSetMesasChange } from 'redux/actions/mesas'
 import DialogPersoneros from './DialogPersoneros'
-import { pageIni } from 'constants/mesas'
 
 /*******************************************************************************************************/
 // Definimos los estilos del componente //
@@ -180,7 +179,7 @@ const MesasTable = props => {
   // Función para cambiar el tamaño de registros de una página
   const handleChangeRowsPerPage = evt => {
     // Reiniciamos a la página inicial
-    setPage(pageIni)
+    setPage(0)
     // Guardamos el número de registro por página
     setRowsPerPage(evt.target.value)
   }

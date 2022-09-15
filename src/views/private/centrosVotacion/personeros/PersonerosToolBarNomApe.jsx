@@ -23,7 +23,7 @@ const PersonerosToolBarNomApe = props => {
   // Obtenemos el Rol de Usuario
   const { rol } = useSelector(state => state.auth.usuario)
 
-  // Obtenemos los estados por defecto de la vista personeros
+  // Obtenemos los estados por defecto de los personeros
   const { search } = useSelector(state => state.personeros)
 
   // Estado de los nombres y apellidos de búsqueda

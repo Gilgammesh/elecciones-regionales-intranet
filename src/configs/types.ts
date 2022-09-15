@@ -44,6 +44,24 @@ export interface ITypes {
   setMesasDistrito: string
   setMesasChange: string
   resetMesas: string
+  setOrganizacionesNombre: string
+  resetOrganizaciones: string
+  setGobernadoresSearch: string
+  setGobernadoresOrganizacion: string
+  setGobernadoresDepartamento: string
+  resetGobernadores: string
+  setConsejerosSearch: string
+  setConsejerosOrganizacion: string
+  setConsejerosDepartamento: string
+  setConsejerosProvincia: string
+  resetConsejeros: string
+  setAlcaldesSearch: string
+  setAlcaldesTipo: string
+  setAlcaldesOrganizacion: string
+  setAlcaldesDepartamento: string
+  setAlcaldesProvincia: string
+  setAlcaldesDistrito: string
+  resetAlcaldes: string
 }
 
 /*******************************************************************************************************/
@@ -91,7 +109,25 @@ const types: ITypes = {
   setMesasProvincia: '[mesas] set provincia',
   setMesasDistrito: '[mesas] set distrito',
   setMesasChange: '[mesas] set change',
-  resetMesas: '[mesas] reset'
+  resetMesas: '[mesas] reset',
+  setOrganizacionesNombre: '[organizaciones] set nombre',
+  resetOrganizaciones: '[organizaciones] reset',
+  setGobernadoresSearch: '[gobernadores] set search',
+  setGobernadoresOrganizacion: '[gobernadores] set organizacion',
+  setGobernadoresDepartamento: '[gobernadores] set departamento',
+  resetGobernadores: '[gobernadores] reset',
+  setConsejerosSearch: '[consejeros] set search',
+  setConsejerosOrganizacion: '[consejeros] set organizacion',
+  setConsejerosDepartamento: '[consejeros] set departamento',
+  setConsejerosProvincia: '[consejeros] set provincia',
+  resetConsejeros: '[consejeros] reset',
+  setAlcaldesSearch: '[alcaldes] set search',
+  setAlcaldesTipo: '[alcaldes] set tipo',
+  setAlcaldesOrganizacion: '[alcaldes] set organizacion',
+  setAlcaldesDepartamento: '[alcaldes] set departamento',
+  setAlcaldesProvincia: '[alcaldes] set provincia',
+  setAlcaldesDistrito: '[alcaldes] set distrito',
+  resetAlcaldes: '[alcaldes] reset'
 }
 
 /*******************************************************************************************************/

@@ -25,7 +25,6 @@ import { fetchData } from 'services/fetch'
 import DialogPersonerosNombres from './DialogPersonerosNombres'
 import DialogPersonerosApellidos from './DialogPersonerosApellidos'
 import DialogPersonerosDni from './DialogPersonerosDni'
-import { pageIni, rowsPerPageIni } from 'constants/mesas'
 
 /*******************************************************************************************************/
 // Tipos del Componente //
@@ -88,9 +87,9 @@ const DialogPersoneros = props => {
   const [persId, setPersId] = useState(null)
 
   // Estado para definir el número de página de la tabla
-  const [page, setPage] = useState(pageIni)
+  const [page, setPage] = useState(0)
   // Estado para definir el número de filas por página
-  const [rowsPerPage, setRowsPerPage] = useState(rowsPerPageIni)
+  const [rowsPerPage, setRowsPerPage] = useState(10)
   // Total de registros de la tablas
   const [totalReg, setTotalReg] = useState(0)
 
@@ -111,7 +110,7 @@ const DialogPersoneros = props => {
   // Función para cambiar el tamaño de registros de una página
   const handleChangeRowsPerPage = evt => {
     // Reiniciamos a la página inicial
-    setPage(pageIni)
+    setPage(0)
     // Guardamos el número de registro por página
     setRowsPerPage(evt.target.value)
   }
@@ -178,8 +177,8 @@ const DialogPersoneros = props => {
   const handleSearchQuery = evt => {
     evt.preventDefault()
     setQuery({ nombres, apellidos, dni })
-    setPage(pageIni)
-    setRowsPerPage(rowsPerPageIni)
+    setPage(0)
+    setRowsPerPage(10)
   }
 
   // Función para seleccionar los datos del personero

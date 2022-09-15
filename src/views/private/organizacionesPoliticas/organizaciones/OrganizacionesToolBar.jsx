@@ -2,39 +2,34 @@
 // Importamos las dependencias //
 /*******************************************************************************************************/
 import React from 'react'
-import { Switch, Route } from 'react-router-dom'
-import { IRoutesModulo, IRoutesChildren } from 'configs/routes'
+import PropTypes from 'prop-types'
+import OrganizacionesToolBarNombre from './OrganizacionesToolBarNombre'
 
 /*******************************************************************************************************/
-// Props para el componente //
+// Definimos la Vista del componente Organizaciones ToolBar //
 /*******************************************************************************************************/
-type Props = {
-  rutas: IRoutesModulo
+const OrganizacionesToolBar = props => {
+  // Obtenemos las propiedades del componente
+  const { resetPages } = props
+
+  // Renderizamos el componente
+  return (
+    <div className="flex flex-col justify-center w-full px-16 sm:px-24">
+      <div className="grid grid-cols-12 gap-24 mt-16 mb-16">
+        <OrganizacionesToolBarNombre resetPages={resetPages} />
+      </div>
+    </div>
+  )
 }
 
 /*******************************************************************************************************/
-// Ruteador de los childrens //
+// Definimos los tipos de propiedades del componente //
 /*******************************************************************************************************/
-const ChildrenRouter = ({ rutas }: Props) => {
-  // Renderizamos las rutas hijos de los submódulos
-  return (
-    <Switch>
-      <Route exact path={rutas.path} component={rutas.component} />
-      {rutas?.children?.map((ele: IRoutesChildren) => {
-        return (
-          <Route
-            key={ele.path}
-            exact
-            path={ele.path}
-            component={ele.component}
-          />
-        )
-      })}
-    </Switch>
-  )
+OrganizacionesToolBar.propTypes = {
+  resetPages: PropTypes.func.isRequired
 }
 
 /*******************************************************************************************************/
 // Exportamos el componente //
 /*******************************************************************************************************/
-export default ChildrenRouter
+export default OrganizacionesToolBar

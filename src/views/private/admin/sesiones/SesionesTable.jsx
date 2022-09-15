@@ -46,7 +46,7 @@ const SesionesTable = props => {
       // Iniciamos carga de la tabla
       setLoading(true)
       // Obtenemos la lista de las sesiones con fetch
-      const result = await fetchData(`admin/sesiones?page=${page + 1}&pageSize=${rowsPerPage}`, {
+      const result = await fetchData(`admin/sesiones?fuente=intranet&page=${page + 1}&pageSize=${rowsPerPage}`, {
         isTokenReq: true
       })
       // Si existe un resultado y el status es positivo
