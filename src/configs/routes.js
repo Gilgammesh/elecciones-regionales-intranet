@@ -155,7 +155,7 @@ const routes = {
   'organizaciones-politicas': {
     path: '/organizaciones-politicas',
     rutas: {
-      personeros: {
+      organizaciones: {
         path: '/organizaciones-politicas/organizaciones',
         component: OrganizacionesView,
         children: [
@@ -194,6 +194,20 @@ const routes = {
           {
             path: '/organizaciones-politicas/consejeros/editar/:id',
             component: ConsejerosEditView
+          }
+        ]
+      },
+      alcaldes: {
+        path: '/organizaciones-politicas/alcaldes',
+        component: Building,
+        children: [
+          {
+            path: '/organizaciones-politicas/alcaldes/nuevo',
+            component: Building
+          },
+          {
+            path: '/organizaciones-politicas/alcaldes/editar/:id',
+            component: Building
           }
         ]
       }
