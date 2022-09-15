@@ -5,16 +5,7 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  Icon,
-  IconButton,
-  Table,
-  TableBody,
-  TableCell,
-  TablePagination,
-  TableRow,
-  Tooltip
-} from '@material-ui/core'
+import { Icon, IconButton, Table, TableBody, TableCell, TablePagination, TableRow, Tooltip } from '@material-ui/core'
 import Scrollbars from 'components/core/Scrollbars'
 import ModulosTableHead from './ModulosTableHead'
 import _ from 'lodash'
@@ -60,9 +51,6 @@ const ModulosTable = props => {
   // Estado de carga de la tabla
   const [loading, setLoading] = useState(true)
 
-  // Estado de cambio de la data
-  const [estado, setEstado] = useState('')
-
   // Valor del módulo seleccionado
   const [selectMod, setSelectMod] = useState({})
 
@@ -74,9 +62,7 @@ const ModulosTable = props => {
 
   // Efecto para obtener las acciones del submódulo
   useEffect(() => {
-    dispatch(startGetAccionesSubModulo('admin', 'modulos')).then(res =>
-      setAccionesPerm(res)
-    )
+    dispatch(startGetAccionesSubModulo('admin', 'modulos')).then(res => setAccionesPerm(res))
   }, [dispatch])
 
   // Efecto para obtener la lista de los Módulos
@@ -88,12 +74,9 @@ const ModulosTable = props => {
       // Iniciamos carga de la tablas
       setLoading(true)
       // Obtenemos la lista de los módulos con fetch
-      const result = await fetchData(
-        `admin/modulos?page=${page + 1}&pageSize=${rowsPerPage}`,
-        {
-          isTokenReq: true
-        }
-      )
+      const result = await fetchData(`admin/modulos?page=${page + 1}&pageSize=${rowsPerPage}`, {
+        isTokenReq: true
+      })
       // Si existe un resultado y el status es positivo
       if (result && mounted && result.data.status) {
         // Actualizamos el total de registros de la lista
@@ -105,7 +88,7 @@ const ModulosTable = props => {
       // Finalizamos carga de la tabla
       setLoading(false)
     }
-    // Si existe un socket o cambia y si existe número de página y filas por página
+    // Si existe un socket, número de página y filas por página
     if (socket && page >= 0 && rowsPerPage >= 1) {
       // Obtenemos los módulos
       getModulos()
@@ -115,12 +98,16 @@ const ModulosTable = props => {
       socket.on('admin-modulo-actualizado', () => getModulos())
       // Si un módulon fue eliminado
       socket.on('admin-modulo-eliminado', () => getModulos())
+
+      // Limpiamos el montaje
+      return () => {
+        mounted = false
+        socket.off('admin-modulo-creado')
+        socket.off('admin-modulo-actualizado')
+        socket.off('admin-modulo-eliminado')
+      }
     }
-    // Limpiamos el montaje
-    return () => {
-      mounted = false
-    }
-  }, [socket, estado, page, rowsPerPage, setList, setData])
+  }, [socket, page, rowsPerPage, setList, setData])
 
   // Función para abrir el Modal de SubMódulos
   const handleOpenSubMod = row => {
@@ -169,15 +156,9 @@ const ModulosTable = props => {
     }).then(async result => {
       if (result.isConfirmed) {
         // Eliminamos el módulo
-        const result = await fetchData(
-          `admin/modulos/${id}`,
-          { isTokenReq: true },
-          'DELETE'
-        )
+        const result = await fetchData(`admin/modulos/${id}`, { isTokenReq: true }, 'DELETE')
         // Validamos el resultado
         if (validateFetchData(result)) {
-          // Cambiamos el estado de cambio de la data
-          setEstado(`${new Date()}`)
           // Avisamos con un toast alert
           Toast.fire({
             icon: 'success',
@@ -196,175 +177,65 @@ const ModulosTable = props => {
           <ModulosTableHead order={order} onRequestSort={handleRequestSort} />
           {!loading && data && (
             <TableBody>
-              {_.orderBy(data, [order.id], [order.direction]).map(
-                (row, index) => {
-                  return (
-                    <TableRow
-                      className="h-32"
-                      hover
-                      tabIndex={-1}
-                      key={row._id}
-                    >
-                      <TableCell className="py-2" component="th" scope="row">
-                        {index + 1 + page * rowsPerPage}
-                      </TableCell>
-                      <TableCell className="py-2" component="th" scope="row">
-                        {row.tag}
-                      </TableCell>
-                      <TableCell className="py-2" component="th" scope="row">
-                        {row.nombre}
-                      </TableCell>
-                      <TableCell
-                        className="py-2 pr-44"
-                        component="th"
-                        scope="row"
-                        align="center"
-                      >
-                        {row.orden}
-                      </TableCell>
-                      <TableCell className="py-2" component="th" scope="row">
-                        {row.url}
-                      </TableCell>
-                      <TableCell
-                        className="py-2"
-                        component="th"
-                        scope="row"
-                        align="justify"
-                      >
-                        {row.descripcion}
-                      </TableCell>
-                      <TableCell
-                        className="py-2"
-                        component="th"
-                        scope="row"
-                        align="center"
-                      >
-                        <Icon style={{ color: '#333' }}>{row.icon}</Icon>
-                      </TableCell>
-                      <TableCell className="py-2" component="th" scope="row">
-                        {row.type}
-                      </TableCell>
-                      <TableCell
-                        className="py-2"
-                        component="th"
-                        scope="row"
-                        align="center"
-                      >
-                        {row.type === 'collapse' && (
-                          <IconButton
-                            style={{ color: '#F44343' }}
-                            aria-label="submodulos"
-                            onClick={() => handleOpenSubMod(row)}
-                          >
-                            <FormatListBulletedIcon />
-                          </IconButton>
-                        )}
-                      </TableCell>
-                      <TableCell
-                        className="py-2 pr-40"
-                        component="th"
-                        scope="row"
-                        align="center"
-                      >
-                        {row.estado ? (
-                          <Icon className="text-green text-20">
-                            check_circle
-                          </Icon>
-                        ) : (
-                          <Icon className="text-red text-20">cancel</Icon>
-                        )}
-                      </TableCell>
-                      {row.tag === 'admin' || row.tag === 'monitor' ? (
-                        rol.super ? (
-                          <TableCell
-                            className="py-2"
-                            component="th"
-                            scope="row"
-                            align="center"
-                            width={140}
-                            height={48}
-                          >
-                            {(rol.super ||
-                              (accionesPerm &&
-                                accionesPerm.indexOf('editar') !== -1)) && (
-                              <Link to={`/admin/modulos/editar/${row._id}`}>
-                                <Tooltip
-                                  title="Editar"
-                                  placement="bottom-start"
-                                  enterDelay={100}
-                                >
-                                  <IconButton
-                                    color="primary"
-                                    aria-label="editar modulo"
-                                  >
-                                    <EditIcon />
-                                  </IconButton>
-                                </Tooltip>
-                              </Link>
-                            )}
-                            {(rol.super ||
-                              (accionesPerm &&
-                                accionesPerm.indexOf('eliminar') !== -1)) && (
-                              <Tooltip
-                                title="Eliminar"
-                                placement="bottom-start"
-                                enterDelay={100}
-                              >
-                                <IconButton
-                                  style={{ color: '#F44343' }}
-                                  aria-label="eliminar modulo"
-                                  onClick={() => handleRemoveRow(row._id)}
-                                >
-                                  <DeleteIcon />
-                                </IconButton>
-                              </Tooltip>
-                            )}
-                          </TableCell>
-                        ) : (
-                          <TableCell
-                            className="py-2"
-                            component="th"
-                            scope="row"
-                            align="center"
-                            width={140}
-                            height={48}
-                          />
-                        )
-                      ) : (
-                        <TableCell
-                          className="py-2"
-                          component="th"
-                          scope="row"
-                          align="center"
-                          width={140}
-                          height={48}
+              {_.orderBy(data, [order.id], [order.direction]).map((row, index) => {
+                return (
+                  <TableRow className="h-32" hover tabIndex={-1} key={row._id}>
+                    <TableCell className="py-2" component="th" scope="row">
+                      {index + 1 + page * rowsPerPage}
+                    </TableCell>
+                    <TableCell className="py-2" component="th" scope="row">
+                      {row.tag}
+                    </TableCell>
+                    <TableCell className="py-2" component="th" scope="row">
+                      {row.nombre}
+                    </TableCell>
+                    <TableCell className="py-2 pr-44" component="th" scope="row" align="center">
+                      {row.orden}
+                    </TableCell>
+                    <TableCell className="py-2" component="th" scope="row">
+                      {row.url}
+                    </TableCell>
+                    <TableCell className="py-2" component="th" scope="row" align="justify">
+                      {row.descripcion}
+                    </TableCell>
+                    <TableCell className="py-2" component="th" scope="row" align="center">
+                      <Icon style={{ color: '#333' }}>{row.icon}</Icon>
+                    </TableCell>
+                    <TableCell className="py-2" component="th" scope="row">
+                      {row.type}
+                    </TableCell>
+                    <TableCell className="py-2" component="th" scope="row" align="center">
+                      {row.type === 'collapse' && (
+                        <IconButton
+                          style={{ color: '#F44343' }}
+                          aria-label="submodulos"
+                          onClick={() => handleOpenSubMod(row)}
                         >
-                          {(rol.super ||
-                            (accionesPerm &&
-                              accionesPerm.indexOf('editar') !== -1)) && (
+                          <FormatListBulletedIcon />
+                        </IconButton>
+                      )}
+                    </TableCell>
+                    <TableCell className="py-2 pr-40" component="th" scope="row" align="center">
+                      {row.estado ? (
+                        <Icon className="text-green text-20">check_circle</Icon>
+                      ) : (
+                        <Icon className="text-red text-20">cancel</Icon>
+                      )}
+                    </TableCell>
+                    {row.tag === 'admin' || row.tag === 'monitor' ? (
+                      rol.super ? (
+                        <TableCell className="py-2" component="th" scope="row" align="center" width={140} height={48}>
+                          {(rol.super || (accionesPerm && accionesPerm.indexOf('editar') !== -1)) && (
                             <Link to={`/admin/modulos/editar/${row._id}`}>
-                              <Tooltip
-                                title="Editar"
-                                placement="bottom-start"
-                                enterDelay={100}
-                              >
-                                <IconButton
-                                  color="primary"
-                                  aria-label="editar modulo"
-                                >
+                              <Tooltip title="Editar" placement="bottom-start" enterDelay={100}>
+                                <IconButton color="primary" aria-label="editar modulo">
                                   <EditIcon />
                                 </IconButton>
                               </Tooltip>
                             </Link>
                           )}
-                          {(rol.super ||
-                            (accionesPerm &&
-                              accionesPerm.indexOf('eliminar') !== -1)) && (
-                            <Tooltip
-                              title="Eliminar"
-                              placement="bottom-start"
-                              enterDelay={100}
-                            >
+                          {(rol.super || (accionesPerm && accionesPerm.indexOf('eliminar') !== -1)) && (
+                            <Tooltip title="Eliminar" placement="bottom-start" enterDelay={100}>
                               <IconButton
                                 style={{ color: '#F44343' }}
                                 aria-label="eliminar modulo"
@@ -375,11 +246,36 @@ const ModulosTable = props => {
                             </Tooltip>
                           )}
                         </TableCell>
-                      )}
-                    </TableRow>
-                  )
-                }
-              )}
+                      ) : (
+                        <TableCell className="py-2" component="th" scope="row" align="center" width={140} height={48} />
+                      )
+                    ) : (
+                      <TableCell className="py-2" component="th" scope="row" align="center" width={140} height={48}>
+                        {(rol.super || (accionesPerm && accionesPerm.indexOf('editar') !== -1)) && (
+                          <Link to={`/admin/modulos/editar/${row._id}`}>
+                            <Tooltip title="Editar" placement="bottom-start" enterDelay={100}>
+                              <IconButton color="primary" aria-label="editar modulo">
+                                <EditIcon />
+                              </IconButton>
+                            </Tooltip>
+                          </Link>
+                        )}
+                        {(rol.super || (accionesPerm && accionesPerm.indexOf('eliminar') !== -1)) && (
+                          <Tooltip title="Eliminar" placement="bottom-start" enterDelay={100}>
+                            <IconButton
+                              style={{ color: '#F44343' }}
+                              aria-label="eliminar modulo"
+                              onClick={() => handleRemoveRow(row._id)}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </Tooltip>
+                        )}
+                      </TableCell>
+                    )}
+                  </TableRow>
+                )
+              })}
             </TableBody>
           )}
         </Table>
@@ -388,13 +284,7 @@ const ModulosTable = props => {
             <ProgressLinear />
           </div>
         )}
-        {!_.isEmpty(selectMod) && (
-          <DialogSubModulos
-            open={openSubMod}
-            setOpen={setOpenSubMod}
-            selectMod={selectMod}
-          />
-        )}
+        {!_.isEmpty(selectMod) && <DialogSubModulos open={openSubMod} setOpen={setOpenSubMod} selectMod={selectMod} />}
       </Scrollbars>
 
       {data && (

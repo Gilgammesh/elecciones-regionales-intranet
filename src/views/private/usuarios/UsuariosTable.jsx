@@ -73,9 +73,7 @@ const UsuariosTable = props => {
 
   // Efecto para obtener las acciones del módulo
   useEffect(() => {
-    dispatch(startGetAccionesModulo('usuarios')).then(res =>
-      setAccionesPerm(res)
-    )
+    dispatch(startGetAccionesModulo('usuarios')).then(res => setAccionesPerm(res))
   }, [dispatch])
 
   // Efecto para obtener la lista de los Usuarios
@@ -88,9 +86,7 @@ const UsuariosTable = props => {
       setLoading(true)
       // Obtenemos la lista de los usuarios con fetch
       const result = await fetchData(
-        `usuarios?departamento=${departamento}&rol=${rol}&page=${
-          page + 1
-        }&pageSize=${rowsPerPage}`,
+        `usuarios?departamento=${departamento}&rol=${rol}&page=${page + 1}&pageSize=${rowsPerPage}`,
         {
           isTokenReq: true
         }
@@ -106,7 +102,7 @@ const UsuariosTable = props => {
       // Finalizamos carga de la tabla
       setLoading(false)
     }
-    // Si existe un socket o cambia y si existe número de página y filas por página
+    // Si existe un socket, número de página y filas por página
     if (socket && page >= 0 && rowsPerPage >= 1) {
       // Obtenemos los usuarios
       getUsuarios()
@@ -118,10 +114,15 @@ const UsuariosTable = props => {
       socket.on('usuario-eliminado', () => getUsuarios())
       // Si un usuario fue eliminado
       socket.on('usuarios-importados', () => getUsuarios())
-    }
-    // Limpiamos el montaje
-    return () => {
-      mounted = false
+
+      // Limpiamos el montaje
+      return () => {
+        mounted = false
+        socket.off('usuario-creado')
+        socket.off('usuario-actualizado')
+        socket.off('usuario-eliminado')
+        socket.off('usuarios-importados')
+      }
     }
   }, [socket, change, page, rowsPerPage, setList, setData, departamento, rol])
 
@@ -165,15 +166,9 @@ const UsuariosTable = props => {
     }).then(async result => {
       if (result.isConfirmed) {
         // Eliminamos el usuario
-        const result = await fetchData(
-          `usuarios/${id}`,
-          { isTokenReq: true },
-          'DELETE'
-        )
+        const result = await fetchData(`usuarios/${id}`, { isTokenReq: true }, 'DELETE')
         // Validamos el resultado
         if (validateFetchData(result)) {
-          // Cambiamos el estado de cambio de la data
-          setChange(`${new Date()}`)
           // Avisamos con un toast alert
           Toast.fire({
             icon: 'success',
@@ -197,115 +192,70 @@ const UsuariosTable = props => {
           />
           {!loading && data && (
             <TableBody>
-              {_.orderBy(data, [o => o[order.id]], [order.direction]).map(
-                (row, index) => {
-                  return (
-                    <TableRow
-                      className="h-32"
-                      hover
-                      tabIndex={-1}
-                      key={row._id}
-                    >
+              {_.orderBy(data, [o => o[order.id]], [order.direction]).map((row, index) => {
+                return (
+                  <TableRow className="h-32" hover tabIndex={-1} key={row._id}>
+                    <TableCell className="py-2" component="th" scope="row">
+                      {index + 1 + page * rowsPerPage}
+                    </TableCell>
+                    <TableCell className="py-2" component="th" scope="row">
+                      <Avatar alt="img" src={row.img ? row.img : row.genero === 'M' ? male : female} />
+                    </TableCell>
+                    <TableCell className="py-2" component="th" scope="row">
+                      {row.nombres}
+                    </TableCell>
+                    <TableCell className="py-2" component="th" scope="row">
+                      {row.apellidos}
+                    </TableCell>
+                    <TableCell className="py-2" component="th" scope="row">
+                      {row.dni}
+                    </TableCell>
+                    <TableCell className="py-2" component="th" scope="row">
+                      {row.celular}
+                    </TableCell>
+                    <TableCell className="py-2" component="th" scope="row">
+                      {row.email}
+                    </TableCell>
+                    <TableCell className="py-2" component="th" scope="row">
+                      {row.rol.nombre}
+                    </TableCell>
+                    {usuario.rol.super && (
                       <TableCell className="py-2" component="th" scope="row">
-                        {index + 1 + page * rowsPerPage}
+                        {row.rol.super ? 'TODOS' : row.departamento.nombre}
                       </TableCell>
-                      <TableCell className="py-2" component="th" scope="row">
-                        <Avatar
-                          alt="img"
-                          src={
-                            row.img
-                              ? row.img
-                              : row.genero === 'M'
-                              ? male
-                              : female
-                          }
-                        />
-                      </TableCell>
-                      <TableCell className="py-2" component="th" scope="row">
-                        {row.nombres}
-                      </TableCell>
-                      <TableCell className="py-2" component="th" scope="row">
-                        {row.apellidos}
-                      </TableCell>
-                      <TableCell className="py-2" component="th" scope="row">
-                        {row.dni}
-                      </TableCell>
-                      <TableCell className="py-2" component="th" scope="row">
-                        {row.celular}
-                      </TableCell>
-                      <TableCell className="py-2" component="th" scope="row">
-                        {row.email}
-                      </TableCell>
-                      <TableCell className="py-2" component="th" scope="row">
-                        {row.rol.nombre}
-                      </TableCell>
-                      {usuario.rol.super && (
-                        <TableCell className="py-2" component="th" scope="row">
-                          {row.rol.super ? 'TODOS' : row.departamento.nombre}
-                        </TableCell>
+                    )}
+                    <TableCell className="py-2 pr-40" component="th" scope="row" align="center">
+                      {row.estado ? (
+                        <Icon className="text-green text-20">check_circle</Icon>
+                      ) : (
+                        <Icon className="text-red text-20">cancel</Icon>
                       )}
-                      <TableCell
-                        className="py-2 pr-40"
-                        component="th"
-                        scope="row"
-                        align="center"
-                      >
-                        {row.estado ? (
-                          <Icon className="text-green text-20">
-                            check_circle
-                          </Icon>
-                        ) : (
-                          <Icon className="text-red text-20">cancel</Icon>
-                        )}
-                      </TableCell>
-                      <TableCell
-                        className="py-2"
-                        component="th"
-                        scope="row"
-                        align="center"
-                        width={140}
-                        height={54}
-                      >
-                        {(usuario.rol.super ||
-                          (accionesPerm &&
-                            accionesPerm.indexOf('editar') !== -1)) && (
-                          <Link to={`/usuarios/editar/${row._id}`}>
-                            <Tooltip
-                              title="Editar"
-                              placement="bottom-start"
-                              enterDelay={100}
-                            >
-                              <IconButton
-                                color="primary"
-                                aria-label="editar usuario"
-                              >
-                                <EditIcon />
-                              </IconButton>
-                            </Tooltip>
-                          </Link>
-                        )}
-                        {(usuario.rol.super ||
-                          (accionesPerm &&
-                            accionesPerm.indexOf('eliminar') !== -1)) && (
-                          <Tooltip
-                            title="Eliminar"
-                            placement="bottom-start"
-                            enterDelay={100}
-                          >
-                            <IconButton
-                              style={{ color: '#F44343' }}
-                              aria-label="eliminar usuario"
-                              onClick={() => handleRemoveRow(row._id)}
-                            >
-                              <DeleteIcon />
+                    </TableCell>
+                    <TableCell className="py-2" component="th" scope="row" align="center" width={140} height={54}>
+                      {(usuario.rol.super || (accionesPerm && accionesPerm.indexOf('editar') !== -1)) && (
+                        <Link to={`/usuarios/editar/${row._id}`}>
+                          <Tooltip title="Editar" placement="bottom-start" enterDelay={100}>
+                            <IconButton color="primary" aria-label="editar usuario">
+                              <EditIcon />
                             </IconButton>
                           </Tooltip>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  )
-                }
-              )}
+                        </Link>
+                      )}
+                      {(usuario.rol.super || (accionesPerm && accionesPerm.indexOf('eliminar') !== -1)) && (
+                        <Tooltip title="Eliminar" placement="bottom-start" enterDelay={100}>
+                          <IconButton
+                            style={{ color: '#F44343' }}
+                            aria-label="eliminar usuario"
+                            onClick={() => handleRemoveRow(row._id)}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </Tooltip>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                )
+              })}
             </TableBody>
           )}
         </Table>

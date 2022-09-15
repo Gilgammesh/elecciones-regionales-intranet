@@ -60,25 +60,21 @@ const SesionesTable = props => {
       // Finalizamos carga de la tabla
       setLoading(false)
     }
-    // Si existe número de página y filas por página
-    if (page >= 0 && rowsPerPage >= 1) {
+    // Si existe un socket, número de página y filas por página
+    if (socket && page >= 0 && rowsPerPage >= 1) {
       // Obtenemos las sesiones
       getSesiones()
-      // Si existe un socket
-      if (socket) {
-        // Si una sesión fue creada
-        socket.on('admin-sesion-creada', () => {
-          getSesiones()
-        })
-        // Si una sesión fue actualizada
-        socket.on('admin-sesion-actualizada', () => {
-          getSesiones()
-        })
+      // Si una sesión fue creada
+      socket.on('admin-sesion-creada', () => getSesiones())
+      // Si una sesión fue actualizada
+      socket.on('admin-sesion-actualizada', () => getSesiones())
+
+      // Limpiamos el montaje
+      return () => {
+        mounted = false
+        socket.off('admin-sesion-creada')
+        socket.off('admin-sesion-actualizada')
       }
-    }
-    // Limpiamos el montaje
-    return () => {
-      mounted = false
     }
   }, [socket, page, rowsPerPage, setList, setData])
 

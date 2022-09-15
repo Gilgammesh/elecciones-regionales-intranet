@@ -5,16 +5,7 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  Icon,
-  IconButton,
-  Table,
-  TableBody,
-  TableCell,
-  TablePagination,
-  TableRow,
-  Tooltip
-} from '@material-ui/core'
+import { Icon, IconButton, Table, TableBody, TableCell, TablePagination, TableRow, Tooltip } from '@material-ui/core'
 import Scrollbars from 'components/core/Scrollbars'
 import RolesTableHead from './RolesTableHead'
 import _ from 'lodash'
@@ -60,9 +51,6 @@ const RolesTable = props => {
   // Estado de carga de la tabla
   const [loading, setLoading] = useState(true)
 
-  // Estado de cambio de la data
-  const [estado, setEstado] = useState('')
-
   // Valor del rol seleccionado
   const [selectedRol, setSelectedRol] = useState(null)
 
@@ -74,9 +62,7 @@ const RolesTable = props => {
 
   // Efecto para obtener las acciones del submódulo
   useEffect(() => {
-    dispatch(startGetAccionesSubModulo('admin', 'roles')).then(res =>
-      setAccionesPerm(res)
-    )
+    dispatch(startGetAccionesSubModulo('admin', 'roles')).then(res => setAccionesPerm(res))
   }, [dispatch])
 
   // Efecto para obtener la lista de los Roles
@@ -88,12 +74,9 @@ const RolesTable = props => {
       // Iniciamos carga de la tabla
       setLoading(true)
       // Obtenemos la lista de los roles con fetch
-      const result = await fetchData(
-        `admin/roles?page=${page + 1}&pageSize=${rowsPerPage}`,
-        {
-          isTokenReq: true
-        }
-      )
+      const result = await fetchData(`admin/roles?page=${page + 1}&pageSize=${rowsPerPage}`, {
+        isTokenReq: true
+      })
       // Si existe un resultado y el status es positivo
       if (result && mounted && result.data.status) {
         // Actualizamos el total de registros de la lista
@@ -105,7 +88,7 @@ const RolesTable = props => {
       // Finalizamos carga de la tabla
       setLoading(false)
     }
-    // Si existe un socket o cambia y si existe número de página y filas por página
+    // Si existe un socket, número de página y filas por página
     if (socket && page >= 0 && rowsPerPage >= 1) {
       // Obtenemos los roles
       getRoles()
@@ -115,12 +98,16 @@ const RolesTable = props => {
       socket.on('admin-rol-actualizado', () => getRoles())
       // Si un rol fue eliminado
       socket.on('admin-rol-eliminado', () => getRoles())
+
+      // Limpiamos el montaje
+      return () => {
+        mounted = false
+        socket.off('admin-rol-creado')
+        socket.off('admin-rol-actualizado')
+        socket.off('admin-rol-eliminado')
+      }
     }
-    // Limpiamos el montaje
-    return () => {
-      mounted = false
-    }
-  }, [socket, estado, page, rowsPerPage, setList, setData])
+  }, [socket, page, rowsPerPage, setList, setData])
 
   // Función para ordenar una columna
   const handleRequestSort = (event, property) => {
@@ -169,15 +156,9 @@ const RolesTable = props => {
     }).then(async result => {
       if (result.isConfirmed) {
         // Eliminamos el rol
-        const result = await fetchData(
-          `admin/roles/${id}`,
-          { isTokenReq: true },
-          'DELETE'
-        )
+        const result = await fetchData(`admin/roles/${id}`, { isTokenReq: true }, 'DELETE')
         // Validamos el resultado
         if (validateFetchData(result)) {
-          // Cambiamos el estado de cambio de la data
-          setEstado(`${new Date()}`)
           // Avisamos con un toast alert
           Toast.fire({
             icon: 'success',
@@ -196,165 +177,55 @@ const RolesTable = props => {
           <RolesTableHead order={order} onRequestSort={handleRequestSort} />
           {!loading && data && (
             <TableBody>
-              {_.orderBy(data, [order.id], [order.direction]).map(
-                (row, index) => {
-                  return (
-                    <TableRow
-                      className="h-32"
-                      hover
-                      tabIndex={-1}
-                      key={row._id}
-                    >
-                      <TableCell
-                        className="py-2"
-                        component="th"
-                        scope="row"
-                        align="center"
-                      >
-                        {index + 1 + page * rowsPerPage}
-                      </TableCell>
-                      <TableCell
-                        className="py-2"
-                        component="th"
-                        scope="row"
-                        align="center"
-                      >
-                        {row.codigo}
-                      </TableCell>
-                      <TableCell className="py-2" component="th" scope="row">
-                        {row.nombre}
-                      </TableCell>
-                      <TableCell
-                        className="py-2"
-                        component="th"
-                        scope="row"
-                        align="justify"
-                      >
-                        {row.descripcion}
-                      </TableCell>
-                      <TableCell
-                        className="py-2"
-                        component="th"
-                        scope="row"
-                        align="center"
-                      >
-                        {row.super ? (
-                          'Todos'
-                        ) : (
-                          <IconButton
-                            style={{ color: '#F44343' }}
-                            aria-label="modulos"
-                            onClick={() => handleOpenMod(row)}
-                          >
-                            <ListAltIcon />
-                          </IconButton>
-                        )}
-                      </TableCell>
-                      <TableCell
-                        className="py-2 pr-40"
-                        component="th"
-                        scope="row"
-                        align="center"
-                      >
-                        {row.estado ? (
-                          <Icon className="text-green text-20">
-                            check_circle
-                          </Icon>
-                        ) : (
-                          <Icon className="text-red text-20">cancel</Icon>
-                        )}
-                      </TableCell>
+              {_.orderBy(data, [order.id], [order.direction]).map((row, index) => {
+                return (
+                  <TableRow className="h-32" hover tabIndex={-1} key={row._id}>
+                    <TableCell className="py-2" component="th" scope="row" align="center">
+                      {index + 1 + page * rowsPerPage}
+                    </TableCell>
+                    <TableCell className="py-2" component="th" scope="row" align="center">
+                      {row.codigo}
+                    </TableCell>
+                    <TableCell className="py-2" component="th" scope="row">
+                      {row.nombre}
+                    </TableCell>
+                    <TableCell className="py-2" component="th" scope="row" align="justify">
+                      {row.descripcion}
+                    </TableCell>
+                    <TableCell className="py-2" component="th" scope="row" align="center">
                       {row.super ? (
-                        rol.super ? (
-                          <TableCell
-                            className="py-2"
-                            component="th"
-                            scope="row"
-                            align="center"
-                            width={140}
-                            height={48}
-                          >
-                            {(rol.super ||
-                              (accionesPerm &&
-                                accionesPerm.indexOf('editar') !== -1)) && (
-                              <Link to={`/admin/roles/editar/${row._id}`}>
-                                <Tooltip
-                                  title="Editar"
-                                  placement="bottom-start"
-                                  enterDelay={100}
-                                >
-                                  <IconButton
-                                    color="primary"
-                                    aria-label="editar rol"
-                                  >
-                                    <EditIcon />
-                                  </IconButton>
-                                </Tooltip>
-                              </Link>
-                            )}
-                            {(rol.super ||
-                              (accionesPerm &&
-                                accionesPerm.indexOf('eliminar') !== -1)) && (
-                              <Tooltip
-                                title="Eliminar"
-                                placement="bottom-start"
-                                enterDelay={100}
-                              >
-                                <IconButton
-                                  style={{ color: '#F44343' }}
-                                  aria-label="eliminar rol"
-                                  onClick={() => handleRemoveRow(row._id)}
-                                >
-                                  <DeleteIcon />
-                                </IconButton>
-                              </Tooltip>
-                            )}
-                          </TableCell>
-                        ) : (
-                          <TableCell
-                            className="py-2"
-                            component="th"
-                            scope="row"
-                            align="center"
-                            width={140}
-                            height={48}
-                          />
-                        )
+                        'Todos'
                       ) : (
-                        <TableCell
-                          className="py-2"
-                          component="th"
-                          scope="row"
-                          align="center"
-                          width={140}
-                          height={48}
+                        <IconButton
+                          style={{ color: '#F44343' }}
+                          aria-label="modulos"
+                          onClick={() => handleOpenMod(row)}
                         >
-                          {(rol.super ||
-                            (accionesPerm &&
-                              accionesPerm.indexOf('editar') !== -1)) && (
+                          <ListAltIcon />
+                        </IconButton>
+                      )}
+                    </TableCell>
+                    <TableCell className="py-2 pr-40" component="th" scope="row" align="center">
+                      {row.estado ? (
+                        <Icon className="text-green text-20">check_circle</Icon>
+                      ) : (
+                        <Icon className="text-red text-20">cancel</Icon>
+                      )}
+                    </TableCell>
+                    {row.super ? (
+                      rol.super ? (
+                        <TableCell className="py-2" component="th" scope="row" align="center" width={140} height={48}>
+                          {(rol.super || (accionesPerm && accionesPerm.indexOf('editar') !== -1)) && (
                             <Link to={`/admin/roles/editar/${row._id}`}>
-                              <Tooltip
-                                title="Editar"
-                                placement="bottom-start"
-                                enterDelay={100}
-                              >
-                                <IconButton
-                                  color="primary"
-                                  aria-label="editar rol"
-                                >
+                              <Tooltip title="Editar" placement="bottom-start" enterDelay={100}>
+                                <IconButton color="primary" aria-label="editar rol">
                                   <EditIcon />
                                 </IconButton>
                               </Tooltip>
                             </Link>
                           )}
-                          {(rol.super ||
-                            (accionesPerm &&
-                              accionesPerm.indexOf('eliminar') !== -1)) && (
-                            <Tooltip
-                              title="Eliminar"
-                              placement="bottom-start"
-                              enterDelay={100}
-                            >
+                          {(rol.super || (accionesPerm && accionesPerm.indexOf('eliminar') !== -1)) && (
+                            <Tooltip title="Eliminar" placement="bottom-start" enterDelay={100}>
                               <IconButton
                                 style={{ color: '#F44343' }}
                                 aria-label="eliminar rol"
@@ -365,11 +236,36 @@ const RolesTable = props => {
                             </Tooltip>
                           )}
                         </TableCell>
-                      )}
-                    </TableRow>
-                  )
-                }
-              )}
+                      ) : (
+                        <TableCell className="py-2" component="th" scope="row" align="center" width={140} height={48} />
+                      )
+                    ) : (
+                      <TableCell className="py-2" component="th" scope="row" align="center" width={140} height={48}>
+                        {(rol.super || (accionesPerm && accionesPerm.indexOf('editar') !== -1)) && (
+                          <Link to={`/admin/roles/editar/${row._id}`}>
+                            <Tooltip title="Editar" placement="bottom-start" enterDelay={100}>
+                              <IconButton color="primary" aria-label="editar rol">
+                                <EditIcon />
+                              </IconButton>
+                            </Tooltip>
+                          </Link>
+                        )}
+                        {(rol.super || (accionesPerm && accionesPerm.indexOf('eliminar') !== -1)) && (
+                          <Tooltip title="Eliminar" placement="bottom-start" enterDelay={100}>
+                            <IconButton
+                              style={{ color: '#F44343' }}
+                              aria-label="eliminar rol"
+                              onClick={() => handleRemoveRow(row._id)}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </Tooltip>
+                        )}
+                      </TableCell>
+                    )}
+                  </TableRow>
+                )
+              })}
             </TableBody>
           )}
         </Table>
@@ -378,13 +274,7 @@ const RolesTable = props => {
             <ProgressLinear />
           </div>
         )}
-        {selectedRol && (
-          <DialogModulos
-            open={openMod}
-            setOpen={setOpenMod}
-            rol={selectedRol}
-          />
-        )}
+        {selectedRol && <DialogModulos open={openMod} setOpen={setOpenMod} rol={selectedRol} />}
       </Scrollbars>
 
       {data && (

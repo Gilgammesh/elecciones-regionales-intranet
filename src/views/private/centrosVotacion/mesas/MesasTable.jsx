@@ -133,25 +133,27 @@ const MesasTable = props => {
       // Finalizamos carga de la tabla
       setLoading(false)
     }
-    // Si existe número de página y filas por página
-    if (page >= 0 && rowsPerPage >= 1) {
+    // Si existe un socket, número de página y filas por página
+    if (socket && page >= 0 && rowsPerPage >= 1) {
       // Obtenemos las mesas de votación
       getMesas()
-      // Si existe un socket
-      if (socket) {
-        // Si una mesa de votación fue creada
-        socket.on('centros-votacion-mesa-creada', () => getMesas())
-        // Si una mesa de votación fue actualizada
-        socket.on('centros-votacion-mesa-actualizada', () => getMesas())
-        // Si una mesa de votación fue eliminada
-        socket.on('centros-votacion-mesa-eliminada', () => getMesas())
-        // Si las mesas de votación fueron importadas de excel
-        socket.on('centros-votacion-mesas-importadas', () => getMesas())
+      // Si una mesa de votación fue creada
+      socket.on('centros-votacion-mesa-creada', () => getMesas())
+      // Si una mesa de votación fue actualizada
+      socket.on('centros-votacion-mesa-actualizada', () => getMesas())
+      // Si una mesa de votación fue eliminada
+      socket.on('centros-votacion-mesa-eliminada', () => getMesas())
+      // Si las mesas de votación fueron importadas de excel
+      socket.on('centros-votacion-mesas-importadas', () => getMesas())
+
+      // Limpiamos el montaje
+      return () => {
+        mounted = false
+        socket.off('centros-votacion-mesa-creada')
+        socket.off('centros-votacion-mesa-actualizada')
+        socket.off('centros-votacion-mesa-eliminada')
+        socket.off('centros-votacion-mesas-importadas')
       }
-    }
-    // Limpiamos el montaje
-    return () => {
-      mounted = false
     }
   }, [socket, search, assign, departamento, provincia, distrito, change, page, rowsPerPage, setData])
 

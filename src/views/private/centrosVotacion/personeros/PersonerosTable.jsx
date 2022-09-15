@@ -107,25 +107,27 @@ const PersonerosTable = props => {
       // Finalizamos carga de la tabla
       setLoading(false)
     }
-    // Si existe número de página y filas por página
+    // Si existe un socket, número de página y filas por página
     if (socket && page >= 0 && rowsPerPage >= 1) {
       // Obtenemos los personeros
       getPersoneros()
-      // Si existe un socket
-      if (socket) {
-        // Si un personero fue creado
-        socket.on('centros-votacion-personero-creado', () => getPersoneros())
-        // Si un personero fue actualizado
-        socket.on('centros-votacion-personero-actualizado', () => getPersoneros())
-        // Si un personero fue eliminado
-        socket.on('centros-votacion-personero-eliminado', () => getPersoneros())
-        // Si los personeros fueron importados de excel
-        socket.on('centros-votacion-personeros-importados', () => getPersoneros())
+      // Si un personero fue creado
+      socket.on('centros-votacion-personero-creado', () => getPersoneros())
+      // Si un personero fue actualizado
+      socket.on('centros-votacion-personero-actualizado', () => getPersoneros())
+      // Si un personero fue eliminado
+      socket.on('centros-votacion-personero-eliminado', () => getPersoneros())
+      // Si los personeros fueron importados de excel
+      socket.on('centros-votacion-personeros-importados', () => getPersoneros())
+
+      // Limpiamos el montaje
+      return () => {
+        mounted = false
+        socket.off('centros-votacion-personero-creado')
+        socket.off('centros-votacion-personero-actualizado')
+        socket.off('centros-votacion-personero-eliminado')
+        socket.off('centros-votacion-personeros-importados')
       }
-    }
-    // Limpiamos el montaje
-    return () => {
-      mounted = false
     }
   }, [socket, search, tipo, estado, departamento, change, page, rowsPerPage, setData])
 
