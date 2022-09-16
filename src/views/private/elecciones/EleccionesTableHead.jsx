@@ -3,13 +3,7 @@
 /*******************************************************************************************************/
 import React from 'react'
 import PropTypes from 'prop-types'
-import {
-  TableCell,
-  TableHead,
-  TableRow,
-  TableSortLabel,
-  Tooltip
-} from '@material-ui/core'
+import { TableCell, TableHead, TableRow, TableSortLabel, Tooltip } from '@material-ui/core'
 
 /*******************************************************************************************************/
 // Columnas cabecera de la Tabla //
@@ -27,6 +21,13 @@ const headers = [
     align: 'left',
     disablePadding: false,
     label: 'Año',
+    sort: true
+  },
+  {
+    id: 'fecha',
+    align: 'left',
+    disablePadding: false,
+    label: 'Fecha',
     sort: true
   },
   {
@@ -80,9 +81,7 @@ const EleccionesTableHead = props => {
               {col.sort ? (
                 <Tooltip
                   title="Ordenar"
-                  placement={
-                    col.align === 'right' ? 'bottom-end' : 'bottom-start'
-                  }
+                  placement={col.align === 'right' ? 'bottom-end' : 'bottom-start'}
                   enterDelay={300}
                 >
                   <TableSortLabel

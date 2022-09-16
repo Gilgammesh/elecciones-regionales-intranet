@@ -62,6 +62,13 @@ export interface ITypes {
   setAlcaldesProvincia: string
   setAlcaldesDistrito: string
   resetAlcaldes: string
+  setMonitoreoSearch: string
+  setMonitoreoDepartamento: string
+  setMonitoreoProvincia: string
+  setMonitoreoDistrito: string
+  setMonitoreoEstadoActaReg: string
+  setMonitoreoEstadoActaProv: string
+  resetMonitoreo: string
 }
 
 /*******************************************************************************************************/
@@ -127,7 +134,14 @@ const types: ITypes = {
   setAlcaldesDepartamento: '[alcaldes] set departamento',
   setAlcaldesProvincia: '[alcaldes] set provincia',
   setAlcaldesDistrito: '[alcaldes] set distrito',
-  resetAlcaldes: '[alcaldes] reset'
+  resetAlcaldes: '[alcaldes] reset',
+  setMonitoreoSearch: '[monitoreo] set search',
+  setMonitoreoDepartamento: '[monitoreo] set departamento',
+  setMonitoreoProvincia: '[monitoreo] set provincia',
+  setMonitoreoDistrito: '[monitoreo] set distrito',
+  setMonitoreoEstadoActaReg: '[monitoreo] set estado acta regional',
+  setMonitoreoEstadoActaProv: '[monitoreo] set estado acta provincial',
+  resetMonitoreo: '[monitoreo] reset'
 }
 
 /*******************************************************************************************************/

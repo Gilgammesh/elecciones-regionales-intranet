@@ -174,6 +174,9 @@ const EleccionesTable = props => {
                       {row.anho}
                     </TableCell>
                     <TableCell className="py-2" component="th" scope="row">
+                      {row.fecha}
+                    </TableCell>
+                    <TableCell className="py-2" component="th" scope="row">
                       {`Elecciones ${_.capitalize(row.tipo)}es`}
                     </TableCell>
                     <TableCell className="py-2" component="th" scope="row">

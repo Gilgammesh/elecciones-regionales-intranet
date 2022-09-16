@@ -58,6 +58,7 @@ import CentrosMesasEditView from 'views/private/centrosVotacion/mesas/mesasEdit'
 //////////////////////////////////////////////////////////////////////////////////////////////
 //---- MÓDULO MONITOREO --------------------------------------------------------------------//
 //////////////////////////////////////////////////////////////////////////////////////////////
+import MonitoreoView from 'views/private/monitoreo'
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 //---- MÓDULO REPORTES ---------------------------------------------------------------------//
@@ -251,7 +252,7 @@ const routes = {
   },
   monitoreo: {
     path: '/monitoreo',
-    component: Building
+    component: MonitoreoView
   },
   reportes: {
     path: '/reportes',

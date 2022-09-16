@@ -216,13 +216,9 @@ const OrganizacionesEditForm = props => {
           type="text"
           name="nombre"
           label="Nombre"
-          accept="onlyLetterAndSpace"
           value={nombre}
           onChange={handleInputChange}
           variant="outlined"
-          inputProps={{
-            maxLength: 30
-          }}
           required
         />
         <TextFieldFormsy
