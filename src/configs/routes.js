@@ -59,6 +59,10 @@ import CentrosMesasEditView from 'views/private/centrosVotacion/mesas/mesasEdit'
 //---- MÓDULO MONITOREO --------------------------------------------------------------------//
 //////////////////////////////////////////////////////////////////////////////////////////////
 import MonitoreoView from 'views/private/monitoreo'
+import MonitoreoActaRegView from 'views/private/monitoreo/monitoreoActaReg'
+import MonitoreoActaRegEditView from 'views/private/monitoreo/monitoreoActaRegEdit'
+import MonitoreoActaProvView from 'views/private/monitoreo/monitoreoActaProv'
+import MonitoreoActaProvEditView from 'views/private/monitoreo/monitoreoActaProvEdit'
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 //---- MÓDULO REPORTES ---------------------------------------------------------------------//
@@ -252,7 +256,25 @@ const routes = {
   },
   monitoreo: {
     path: '/monitoreo',
-    component: MonitoreoView
+    component: MonitoreoView,
+    children: [
+      {
+        path: '/monitoreo/acta-regional',
+        component: MonitoreoActaRegView
+      },
+      {
+        path: '/monitoreo/acta-regional-edit',
+        component: MonitoreoActaRegEditView
+      },
+      {
+        path: '/monitoreo/acta-provincial',
+        component: MonitoreoActaProvView
+      },
+      {
+        path: '/monitoreo/acta-provincial-edit',
+        component: MonitoreoActaProvEditView
+      }
+    ]
   },
   reportes: {
     path: '/reportes',

@@ -198,7 +198,7 @@ const GobernadoresTable = props => {
                     </TableCell>
                     <TableCell className="py-4" component="th" scope="row">
                       <div className={styles.avatar}>
-                        <img className={styles.avatarImg} alt="logo" src={row.foto} />
+                        <img className={styles.avatarImg} alt="foto" src={row.foto} />
                       </div>
                     </TableCell>
                     <TableCell className="py-2" component="th" scope="row">

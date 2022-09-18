@@ -48,6 +48,13 @@ const headers = [
     sort: false
   },
   {
+    id: 'votantes',
+    align: 'left',
+    disablePadding: false,
+    label: 'Votantes',
+    sort: false
+  },
+  {
     id: 'departamento',
     align: 'left',
     disablePadding: false,

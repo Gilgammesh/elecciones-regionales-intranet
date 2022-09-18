@@ -3,6 +3,7 @@
 /*******************************************************************************************************/
 import types from 'configs/types'
 import { Dispatch } from 'redux'
+import { IMonitoreoRow } from 'redux/reducers/monitoreoReducer'
 
 /*******************************************************************************************************/
 // Función para iniciar establecer el query de búsqueda personalizado del monitoreo //
@@ -50,6 +51,22 @@ export const startSetMonitoreoEstadoActaReg = (estado: string) => {
 export const startSetMonitoreoEstadoActaProv = (estado: string) => {
   return (dispatch: Dispatch) => {
     dispatch(setMonitoreoEstadoActaProv(estado))
+  }
+}
+/*******************************************************************************************************/
+// Función para iniciar establecer el Row del monitoreo //
+/*******************************************************************************************************/
+export const startSetMonitoreoRow = (row: IMonitoreoRow) => {
+  return (dispatch: Dispatch) => {
+    dispatch(setMonitoreoRow(row))
+  }
+}
+/*******************************************************************************************************/
+// Función para iniciar restablecer el row de monitoreo //
+/*******************************************************************************************************/
+export const startResetMonitoreoRow = () => {
+  return (dispatch: Dispatch) => {
+    dispatch(resetMonitoreoRow())
   }
 }
 /*******************************************************************************************************/
@@ -116,6 +133,23 @@ export const setMonitoreoEstadoActaProv = (estado: string) => {
   return {
     type: types.setMonitoreoEstadoActaProv,
     payload: estado
+  }
+}
+/*******************************************************************************************************/
+// Acción para establecer el Row del monitoreo //
+/*******************************************************************************************************/
+export const setMonitoreoRow = (row: IMonitoreoRow) => {
+  return {
+    type: types.setMonitoreoRow,
+    payload: row
+  }
+}
+/*******************************************************************************************************/
+// Acción para restablecer el row de monitoreo //
+/*******************************************************************************************************/
+export const resetMonitoreoRow = () => {
+  return {
+    type: types.resetMonitoreoRow
   }
 }
 /*******************************************************************************************************/

@@ -3,7 +3,7 @@
 /*******************************************************************************************************/
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Table, TableBody, TableCell, TablePagination, TableRow, Icon, Typography, Paper } from '@material-ui/core'
 import Scrollbars from 'components/core/Scrollbars'
@@ -13,6 +13,7 @@ import { fetchData } from 'services/fetch'
 import ProgressLinear from 'components/core/Progress/ProgressLinear'
 import AnimateGroup from 'components/core/AnimateGroup'
 import { startGetAccionesModulo } from 'redux/actions/auth'
+import { startSetMonitoreoRow } from 'redux/actions/monitoreo'
 import { EMesaEstadoActa } from 'enums/mesas'
 import { Swal } from 'configs/settings'
 
@@ -22,6 +23,9 @@ import { Swal } from 'configs/settings'
 const MonitoreoContainer = props => {
   // Obtenemos las propiedades del componente
   const { data, setData, page, setPage, rowsPerPage, setRowsPerPage, resetPages } = props
+
+  // Llamamos al history de las rutas
+  const history = useHistory()
 
   // Llamamos al dispatch de redux
   const dispatch = useDispatch()
@@ -52,6 +56,13 @@ const MonitoreoContainer = props => {
     porenviar: 0,
     reabiertas: 0
   })
+
+  // Totales de votantes
+  const [totalVotantes, setTotalVotantes] = useState(0)
+  const [totalVotosGober, setTotalVotosGober] = useState(0)
+  const [totalVotosConse, setTotalVotosConse] = useState(0)
+  const [totalVotosAlcProv, setTotalVotosAlcProv] = useState(0)
+  const [totalVotosAlcDist, setTotalVotosAlcDist] = useState(0)
 
   // Estado inicial del ordenamiento de una columna
   const [order, setOrder] = useState({
@@ -98,6 +109,12 @@ const MonitoreoContainer = props => {
         setTotalActas(result.data.totalActas)
         setTotalActasReg(result.data.totalActasReg)
         setTotalActasProv(result.data.totalActasProv)
+        // Guardamos los datos de los votantes
+        setTotalVotantes(result.data.totalVotantes)
+        setTotalVotosGober(result.data.totalVotosGober)
+        setTotalVotosConse(result.data.totalVotosConse)
+        setTotalVotosAlcProv(result.data.totalVotosAlcProv)
+        setTotalVotosAlcDist(result.data.totalVotosAlcDist)
       }
       // Finalizamos carga de la tabla
       setLoading(false)
@@ -109,6 +126,7 @@ const MonitoreoContainer = props => {
       socket.on('centros-votacion-mesa-actualizada', () => getMonitoreo())
       socket.on('centros-votacion-mesa-eliminada', () => getMonitoreo())
       socket.on('centros-votacion-monitoreo-importadas', () => getMonitoreo())
+      socket.on('acta-upsert', () => getMonitoreo())
       socket.on('acta-reopen', () => getMonitoreo())
       // Limpiamos el montaje
       return () => {
@@ -117,6 +135,7 @@ const MonitoreoContainer = props => {
         socket.off('centros-votacion-mesa-actualizada')
         socket.off('centros-votacion-mesa-eliminada')
         socket.off('centros-votacion-monitoreo-importadas')
+        socket.off('acta-upsert')
         socket.off('acta-reopen')
       }
     }
@@ -163,6 +182,22 @@ const MonitoreoContainer = props => {
     setRowsPerPage(evt.target.value)
   }
 
+  // Función para registrar una acta
+  const handleRegisterActa = (row, acta) => {
+    // Guardamos el row de la mesa
+    dispatch(startSetMonitoreoRow(row))
+    // Redireccionamos a registrar el acta correspondiente
+    history.push(`/monitoreo/acta-${acta}`)
+  }
+
+  // Función para actualizar una acta
+  const handleUpdateActa = (row, acta) => {
+    // Guardamos el row de la mesa
+    dispatch(startSetMonitoreoRow(row))
+    // Redireccionamos a edita el acta correspondiente
+    history.push(`/monitoreo/acta-${acta}-edit`)
+  }
+
   // Función para reabrir una acta
   const handleReopenActa = (id, acta) => {
     Swal.fire({
@@ -189,16 +224,18 @@ const MonitoreoContainer = props => {
             animation: 'transition.slideUpBigIn'
           }}
         >
-          <div className="widget flex w-full p-12 sm:w-1/4">
+          <div className="widget flex w-full p-12 sm:w-1/3">
             <Paper className="w-full rounded-8 shadow-1">
               <div className="flex items-center justify-between px-4 py-8 rounded-t-8 bg-blue-600">
                 <div className="flex items-center">
                   <Icon className="ml-12 text-white">how_to_vote</Icon>
                   <Typography className="text-16 px-12 text-white font-bold">Actas Regionales</Typography>
                 </div>
-                <Typography className="text-16 px-12 text-white font-bold">
-                  {((totalActasReg.enviadas / totalActas) * 100).toFixed(2)} %
-                </Typography>
+                {totalActas > 0 && (
+                  <Typography className="text-16 px-12 text-white font-bold">
+                    {((totalActasReg.enviadas / totalActas) * 100).toFixed(2)} %
+                  </Typography>
+                )}
               </div>
               <div className="flex items-center px-16 pt-10 pb-2">
                 <Typography className="text-15 flex w-full">
@@ -222,16 +259,18 @@ const MonitoreoContainer = props => {
               </div>
             </Paper>
           </div>
-          <div className="widget flex w-full p-12 sm:w-1/4">
+          <div className="widget flex w-full p-12 sm:w-1/3">
             <Paper className="w-full rounded-8 shadow-1">
               <div className="flex items-center justify-between px-4 py-8 rounded-t-8 bg-blue-600">
                 <div className="flex items-center">
                   <Icon className="ml-12 text-white">how_to_vote</Icon>
                   <Typography className="text-16 px-12 text-white font-bold">Actas Provinciales</Typography>
                 </div>
-                <Typography className="text-16 px-12 text-white font-bold">
-                  {((totalActasProv.enviadas / totalActas) * 100).toFixed(2)} %
-                </Typography>
+                {totalActas > 0 && (
+                  <Typography className="text-16 px-12 text-white font-bold">
+                    {((totalActasProv.enviadas / totalActas) * 100).toFixed(2)} %
+                  </Typography>
+                )}
               </div>
               <div className="flex items-center px-16 pt-10 pb-2">
                 <Typography className="text-15 flex w-full">
@@ -251,6 +290,63 @@ const MonitoreoContainer = props => {
                 <Typography className="text-15 flex w-full">
                   <span className="text-blue w-80">Reabiertas</span>:
                   <span className="px-8 font-semibold">{totalActasProv.reabiertas}</span>
+                </Typography>
+              </div>
+            </Paper>
+          </div>
+          <div className="widget flex w-full p-12 sm:w-1/3">
+            <Paper className="w-full rounded-8 shadow-1">
+              <div className="flex items-center justify-between px-4 py-8 rounded-t-8 bg-teal-500">
+                <div className="flex items-center">
+                  <Icon className="ml-12 text-white">how_to_vote</Icon>
+                  <Typography className="text-16 px-12 text-white font-bold">Votantes</Typography>
+                </div>
+                <Typography className="text-16 px-12 text-white font-bold">
+                  {new Intl.NumberFormat('es-PE').format(totalVotantes)}
+                </Typography>
+              </div>
+              <div className="flex items-center px-16 pt-10 pb-2">
+                <Typography className="text-15 flex w-full">
+                  <span className="w-160 text-blue-gray-800">Gobernador</span>:
+                  <span className="px-8 font-semibold">{totalVotosGober}</span>
+                  {totalVotantes > 0 && (
+                    <span className="px-8 font-semibold text-blue-gray-900">
+                      ({((totalVotosGober / totalVotantes) * 100).toFixed(2)} %)
+                    </span>
+                  )}
+                </Typography>
+              </div>
+              <div className="flex items-center px-16 pt-10 pb-2">
+                <Typography className="text-15 flex w-full">
+                  <span className="w-160 text-blue-gray-800">Consejeros</span>:
+                  <span className="px-8 font-semibold">{totalVotosConse}</span>
+                  {totalVotantes > 0 && (
+                    <span className="px-8 font-semibold text-blue-gray-900">
+                      ({((totalVotosConse / totalVotantes) * 100).toFixed(2)} %)
+                    </span>
+                  )}
+                </Typography>
+              </div>
+              <div className="flex items-center px-16 pt-10 pb-2">
+                <Typography className="text-15 flex w-full">
+                  <span className="w-160 text-blue-gray-800">Alcaldes Provinciales</span>:
+                  <span className="px-8 font-semibold">{totalVotosAlcProv}</span>
+                  {totalVotantes > 0 && (
+                    <span className="px-8 font-semibold text-blue-gray-900">
+                      ({((totalVotosAlcProv / totalVotantes) * 100).toFixed(2)} %)
+                    </span>
+                  )}
+                </Typography>
+              </div>
+              <div className="flex items-center px-16 pt-10 pb-10">
+                <Typography className="text-15 flex w-full">
+                  <span className="w-160 text-blue-gray-800">Alcaldes Distritales</span>:
+                  <span className="px-8 font-semibold">{totalVotosAlcDist}</span>
+                  {totalVotantes > 0 && (
+                    <span className="px-8 font-semibold text-blue-gray-900">
+                      ({((totalVotosAlcDist / totalVotantes) * 100).toFixed(2)} %)
+                    </span>
+                  )}
                 </Typography>
               </div>
             </Paper>
@@ -296,6 +392,9 @@ const MonitoreoContainer = props => {
                         )}
                       </div>
                     </TableCell>
+                    <TableCell className="py-2" component="th" scope="row">
+                      {row.votantes}
+                    </TableCell>
                     {rol.super && (
                       <TableCell className="py-2" component="th" scope="row">
                         {row.departamento.nombre}
@@ -328,14 +427,24 @@ const MonitoreoContainer = props => {
                           </div>
                         )}
                         {(rol.super || (accionesPerm && accionesPerm.indexOf('editar') !== -1)) &&
-                          (row.acta_reg === EMesaEstadoActa.PorEnviar ||
-                            row.acta_reg === EMesaEstadoActa.Reabierto) && (
-                            <Link to={`/monitoreo/mesa/${row._id}/acta-regional`} role="button">
-                              <div className="flex flex-col items-center w-72">
-                                <Icon>assignment</Icon>
-                                <span className="text-10">registrar acta</span>
-                              </div>
-                            </Link>
+                          row.acta_reg === EMesaEstadoActa.PorEnviar && (
+                            <div
+                              className="flex flex-col items-center w-72 cursor-pointer"
+                              onClick={() => handleRegisterActa(row, 'regional')}
+                            >
+                              <Icon>assignment</Icon>
+                              <span className="text-10">registrar acta</span>
+                            </div>
+                          )}
+                        {(rol.super || (accionesPerm && accionesPerm.indexOf('editar') !== -1)) &&
+                          row.acta_reg === EMesaEstadoActa.Reabierto && (
+                            <div
+                              className="flex flex-col items-center w-72 cursor-pointer"
+                              onClick={() => handleUpdateActa(row, 'regional')}
+                            >
+                              <Icon>assignment</Icon>
+                              <span className="text-10">actualizar acta</span>
+                            </div>
                           )}
                         {(rol.super || (accionesPerm && accionesPerm.indexOf('editar') !== -1)) &&
                           row.acta_reg === EMesaEstadoActa.Enviado && (
@@ -370,14 +479,24 @@ const MonitoreoContainer = props => {
                           </div>
                         )}
                         {(rol.super || (accionesPerm && accionesPerm.indexOf('editar') !== -1)) &&
-                          (row.acta_prov === EMesaEstadoActa.PorEnviar ||
-                            row.acta_prov === EMesaEstadoActa.Reabierto) && (
-                            <Link to={`/monitoreo/mesa/${row._id}/acta-provincial`} role="button">
-                              <div className="flex flex-col items-center w-72">
-                                <Icon>assignment</Icon>
-                                <span className="text-10">registrar acta</span>
-                              </div>
-                            </Link>
+                          row.acta_prov === EMesaEstadoActa.PorEnviar && (
+                            <div
+                              className="flex flex-col items-center w-72 cursor-pointer"
+                              onClick={() => handleRegisterActa(row, 'provincial')}
+                            >
+                              <Icon>assignment</Icon>
+                              <span className="text-10">registrar acta</span>
+                            </div>
+                          )}
+                        {(rol.super || (accionesPerm && accionesPerm.indexOf('editar') !== -1)) &&
+                          row.acta_prov === EMesaEstadoActa.Reabierto && (
+                            <div
+                              className="flex flex-col items-center w-72 cursor-pointer"
+                              onClick={() => handleUpdateActa(row, 'provincial')}
+                            >
+                              <Icon>assignment</Icon>
+                              <span className="text-10">actualizar acta</span>
+                            </div>
                           )}
                         {(rol.super || (accionesPerm && accionesPerm.indexOf('editar') !== -1)) &&
                           row.acta_prov === EMesaEstadoActa.Enviado && (

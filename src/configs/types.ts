@@ -68,6 +68,8 @@ export interface ITypes {
   setMonitoreoDistrito: string
   setMonitoreoEstadoActaReg: string
   setMonitoreoEstadoActaProv: string
+  setMonitoreoRow: string
+  resetMonitoreoRow: string
   resetMonitoreo: string
 }
 
@@ -141,6 +143,8 @@ const types: ITypes = {
   setMonitoreoDistrito: '[monitoreo] set distrito',
   setMonitoreoEstadoActaReg: '[monitoreo] set estado acta regional',
   setMonitoreoEstadoActaProv: '[monitoreo] set estado acta provincial',
+  setMonitoreoRow: '[monitoreo] set row',
+  resetMonitoreoRow: '[monitoreo] reset row',
   resetMonitoreo: '[monitoreo] reset'
 }
 
