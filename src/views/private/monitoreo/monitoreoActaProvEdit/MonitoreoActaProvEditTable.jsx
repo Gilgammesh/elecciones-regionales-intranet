@@ -7,6 +7,7 @@ import { Table, TableHead, TableBody, TableCell, TableRow } from '@material-ui/c
 import Scrollbars from 'components/core/Scrollbars'
 import TextFieldFormsy from 'components/core/Formsy/TextFieldFormsy'
 import ProgressLinear from 'components/core/Progress/ProgressLinear'
+import { apiBaseUrl } from 'configs/settings'
 
 /*******************************************************************************************************/
 // Definimos la Vista del componente Monitoreo Acta Provincial - Editar Table //
@@ -77,7 +78,16 @@ const MonitoreoActaProvEditTable = props => {
                       <span>{organizacion.nombre}</span>
                     </TableCell>
                     <TableCell className="py-2" component="th" scope="row">
-                      <img alt="foto" src={organizacion.alcaldeProv.foto} width="40" height="auto" />
+                      {organizacion.alcaldeProv && organizacion.alcaldeProv.length > 0 ? (
+                        <img alt="foto" src={organizacion.alcaldeProv[0].foto} width="40" height="auto" />
+                      ) : (
+                        <img
+                          alt="foto"
+                          src={`${apiBaseUrl}/uploads/organizaciones-politicas/alcaldes/no-foto.png`}
+                          width="40"
+                          height="auto"
+                        />
+                      )}
                     </TableCell>
                     <TableCell className="py-2" component="th" scope="row">
                       <img alt="logo" src={organizacion.logo} width="40" height="auto" />
@@ -91,7 +101,7 @@ const MonitoreoActaProvEditTable = props => {
                         value={`${organizacion.votos_alc_prov}`}
                         onChange={evt => setVotosAlcProv(evt, organizacion._id)}
                         variant="outlined"
-                        disabled={organizacion.alcaldeProv ? false : true}
+                        disabled={organizacion.alcaldeProv && organizacion.alcaldeProv.length > 0 ? false : true}
                         inputProps={{
                           maxLength: 3,
                           min: 0,
@@ -109,7 +119,7 @@ const MonitoreoActaProvEditTable = props => {
                           value={`${organizacion.votos_alc_dist}`}
                           onChange={evt => setVotosAlcDist(evt, organizacion._id)}
                           variant="outlined"
-                          disabled={organizacion.alcaldeDist ? false : true}
+                          disabled={organizacion.alcaldeDist && organizacion.alcaldeDist.length > 0 ? false : true}
                           inputProps={{
                             maxLength: 3,
                             min: 0,

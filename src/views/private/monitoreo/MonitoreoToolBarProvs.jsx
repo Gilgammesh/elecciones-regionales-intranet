@@ -80,7 +80,7 @@ const MonitoreoToolBarProvs = props => {
       <Select
         labelId="select-monitoreo-provincia"
         className="col-span-12"
-        value={provincia}
+        value={listProvincias.length > 0 ? provincia : 'todos'}
         onChange={handleChange}
         displayEmpty
       >

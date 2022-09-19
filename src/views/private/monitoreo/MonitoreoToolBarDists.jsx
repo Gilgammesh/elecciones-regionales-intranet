@@ -82,7 +82,7 @@ const MonitoreoToolBarDists = props => {
       <Select
         labelId="select-monitoreo-distrito"
         className="col-span-12"
-        value={distrito}
+        value={listDistritos.length > 0 ? distrito : 'todos'}
         onChange={handleChange}
         displayEmpty
       >

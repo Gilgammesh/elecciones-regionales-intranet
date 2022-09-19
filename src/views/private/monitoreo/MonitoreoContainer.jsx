@@ -121,25 +121,31 @@ const MonitoreoContainer = props => {
     }
     // Si existe un socket, número de página y filas por página
     if (socket && page >= 0 && rowsPerPage >= 1) {
-      getMonitoreo()
-      socket.on('centros-votacion-mesa-creada', () => getMonitoreo())
-      socket.on('centros-votacion-mesa-actualizada', () => getMonitoreo())
-      socket.on('centros-votacion-mesa-eliminada', () => getMonitoreo())
-      socket.on('centros-votacion-monitoreo-importadas', () => getMonitoreo())
-      socket.on('acta-upsert', () => getMonitoreo())
-      socket.on('acta-reopen', () => getMonitoreo())
-      // Limpiamos el montaje
-      return () => {
-        mounted = false
-        socket.off('centros-votacion-mesa-creada')
-        socket.off('centros-votacion-mesa-actualizada')
-        socket.off('centros-votacion-mesa-eliminada')
-        socket.off('centros-votacion-monitoreo-importadas')
-        socket.off('acta-upsert')
-        socket.off('acta-reopen')
+      if (rol.super && departamento === 'todos') {
+        // Finalizamos carga de la tabla
+        setLoading(false)
+      } else {
+        getMonitoreo()
+        socket.on('centros-votacion-mesa-creada', () => getMonitoreo())
+        socket.on('centros-votacion-mesa-actualizada', () => getMonitoreo())
+        socket.on('centros-votacion-mesa-eliminada', () => getMonitoreo())
+        socket.on('centros-votacion-monitoreo-importadas', () => getMonitoreo())
+        socket.on('acta-upsert', () => getMonitoreo())
+        socket.on('acta-reopen', () => getMonitoreo())
+        // Limpiamos el montaje
+        return () => {
+          mounted = false
+          socket.off('centros-votacion-mesa-creada')
+          socket.off('centros-votacion-mesa-actualizada')
+          socket.off('centros-votacion-mesa-eliminada')
+          socket.off('centros-votacion-monitoreo-importadas')
+          socket.off('acta-upsert')
+          socket.off('acta-reopen')
+        }
       }
     }
   }, [
+    rol,
     socket,
     search,
     departamento,
