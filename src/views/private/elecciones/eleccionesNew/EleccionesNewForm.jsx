@@ -3,14 +3,10 @@
 /*******************************************************************************************************/
 import React from 'react'
 import PropTypes from 'prop-types'
-import {
-  FormControlLabel,
-  Checkbox,
-  TextField,
-  MenuItem
-} from '@material-ui/core'
+import { FormControlLabel, Checkbox, TextField, MenuItem } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import { green } from '@material-ui/core/colors'
+import { KeyboardDatePicker } from '@material-ui/pickers'
 import TextFieldFormsy from 'components/core/Formsy/TextFieldFormsy'
 
 /*******************************************************************************************************/
@@ -31,9 +27,18 @@ const GreenCheckbox = withStyles({
 /*******************************************************************************************************/
 const EleccionesNewForm = props => {
   // Obtenemos las propiedades del componente
-  const { formValues, handleInputChange } = props
+  const { formValues, handleInputChange, setForm } = props
   // Obtenemos los valores del formulario
-  const { anho, tipo, actual } = formValues
+  const { anho, fecha, tipo, actual } = formValues
+
+  // Función para cambiar la fecha
+  const handleDateChange = date => {
+    // Guardamos los datos en el formulario
+    setForm({
+      ...formValues,
+      fecha: date
+    })
+  }
 
   // Renderizamos el componente
   return (
@@ -54,6 +59,20 @@ const EleccionesNewForm = props => {
           }}
           required
         />
+        <KeyboardDatePicker
+          className="col-span-12 sm:col-span-2"
+          autoOk
+          variant="inline"
+          inputVariant="outlined"
+          format="DD/MM/yyyy"
+          name="fecha"
+          label="Fecha de Elección"
+          value={fecha}
+          onChange={handleDateChange}
+          InputAdornmentProps={{ position: 'start' }}
+          invalidDateMessage="Fecha Inválida"
+          required
+        />
         <TextField
           select
           className="col-span-12 sm:col-span-4"
@@ -65,18 +84,10 @@ const EleccionesNewForm = props => {
           required
         >
           <MenuItem value="regional">Elecciones Regionales </MenuItem>
-          <MenuItem value="general">Elecciones Generales </MenuItem>
         </TextField>
         <FormControlLabel
           className="col-span-12 sm:col-span-3"
-          control={
-            <GreenCheckbox
-              checked={actual}
-              onChange={handleInputChange}
-              name="actual"
-              color="primary"
-            />
-          }
+          control={<GreenCheckbox checked={actual} onChange={handleInputChange} name="actual" color="primary" />}
           label="¿Es el actual?"
         />
       </div>
@@ -89,7 +100,8 @@ const EleccionesNewForm = props => {
 /*******************************************************************************************************/
 EleccionesNewForm.propTypes = {
   formValues: PropTypes.object.isRequired,
-  handleInputChange: PropTypes.func.isRequired
+  handleInputChange: PropTypes.func.isRequired,
+  setForm: PropTypes.func.isRequired
 }
 
 /*******************************************************************************************************/

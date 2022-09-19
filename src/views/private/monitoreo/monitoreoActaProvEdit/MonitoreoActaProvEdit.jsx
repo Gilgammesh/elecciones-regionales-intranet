@@ -68,7 +68,9 @@ const MonitoreoActaProvEdit = () => {
         }
       )
       if (mounted && result && result.data.status) {
-        if (result.data.list) setOrganizaciones(result.data.list)
+        if (result.data.list) {
+          setOrganizaciones(result.data.list)
+        }
         if (result.data.nulos) {
           setNulos({ alc_prov: result.data.nulos.votos_alc_prov, alc_dist: result.data.nulos.votos_alc_dist })
         }

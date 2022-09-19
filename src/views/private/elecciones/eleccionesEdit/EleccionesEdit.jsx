@@ -28,23 +28,18 @@ const EleccionesEdit = () => {
   // Estado inicial del formulario
   const initialForm = {
     anho: new Date().getFullYear(),
+    fecha: null,
     tipo: '',
     actual: false
   }
 
   // Usamos el Hook personalizado de formularios
-  const [formValues, handleInputChange, resetForm, setForm] =
-    useForm(initialForm)
+  const [formValues, handleInputChange, resetForm, setForm] = useForm(initialForm)
 
   // Función que se ejecuta cuando se envia el formulario
   const handleSubmit = async () => {
     // Actualizamos la data de la acción
-    const result = await fetchData(
-      `elecciones/${id}`,
-      { isTokenReq: true },
-      'PUT',
-      formValues
-    )
+    const result = await fetchData(`elecciones/${id}`, { isTokenReq: true }, 'PUT', formValues)
     // Validamos el resultado
     if (validateFetchData(result)) {
       // Reseteamos el formulario
@@ -71,11 +66,7 @@ const EleccionesEdit = () => {
 
   // Renderizamos el componente
   return (
-    <Formsy
-      onValidSubmit={handleSubmit}
-      onValid={enableButton}
-      onInvalid={disableButton}
-    >
+    <Formsy onValidSubmit={handleSubmit} onValid={enableButton} onInvalid={disableButton}>
       <PageCarded
         classes={{
           toolbar: 'p-0',
@@ -87,13 +78,7 @@ const EleccionesEdit = () => {
             <h2>Elección</h2>
           </div>
         }
-        content={
-          <EleccionesEditForm
-            formValues={formValues}
-            handleInputChange={handleInputChange}
-            setForm={setForm}
-          />
-        }
+        content={<EleccionesEditForm formValues={formValues} handleInputChange={handleInputChange} setForm={setForm} />}
         innerScroll
       />
     </Formsy>

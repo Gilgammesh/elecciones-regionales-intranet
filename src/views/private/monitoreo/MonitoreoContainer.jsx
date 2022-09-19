@@ -310,7 +310,7 @@ const MonitoreoContainer = props => {
                   <span className="w-160 text-blue-gray-800">Gobernador</span>:
                   <span className="px-8 font-semibold">{totalVotosGober}</span>
                   {totalVotantes > 0 && (
-                    <span className="px-8 font-semibold text-blue-gray-900">
+                    <span className="px-4 font-semibold text-blue-gray-900">
                       ({((totalVotosGober / totalVotantes) * 100).toFixed(2)} %)
                     </span>
                   )}
@@ -321,7 +321,7 @@ const MonitoreoContainer = props => {
                   <span className="w-160 text-blue-gray-800">Consejeros</span>:
                   <span className="px-8 font-semibold">{totalVotosConse}</span>
                   {totalVotantes > 0 && (
-                    <span className="px-8 font-semibold text-blue-gray-900">
+                    <span className="px-4 font-semibold text-blue-gray-900">
                       ({((totalVotosConse / totalVotantes) * 100).toFixed(2)} %)
                     </span>
                   )}
@@ -332,7 +332,7 @@ const MonitoreoContainer = props => {
                   <span className="w-160 text-blue-gray-800">Alcaldes Provinciales</span>:
                   <span className="px-8 font-semibold">{totalVotosAlcProv}</span>
                   {totalVotantes > 0 && (
-                    <span className="px-8 font-semibold text-blue-gray-900">
+                    <span className="px-4 font-semibold text-blue-gray-900">
                       ({((totalVotosAlcProv / totalVotantes) * 100).toFixed(2)} %)
                     </span>
                   )}
@@ -343,7 +343,7 @@ const MonitoreoContainer = props => {
                   <span className="w-160 text-blue-gray-800">Alcaldes Distritales</span>:
                   <span className="px-8 font-semibold">{totalVotosAlcDist}</span>
                   {totalVotantes > 0 && (
-                    <span className="px-8 font-semibold text-blue-gray-900">
+                    <span className="px-4 font-semibold text-blue-gray-900">
                       ({((totalVotosAlcDist / totalVotantes) * 100).toFixed(2)} %)
                     </span>
                   )}

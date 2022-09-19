@@ -68,7 +68,9 @@ const MonitoreoActaRegEdit = () => {
         }
       )
       if (mounted && result && result.data.status) {
-        if (result.data.list) setOrganizaciones(result.data.list)
+        if (result.data.list) {
+          setOrganizaciones(result.data.list)
+        }
         if (result.data.nulos) {
           setNulos({ gober: result.data.nulos.votos_gober, conse: result.data.nulos.votos_conse })
         }
