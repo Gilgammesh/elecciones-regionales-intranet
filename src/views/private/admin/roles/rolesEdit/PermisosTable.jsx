@@ -201,7 +201,9 @@ const PermisosTable = () => {
           <ProgressLinear />
         </div>
       )}
-      {!_.isEmpty(selectMod) && <DialogSubModulos open={openSubMod} setOpen={setOpenSubMod} selectMod={selectMod} />}
+      {!_.isEmpty(selectMod) && selectMod.type === 'collapse' && (
+        <DialogSubModulos open={openSubMod} setOpen={setOpenSubMod} selectMod={selectMod} />
+      )}
       {!_.isEmpty(selectMod) && (
         <DialogAccionesModulo open={openAccion} setOpen={setOpenAccion} selectMod={selectMod} />
       )}
