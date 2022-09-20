@@ -6,8 +6,8 @@ import { AppBar, Hidden, Icon } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 import Scrollbars from 'components/core/Scrollbars'
-import Logo from 'components/layouts/shared-components/Logo'
-// import Logo from 'components/layouts/shared-components/Logo_';
+// import Logo from 'components/layouts/shared-components/Logo'
+import Logo from 'components/layouts/shared-components/Logo_'
 // import Logo from 'components/layouts/shared-components/Logo__';
 import NavbarFoldedToggleButton from 'components/layouts/shared-components/NavbarFoldedToggleButton'
 import NavbarMobileToggleButton from 'components/layouts/shared-components/NavbarMobileToggleButton'
