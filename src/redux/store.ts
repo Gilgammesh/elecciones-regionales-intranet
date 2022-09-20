@@ -21,6 +21,7 @@ import gobernadoresReducer, { IGobernadoresReducer } from './reducers/gobernador
 import consejerosReducer, { IConsejerosReducer } from './reducers/consejerosReducer'
 import alcaldesReducer, { IAlcaldesReducer } from './reducers/alcaldesReducer'
 import monitoreoReducer, { IMonitoreoReducer } from './reducers/monitoreoReducer'
+import reportesReducer, { IReportesReducer } from './reducers/reportesReducer'
 import socketioReducer from './reducers/socketioReducer'
 import { Socket } from 'socket.io-client'
 
@@ -46,6 +47,7 @@ export interface IRootReducers {
   consejeros: IConsejerosReducer
   alcaldes: IAlcaldesReducer
   monitoreo: IMonitoreoReducer
+  reportes: IReportesReducer
   socketio: Socket | null
 }
 
@@ -71,6 +73,7 @@ const reducers = combineReducers({
   consejeros: consejerosReducer,
   alcaldes: alcaldesReducer,
   monitoreo: monitoreoReducer,
+  reportes: reportesReducer,
   socketio: socketioReducer
 })
 

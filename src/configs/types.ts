@@ -71,6 +71,10 @@ export interface ITypes {
   setMonitoreoRow: string
   resetMonitoreoRow: string
   resetMonitoreo: string
+  setReportesTipo: string
+  setReportesDepartamento: string
+  setReportesProvincia: string
+  setReportesDistrito: string
 }
 
 /*******************************************************************************************************/
@@ -145,7 +149,11 @@ const types: ITypes = {
   setMonitoreoEstadoActaProv: '[monitoreo] set estado acta provincial',
   setMonitoreoRow: '[monitoreo] set row',
   resetMonitoreoRow: '[monitoreo] reset row',
-  resetMonitoreo: '[monitoreo] reset'
+  resetMonitoreo: '[monitoreo] reset',
+  setReportesTipo: '[reportes] set tipo',
+  setReportesDepartamento: '[reportes] set departamento',
+  setReportesProvincia: '[reportes] set provincia',
+  setReportesDistrito: '[reportes] set distrito'
 }
 
 /*******************************************************************************************************/
