@@ -103,7 +103,7 @@ const PrivateRouter = () => {
         <Route exact path="/" component={Building} />
         <Route exact path="/cambiar-contraseña" component={Password} />
         {rutas_}
-        <Redirect to="/monitoreo" />
+        <Redirect to="/reportes" />
       </Switch>
     </Layout>
   )
