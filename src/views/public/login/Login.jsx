@@ -5,9 +5,8 @@ import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 import Animate from 'components/core/Animate'
-import LoginLeft from './LoginLeft'
-// import LoginLeft from './LoginLeft_';
-// import LoginLeft from './LoginLeft__';
+// import LoginLeft from './LoginLeft'
+import LoginLeft from './LoginLeft_';
 import LoginRight from './LoginRight'
 import background from 'assets/images/backgrounds/login-bg.jpg'
 
