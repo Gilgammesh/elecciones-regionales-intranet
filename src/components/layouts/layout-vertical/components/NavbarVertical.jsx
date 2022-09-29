@@ -12,6 +12,7 @@ import NavbarFoldedToggleButton from 'components/layouts/shared-components/Navba
 import NavbarMobileToggleButton from 'components/layouts/shared-components/NavbarMobileToggleButton'
 import Navigation from 'components/layouts/shared-components/Navigation'
 import UserNavbarHeader from 'components/layouts/shared-components/UserNavbarHeader'
+import { Link } from 'react-router-dom'
 
 /*******************************************************************************************************/
 // Definimos los estilos del componente //
@@ -46,7 +47,9 @@ const NavbarVertical = props => {
         className="container-logo flex flex-row items-center flex-shrink h-64 min-h-64 px-12"
       >
         <div className="flex flex-1 mx-8">
-          <Logo />
+          <Link to="/bienvenida" role="button">
+            <Logo />
+          </Link>
         </div>
 
         <Hidden mdDown>

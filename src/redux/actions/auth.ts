@@ -121,7 +121,7 @@ export const startLogin = (body: ILogin, history: RouteComponentProps['history']
         dispatch<any>(startSetNavigation(result.data.usuario, result.data.permisos, result.data.modulos))
 
         // Redireccionamos
-        history.replace('/reportes')
+        history.replace('/bienvenida')
 
         // Establecemos los datos del usuario
         dispatch(login(result.data.token, result.data.usuario, result.data.permisos))

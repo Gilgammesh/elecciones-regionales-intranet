@@ -8,7 +8,8 @@ import routes from 'configs/routes'
 import Layout from 'components/core/Layout'
 import ChildrenRouter from './ChildrenRouter'
 import Building from 'components/core/Building'
-import Password from 'views/private/contrasenha'
+import PasswordView from 'views/private/contrasenha'
+import HomeView from 'views/private/home'
 
 /*******************************************************************************************************/
 // Definimos las Rutas Privadas de la Aplicación //
@@ -101,9 +102,10 @@ const PrivateRouter = () => {
     <Layout>
       <Switch>
         <Route exact path="/" component={Building} />
-        <Route exact path="/cambiar-contraseña" component={Password} />
+        <Route exact path="/cambiar-contraseña" component={PasswordView} />
+        <Route exact path="/bienvenida" component={HomeView} />
         {rutas_}
-        <Redirect to="/reportes" />
+        <Redirect to="/bienvenida" />
       </Switch>
     </Layout>
   )
