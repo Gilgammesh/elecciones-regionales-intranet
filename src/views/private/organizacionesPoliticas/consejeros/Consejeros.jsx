@@ -4,7 +4,6 @@
 import React, { useState } from 'react'
 import PageCarded from 'components/core/PageCarded'
 import ConsejerosHeader from './ConsejerosHeader'
-import ConsejerosToolBar from './ConsejerosToolBar'
 import ConsejerosTable from './ConsejerosTable'
 
 /*******************************************************************************************************/
@@ -34,7 +33,6 @@ const Consejeros = () => {
         header: 'min-h-72 h-72 sm:h-136 sm:min-h-136'
       }}
       header={<ConsejerosHeader />}
-      contentToolbar={<ConsejerosToolBar resetPages={resetPages} />}
       content={
         <ConsejerosTable
           data={data}

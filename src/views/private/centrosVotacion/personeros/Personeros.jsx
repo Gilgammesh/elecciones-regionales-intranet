@@ -4,7 +4,6 @@
 import React, { useState } from 'react'
 import PageCarded from 'components/core/PageCarded'
 import PersonerosHeader from './PersonerosHeader'
-import PersonerosToolBar from './PersonerosToolBar'
 import PersonerosTable from './PersonerosTable'
 
 /*******************************************************************************************************/
@@ -34,7 +33,6 @@ const Personeros = () => {
         header: 'min-h-72 h-72 sm:h-136 sm:min-h-136'
       }}
       header={<PersonerosHeader />}
-      contentToolbar={<PersonerosToolBar resetPages={resetPages} />}
       content={
         <PersonerosTable
           data={data}

@@ -16,6 +16,7 @@ import ProgressLinear from 'components/core/Progress/ProgressLinear'
 import { Swal, Toast } from 'configs/settings'
 import { validateFetchData } from 'helpers/validateFetchData'
 import { startGetAccionesSubModulo } from 'redux/actions/auth'
+import OrganizacionesToolBar from './OrganizacionesToolBar'
 
 /*******************************************************************************************************/
 // Definimos la Vista del componente Organizaciones Table //
@@ -158,6 +159,8 @@ const OrganizacionesTable = props => {
   // Renderizamos el componente
   return (
     <div className="w-full flex flex-col">
+      <OrganizacionesToolBar resetPages={resetPages} />
+      <hr />
       <Scrollbars className="flex-grow overflow-x-auto">
         <Table stickyHeader className="min-w-xl" aria-labelledby="tableTitle">
           <OrganizacionesTableHead order={order} onRequestSort={handleRequestSort} resetPages={resetPages} />

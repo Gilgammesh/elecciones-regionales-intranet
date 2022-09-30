@@ -1,7 +1,7 @@
 /*******************************************************************************************************/
 // Importamos las dependencias //
 /*******************************************************************************************************/
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Fragment } from 'react'
 import { useSelector } from 'react-redux'
 import { Icon, Typography, Paper } from '@material-ui/core'
 import { fetchData } from 'services/fetch'
@@ -12,6 +12,7 @@ import Searching from 'components/core/Animations/Searching'
 import ReportesCandidato from './ReportesCandidato'
 import ReportesVotoProvincia from './ReportesVotoProvincia'
 import ReportesVotoDistrito from './ReportesVotoDistrito'
+import ReportesToolBar from './ReportesToolBar'
 
 /*******************************************************************************************************/
 // Definimos la Vista del componente Reportes Container //
@@ -238,229 +239,233 @@ const ReportesContainer = () => {
     }
   }, [usuario, socket, tipo, organizacion, departamento, provincia, distrito])
 
-  if (loading) {
-    return <Searching model="stretch" variant={1} height={500} width={500} playingState="playing" />
-  }
-
   // Renderizamos el componente
   return (
     <div className="w-full flex flex-col">
-      <div className="p-12">
-        <AnimateGroup
-          className="flex flex-wrap"
-          enter={{
-            animation: 'transition.slideUpBigIn'
-          }}
-        >
-          <div className="widget flex w-full p-12 sm:w-1/6">
-            <Paper className="w-full rounded-8 shadow-1">
-              <div className="flex items-center justify-between px-4 py-8 rounded-t-8 bg-blue-600">
-                <div className="flex items-center">
-                  <Icon className="ml-12 text-white">dns</Icon>
-                  <Typography className="text-15 px-12 text-white font-bold">Mesas</Typography>
-                </div>
-              </div>
-              <div className="flex justify-center items-center px-16 pt-10 pb-10">
-                <Typography className="text-15 w-full text-center font-bold">
-                  {new Intl.NumberFormat('es-PE').format(totalMesas)}
-                </Typography>
-              </div>
-            </Paper>
-          </div>
-          <div className="widget flex w-full p-12 sm:w-1/6">
-            <Paper className="w-full rounded-8 shadow-1">
-              <div className="flex items-center justify-between px-4 py-8 rounded-t-8 bg-blue-600">
-                <div className="flex items-center">
-                  <Icon className="ml-12 text-white">assignment</Icon>
-                  <Typography className="text-15 px-12 text-white font-bold">Actas Procesadas</Typography>
-                </div>
-              </div>
-              <div className="flex justify-center items-center px-16 pt-10 pb-10">
-                <Typography className="text-15 w-full text-center font-bold">
-                  {new Intl.NumberFormat('es-PE').format(totalActasProcesadas)}
-                </Typography>
-              </div>
-            </Paper>
-          </div>
-          <div className="widget flex w-full p-12 sm:w-1/6">
-            <Paper className="w-full rounded-8 shadow-1">
-              <div className="flex items-center justify-between px-4 py-8 rounded-t-8 bg-blue-600">
-                <div className="flex items-center">
-                  <Typography className="text-15 px-12 text-white font-bold">% Actas Escrutadas</Typography>
-                </div>
-              </div>
-              <div className="flex justify-center items-center px-16 pt-10 pb-10">
-                <Typography className="text-15 w-full text-center font-bold">
-                  {totalMesas > 0 ? ((totalActasProcesadas / totalMesas) * 100).toFixed(2) : '0.00'} %
-                </Typography>
-              </div>
-            </Paper>
-          </div>
-          <div className="widget flex w-full p-12 sm:w-1/6">
-            <Paper className="w-full rounded-8 shadow-1">
-              <div className="flex items-center justify-between px-4 py-8 rounded-t-8 bg-teal-500">
-                <div className="flex items-center">
-                  <Icon className="ml-12 text-white">people</Icon>
-                  <Typography className="text-15 px-12 text-white font-bold">Votantes</Typography>
-                </div>
-              </div>
-              <div className="flex justify-center items-center px-16 pt-10 pb-10">
-                <Typography className="text-15 w-full text-center font-bold">
-                  {new Intl.NumberFormat('es-PE').format(totalVotantes)}
-                </Typography>
-              </div>
-            </Paper>
-          </div>
-          <div className="widget flex w-full p-12 sm:w-1/6">
-            <Paper className="w-full rounded-8 shadow-1">
-              <div className="flex items-center justify-between px-4 py-8 rounded-t-8 bg-teal-500">
-                <div className="flex items-center">
-                  <Icon className="ml-12 text-white">how_to_vote</Icon>
-                  <Typography className="text-15 px-12 text-white font-bold">Votos</Typography>
-                </div>
-              </div>
-              <div className="flex justify-center items-center px-16 pt-10 pb-10">
-                <Typography className="text-15 w-full text-center font-bold">
-                  {new Intl.NumberFormat('es-PE').format(totalVotos)}
-                </Typography>
-              </div>
-            </Paper>
-          </div>
-          <div className="widget flex w-full p-12 sm:w-1/6">
-            <Paper className="w-full rounded-8 shadow-1">
-              <div className="flex items-center justify-between px-4 py-8 rounded-t-8 bg-teal-500">
-                <div className="flex items-center">
-                  <Typography className="text-15 px-12 text-white font-bold">% Participación</Typography>
-                </div>
-              </div>
-              <div className="flex justify-center items-center px-16 pt-10 pb-10">
-                <Typography className="text-15 w-full text-center font-bold">
-                  {totalVotantes > 0 ? ((totalVotos / totalVotantes) * 100).toFixed(2) : '0.00'} %
-                </Typography>
-              </div>
-            </Paper>
-          </div>
-          <div className="widget flex w-full p-12 sm:w-1/6">
-            <Paper className="w-full rounded-8 shadow-1">
-              <div className="flex items-center justify-between px-4 py-8 rounded-t-8 bg-indigo-500">
-                <div className="flex items-center">
-                  <Icon className="ml-12 text-white">how_to_vote</Icon>
-                  <Typography className="text-15 px-12 text-white font-bold">Votos Nulos</Typography>
-                </div>
-              </div>
-              <div className="flex justify-center items-center px-16 pt-10 pb-10">
-                <Typography className="text-15 w-full text-center font-bold">
-                  {new Intl.NumberFormat('es-PE').format(totalVotosNulo)}
-                </Typography>
-              </div>
-            </Paper>
-          </div>
-          <div className="widget flex w-full p-12 sm:w-1/6">
-            <Paper className="w-full rounded-8 shadow-1">
-              <div className="flex items-center justify-between px-4 py-8 rounded-t-8 bg-indigo-500">
-                <div className="flex items-center">
-                  <Icon className="ml-12 text-white">how_to_vote</Icon>
-                  <Typography className="text-15 px-12 text-white font-bold">Votos en Blanco</Typography>
-                </div>
-              </div>
-              <div className="flex justify-center items-center px-16 pt-10 pb-10">
-                <Typography className="text-15 w-full text-center font-bold">
-                  {new Intl.NumberFormat('es-PE').format(totalVotosBlanco)}
-                </Typography>
-              </div>
-            </Paper>
-          </div>
-          <div className="widget flex w-full p-12 sm:w-1/6">
-            <Paper className="w-full rounded-8 shadow-1">
-              <div className="flex items-center justify-between px-4 py-8 rounded-t-8 bg-indigo-500">
-                <div className="flex items-center">
-                  <Typography className="text-15 px-12 text-white font-bold">Votos Impugnados</Typography>
-                </div>
-              </div>
-              <div className="flex justify-center items-center px-16 pt-10 pb-10">
-                <Typography className="text-15 w-full text-center font-bold">
-                  {new Intl.NumberFormat('es-PE').format(totalVotosImpugnados)}
-                </Typography>
-              </div>
-            </Paper>
-          </div>
-        </AnimateGroup>
-      </div>
-      <div className="flex flex-col justify-center w-full px-24 py-6">
-        <div className="grid grid-cols-12 gap-24">
-          <div className="col-span-12 sm:col-span-7">
-            {tipo === EReportesTipo.GOBERNADORES && (
-              <Animate animation="transition.expandIn" delay={300}>
-                <Typography variant="h6">Resultados de Gobernadores</Typography>
-              </Animate>
-            )}
-            {tipo === EReportesTipo.ALCALDES && distrito === 'todos' && (
-              <Animate animation="transition.expandIn" delay={300}>
-                <Typography variant="h6">Resultados de Alcaldes Provinciales</Typography>
-              </Animate>
-            )}
-            {tipo === EReportesTipo.ALCALDES && distrito !== 'todos' && (
-              <Animate animation="transition.expandIn" delay={300}>
-                <Typography variant="h6">Resultados de Alcaldes Distritales</Typography>
-              </Animate>
-            )}
+      <ReportesToolBar />
+      <hr />
+      {loading ? (
+        <Searching model="stretch" variant={1} height={500} width={500} playingState="playing" />
+      ) : (
+        <Fragment>
+          <div className="p-12">
             <AnimateGroup
-              animation="transition.slideLeftIn"
-              delay={300}
-              className="flex flex-col justify-center items-center gap-12 py-10"
+              className="flex flex-wrap"
+              enter={{
+                animation: 'transition.slideUpBigIn'
+              }}
             >
-              {list &&
-                list.length > 0 &&
-                list.map(row => (
-                  <ReportesCandidato
-                    key={row._id}
-                    row={row}
-                    totalVotos={totalVotos}
-                    maxVoto={maxVoto}
-                    organizacion={organizacion}
-                    setOrganizacion={setOrganizacion}
-                  />
-                ))}
+              <div className="widget flex w-full p-12 sm:w-1/6">
+                <Paper className="w-full rounded-8 shadow-1">
+                  <div className="flex items-center justify-between px-4 py-8 rounded-t-8 bg-blue-600">
+                    <div className="flex items-center">
+                      <Icon className="ml-12 text-white">dns</Icon>
+                      <Typography className="text-15 px-12 text-white font-bold">Mesas</Typography>
+                    </div>
+                  </div>
+                  <div className="flex justify-center items-center px-16 pt-10 pb-10">
+                    <Typography className="text-15 w-full text-center font-bold">
+                      {new Intl.NumberFormat('es-PE').format(totalMesas)}
+                    </Typography>
+                  </div>
+                </Paper>
+              </div>
+              <div className="widget flex w-full p-12 sm:w-1/6">
+                <Paper className="w-full rounded-8 shadow-1">
+                  <div className="flex items-center justify-between px-4 py-8 rounded-t-8 bg-blue-600">
+                    <div className="flex items-center">
+                      <Icon className="ml-12 text-white">assignment</Icon>
+                      <Typography className="text-15 px-12 text-white font-bold">Actas Procesadas</Typography>
+                    </div>
+                  </div>
+                  <div className="flex justify-center items-center px-16 pt-10 pb-10">
+                    <Typography className="text-15 w-full text-center font-bold">
+                      {new Intl.NumberFormat('es-PE').format(totalActasProcesadas)}
+                    </Typography>
+                  </div>
+                </Paper>
+              </div>
+              <div className="widget flex w-full p-12 sm:w-1/6">
+                <Paper className="w-full rounded-8 shadow-1">
+                  <div className="flex items-center justify-between px-4 py-8 rounded-t-8 bg-blue-600">
+                    <div className="flex items-center">
+                      <Typography className="text-15 px-12 text-white font-bold">% Actas Escrutadas</Typography>
+                    </div>
+                  </div>
+                  <div className="flex justify-center items-center px-16 pt-10 pb-10">
+                    <Typography className="text-15 w-full text-center font-bold">
+                      {totalMesas > 0 ? ((totalActasProcesadas / totalMesas) * 100).toFixed(2) : '0.00'} %
+                    </Typography>
+                  </div>
+                </Paper>
+              </div>
+              <div className="widget flex w-full p-12 sm:w-1/6">
+                <Paper className="w-full rounded-8 shadow-1">
+                  <div className="flex items-center justify-between px-4 py-8 rounded-t-8 bg-teal-500">
+                    <div className="flex items-center">
+                      <Icon className="ml-12 text-white">people</Icon>
+                      <Typography className="text-15 px-12 text-white font-bold">Votantes</Typography>
+                    </div>
+                  </div>
+                  <div className="flex justify-center items-center px-16 pt-10 pb-10">
+                    <Typography className="text-15 w-full text-center font-bold">
+                      {new Intl.NumberFormat('es-PE').format(totalVotantes)}
+                    </Typography>
+                  </div>
+                </Paper>
+              </div>
+              <div className="widget flex w-full p-12 sm:w-1/6">
+                <Paper className="w-full rounded-8 shadow-1">
+                  <div className="flex items-center justify-between px-4 py-8 rounded-t-8 bg-teal-500">
+                    <div className="flex items-center">
+                      <Icon className="ml-12 text-white">how_to_vote</Icon>
+                      <Typography className="text-15 px-12 text-white font-bold">Votos</Typography>
+                    </div>
+                  </div>
+                  <div className="flex justify-center items-center px-16 pt-10 pb-10">
+                    <Typography className="text-15 w-full text-center font-bold">
+                      {new Intl.NumberFormat('es-PE').format(totalVotos)}
+                    </Typography>
+                  </div>
+                </Paper>
+              </div>
+              <div className="widget flex w-full p-12 sm:w-1/6">
+                <Paper className="w-full rounded-8 shadow-1">
+                  <div className="flex items-center justify-between px-4 py-8 rounded-t-8 bg-teal-500">
+                    <div className="flex items-center">
+                      <Typography className="text-15 px-12 text-white font-bold">% Participación</Typography>
+                    </div>
+                  </div>
+                  <div className="flex justify-center items-center px-16 pt-10 pb-10">
+                    <Typography className="text-15 w-full text-center font-bold">
+                      {totalVotantes > 0 ? ((totalVotos / totalVotantes) * 100).toFixed(2) : '0.00'} %
+                    </Typography>
+                  </div>
+                </Paper>
+              </div>
+              <div className="widget flex w-full p-12 sm:w-1/6">
+                <Paper className="w-full rounded-8 shadow-1">
+                  <div className="flex items-center justify-between px-4 py-8 rounded-t-8 bg-indigo-500">
+                    <div className="flex items-center">
+                      <Icon className="ml-12 text-white">how_to_vote</Icon>
+                      <Typography className="text-15 px-12 text-white font-bold">Votos Nulos</Typography>
+                    </div>
+                  </div>
+                  <div className="flex justify-center items-center px-16 pt-10 pb-10">
+                    <Typography className="text-15 w-full text-center font-bold">
+                      {new Intl.NumberFormat('es-PE').format(totalVotosNulo)}
+                    </Typography>
+                  </div>
+                </Paper>
+              </div>
+              <div className="widget flex w-full p-12 sm:w-1/6">
+                <Paper className="w-full rounded-8 shadow-1">
+                  <div className="flex items-center justify-between px-4 py-8 rounded-t-8 bg-indigo-500">
+                    <div className="flex items-center">
+                      <Icon className="ml-12 text-white">how_to_vote</Icon>
+                      <Typography className="text-15 px-12 text-white font-bold">Votos en Blanco</Typography>
+                    </div>
+                  </div>
+                  <div className="flex justify-center items-center px-16 pt-10 pb-10">
+                    <Typography className="text-15 w-full text-center font-bold">
+                      {new Intl.NumberFormat('es-PE').format(totalVotosBlanco)}
+                    </Typography>
+                  </div>
+                </Paper>
+              </div>
+              <div className="widget flex w-full p-12 sm:w-1/6">
+                <Paper className="w-full rounded-8 shadow-1">
+                  <div className="flex items-center justify-between px-4 py-8 rounded-t-8 bg-indigo-500">
+                    <div className="flex items-center">
+                      <Typography className="text-15 px-12 text-white font-bold">Votos Impugnados</Typography>
+                    </div>
+                  </div>
+                  <div className="flex justify-center items-center px-16 pt-10 pb-10">
+                    <Typography className="text-15 w-full text-center font-bold">
+                      {new Intl.NumberFormat('es-PE').format(totalVotosImpugnados)}
+                    </Typography>
+                  </div>
+                </Paper>
+              </div>
             </AnimateGroup>
           </div>
-          {tipo === EReportesTipo.GOBERNADORES && (
-            <div className="col-span-12 sm:col-span-5">
-              <Animate animation="transition.expandIn" delay={300}>
-                <Typography variant="h6">Resultados por Provincia</Typography>
-              </Animate>
-              <AnimateGroup
-                animation="transition.slideLeftIn"
-                delay={300}
-                className="flex flex-col justify-center items-center gap-10 py-10"
-              >
-                {votosxProv &&
-                  votosxProv.length > 0 &&
-                  votosxProv.map(row => (
-                    <ReportesVotoProvincia key={row._id} row={row} totalVotos={totalVotos} maxVoto={maxVotoxProv} />
-                  ))}
-              </AnimateGroup>
+          <div className="flex flex-col justify-center w-full px-24 py-6">
+            <div className="grid grid-cols-12 gap-24">
+              <div className="col-span-12 sm:col-span-7">
+                {tipo === EReportesTipo.GOBERNADORES && (
+                  <Animate animation="transition.expandIn" delay={300}>
+                    <Typography variant="h6">Resultados de Gobernadores</Typography>
+                  </Animate>
+                )}
+                {tipo === EReportesTipo.ALCALDES && distrito === 'todos' && (
+                  <Animate animation="transition.expandIn" delay={300}>
+                    <Typography variant="h6">Resultados de Alcaldes Provinciales</Typography>
+                  </Animate>
+                )}
+                {tipo === EReportesTipo.ALCALDES && distrito !== 'todos' && (
+                  <Animate animation="transition.expandIn" delay={300}>
+                    <Typography variant="h6">Resultados de Alcaldes Distritales</Typography>
+                  </Animate>
+                )}
+                <AnimateGroup
+                  animation="transition.slideLeftIn"
+                  delay={300}
+                  className="flex flex-col justify-center items-center gap-12 py-10"
+                >
+                  {list &&
+                    list.length > 0 &&
+                    list.map(row => (
+                      <ReportesCandidato
+                        key={row._id}
+                        row={row}
+                        totalVotos={totalVotos}
+                        maxVoto={maxVoto}
+                        organizacion={organizacion}
+                        setOrganizacion={setOrganizacion}
+                      />
+                    ))}
+                </AnimateGroup>
+              </div>
+              {tipo === EReportesTipo.GOBERNADORES && (
+                <div className="col-span-12 sm:col-span-5">
+                  <Animate animation="transition.expandIn" delay={300}>
+                    <Typography variant="h6">Resultados por Provincia</Typography>
+                  </Animate>
+                  <AnimateGroup
+                    animation="transition.slideLeftIn"
+                    delay={300}
+                    className="flex flex-col justify-center items-center gap-10 py-10"
+                  >
+                    {votosxProv &&
+                      votosxProv.length > 0 &&
+                      votosxProv.map(row => (
+                        <ReportesVotoProvincia key={row._id} row={row} totalVotos={totalVotos} maxVoto={maxVotoxProv} />
+                      ))}
+                  </AnimateGroup>
+                </div>
+              )}
+              {tipo === EReportesTipo.ALCALDES && distrito === 'todos' && (
+                <div className="col-span-12 sm:col-span-5">
+                  <Animate animation="transition.expandIn" delay={300}>
+                    <Typography variant="h6">Resultados por Distrito</Typography>
+                  </Animate>
+                  <AnimateGroup
+                    animation="transition.slideLeftIn"
+                    delay={300}
+                    className="flex flex-col justify-center items-center gap-10 py-10"
+                  >
+                    {votosxDist &&
+                      votosxDist.length > 0 &&
+                      votosxDist.map(row => (
+                        <ReportesVotoDistrito key={row._id} row={row} totalVotos={totalVotos} maxVoto={maxVotoxDist} />
+                      ))}
+                  </AnimateGroup>
+                </div>
+              )}
             </div>
-          )}
-          {tipo === EReportesTipo.ALCALDES && distrito === 'todos' && (
-            <div className="col-span-12 sm:col-span-5">
-              <Animate animation="transition.expandIn" delay={300}>
-                <Typography variant="h6">Resultados por Distrito</Typography>
-              </Animate>
-              <AnimateGroup
-                animation="transition.slideLeftIn"
-                delay={300}
-                className="flex flex-col justify-center items-center gap-10 py-10"
-              >
-                {votosxDist &&
-                  votosxDist.length > 0 &&
-                  votosxDist.map(row => (
-                    <ReportesVotoDistrito key={row._id} row={row} totalVotos={totalVotos} maxVoto={maxVotoxDist} />
-                  ))}
-              </AnimateGroup>
-            </div>
-          )}
-        </div>
-      </div>
+          </div>
+        </Fragment>
+      )}
     </div>
   )
 }

@@ -29,6 +29,7 @@ import { Swal, Toast } from 'configs/settings'
 import { validateFetchData } from 'helpers/validateFetchData'
 import { startGetAccionesSubModulo } from 'redux/actions/auth'
 import { startResetPersoneros } from 'redux/actions/personeros'
+import PersonerosToolBar from './PersonerosToolBar'
 
 /*******************************************************************************************************/
 // Definimos los estilos del componente //
@@ -189,6 +190,8 @@ const PersonerosTable = props => {
   // Renderizamos el componente
   return (
     <div className="w-full flex flex-col">
+      <PersonerosToolBar resetPages={resetPages} />
+      <hr />
       <Scrollbars className="flex-grow overflow-x-auto">
         <Table stickyHeader className="min-w-xl" aria-labelledby="tableTitle">
           <PersonerosTableHead order={order} onRequestSort={handleRequestSort} resetPages={resetPages} />

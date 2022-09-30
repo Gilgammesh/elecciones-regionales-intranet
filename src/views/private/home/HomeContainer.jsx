@@ -21,8 +21,8 @@ const useStyles = makeStyles(() => ({
     backgroundRepeat: 'center'
   },
   background: {
-    background: `linear-gradient(to right, ${darken('rgb(62,105,161,0.78)', 0.2)} 0%, ${darken(
-      'rgb(249,68,37,0.78)',
+    background: `linear-gradient(to right, ${darken('rgb(249,68,37,0.78)', 0.2)} 0%, ${darken(
+      'rgb(62,105,161,0.78)',
       0.2
     )} 100%)`
   }

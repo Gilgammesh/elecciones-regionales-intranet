@@ -4,7 +4,6 @@
 import React, { useState } from 'react'
 import PageCarded from 'components/core/PageCarded'
 import MesasHeader from './MesasHeader'
-import MesasToolBar from './MesasToolBar'
 import MesasTable from './MesasTable'
 
 /*******************************************************************************************************/
@@ -34,7 +33,6 @@ const Mesas = () => {
         header: 'min-h-72 h-72 sm:h-136 sm:min-h-136'
       }}
       header={<MesasHeader />}
-      contentToolbar={<MesasToolBar resetPages={resetPages} />}
       content={
         <MesasTable
           data={data}

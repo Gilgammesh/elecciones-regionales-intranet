@@ -5,7 +5,6 @@ import React, { useState } from 'react'
 import PageCarded from 'components/core/PageCarded'
 import OrganizacionesHeader from './OrganizacionesHeader'
 import OrganizacionesTable from './OrganizacionesTable'
-import OrganizacionesToolBar from './OrganizacionesToolBar'
 
 /*******************************************************************************************************/
 // Definimos la Vista del componente Organizaciones //
@@ -34,7 +33,6 @@ const Organizaciones = () => {
         header: 'min-h-72 h-72 sm:h-136 sm:min-h-136'
       }}
       header={<OrganizacionesHeader />}
-      contentToolbar={<OrganizacionesToolBar resetPages={resetPages} />}
       content={
         <OrganizacionesTable
           data={data}

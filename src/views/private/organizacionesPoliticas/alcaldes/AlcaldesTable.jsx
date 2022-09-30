@@ -17,6 +17,7 @@ import ProgressLinear from 'components/core/Progress/ProgressLinear'
 import { Swal, Toast } from 'configs/settings'
 import { validateFetchData } from 'helpers/validateFetchData'
 import { startGetAccionesSubModulo } from 'redux/actions/auth'
+import AlcaldesToolBar from './AlcaldesToolBar'
 
 /*******************************************************************************************************/
 // Definimos los estilos del componente //
@@ -188,6 +189,8 @@ const AlcaldesTable = props => {
   // Renderizamos el componente
   return (
     <div className="w-full flex flex-col">
+      <AlcaldesToolBar resetPages={resetPages} />
+      <hr />
       <Scrollbars className="flex-grow overflow-x-auto">
         <Table stickyHeader className="min-w-xl" aria-labelledby="tableTitle">
           <AlcaldesTableHead order={order} onRequestSort={handleRequestSort} resetPages={resetPages} />

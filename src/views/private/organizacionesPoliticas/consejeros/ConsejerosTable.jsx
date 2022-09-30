@@ -17,6 +17,7 @@ import ProgressLinear from 'components/core/Progress/ProgressLinear'
 import { Swal, Toast } from 'configs/settings'
 import { validateFetchData } from 'helpers/validateFetchData'
 import { startGetAccionesSubModulo } from 'redux/actions/auth'
+import ConsejerosToolBar from './ConsejerosToolBar'
 
 /*******************************************************************************************************/
 // Definimos los estilos del componente //
@@ -186,6 +187,8 @@ const ConsejerosTable = props => {
   // Renderizamos el componente
   return (
     <div className="w-full flex flex-col">
+      <ConsejerosToolBar resetPages={resetPages} />
+      <hr />
       <Scrollbars className="flex-grow overflow-x-auto">
         <Table stickyHeader className="min-w-xl" aria-labelledby="tableTitle">
           <ConsejerosTableHead order={order} onRequestSort={handleRequestSort} resetPages={resetPages} />

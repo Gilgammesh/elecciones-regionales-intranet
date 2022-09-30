@@ -36,7 +36,6 @@ const ReportesToolBarProvs = () => {
       // Si existe un resultado y el status es positivo
       if (result && mounted && result.data.status) {
         // Establecemos las provincias
-        dispatch(startSetReportesProvincia(result.data.list[0]._id, 'todos'))
         setListProvincias(result.data.list)
       }
     }
@@ -72,23 +71,23 @@ const ReportesToolBarProvs = () => {
       <InputLabel shrink id="select-reportes-provincia">
         Provincia
       </InputLabel>
-      {listProvincias.length > 0 && provincia !== 'todos' && (
-        <Select
-          labelId="select-reportes-provincia"
-          className="col-span-12"
-          value={provincia}
-          onChange={handleChange}
-          displayEmpty
-        >
-          {listProvincias.map(ele => {
+      <Select
+        labelId="select-reportes-provincia"
+        className="col-span-12"
+        value={provincia}
+        onChange={handleChange}
+        displayEmpty
+      >
+        <MenuItem value="todos">--Seleccione--</MenuItem>
+        {listProvincias.length > 0 &&
+          listProvincias.map(ele => {
             return (
               <MenuItem key={ele._id} value={ele._id}>
                 {ele.nombre}
               </MenuItem>
             )
           })}
-        </Select>
-      )}
+      </Select>
     </FormControl>
   )
 }

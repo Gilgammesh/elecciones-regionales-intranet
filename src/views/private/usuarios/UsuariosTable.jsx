@@ -28,6 +28,7 @@ import { validateFetchData } from 'helpers/validateFetchData'
 import { startGetAccionesModulo } from 'redux/actions/auth'
 import male from 'assets/images/avatars/male.jpg'
 import female from 'assets/images/avatars/female.jpg'
+import UsuariosToolBar from './UsuariosToolBar'
 
 /*******************************************************************************************************/
 // Definimos la Vista del componente Usuarios Table //
@@ -182,6 +183,8 @@ const UsuariosTable = props => {
   // Renderizamos el componente
   return (
     <div className="w-full flex flex-col">
+      <UsuariosToolBar />
+      <hr />
       <Scrollbars className="flex-grow overflow-x-auto">
         <Table stickyHeader className="min-w-xl" aria-labelledby="tableTitle">
           <UsuariosTableHead

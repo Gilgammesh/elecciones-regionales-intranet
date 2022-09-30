@@ -16,6 +16,7 @@ import { startGetAccionesModulo } from 'redux/actions/auth'
 import { startSetMonitoreoRow } from 'redux/actions/monitoreo'
 import { EMesaEstadoActa } from 'enums/mesas'
 import { Swal } from 'configs/settings'
+import MonitoreoToolBar from './MonitoreoToolBar'
 
 /*******************************************************************************************************/
 // Definimos la Vista del componente Monitoreo Table //
@@ -223,6 +224,8 @@ const MonitoreoContainer = props => {
   // Renderizamos el componente
   return (
     <div className="w-full flex flex-col">
+      <MonitoreoToolBar resetPages={resetPages} />
+      <hr />
       <div className="p-12">
         <AnimateGroup
           className="flex flex-wrap"

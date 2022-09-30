@@ -4,7 +4,6 @@
 import React from 'react'
 import PageCarded from 'components/core/PageCarded'
 import ReportesHeader from './ReportesHeader'
-import ReportesToolBar from './ReportesToolBar'
 import ReportesContainer from './ReportesContainer'
 
 /*******************************************************************************************************/
@@ -20,7 +19,6 @@ const Reportes = () => {
         header: 'min-h-72 h-72 sm:h-136 sm:min-h-136'
       }}
       header={<ReportesHeader />}
-      contentToolbar={<ReportesToolBar />}
       content={<ReportesContainer />}
       innerScroll
     />

@@ -4,7 +4,6 @@
 import React, { useState } from 'react'
 import PageCarded from 'components/core/PageCarded'
 import MonitoreoHeader from './MonitoreoHeader'
-import MonitoreoToolBar from './MonitoreoToolBar'
 import MonitoreoContainer from './MonitoreoContainer'
 
 /*******************************************************************************************************/
@@ -34,7 +33,6 @@ const Monitoreo = () => {
         header: 'min-h-72 h-72 sm:h-136 sm:min-h-136'
       }}
       header={<MonitoreoHeader />}
-      contentToolbar={<MonitoreoToolBar resetPages={resetPages} />}
       content={
         <MonitoreoContainer
           data={data}

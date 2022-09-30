@@ -32,6 +32,7 @@ import { validateFetchData } from 'helpers/validateFetchData'
 import { startGetAccionesSubModulo } from 'redux/actions/auth'
 import { startSetMesasChange } from 'redux/actions/mesas'
 import DialogPersoneros from './DialogPersoneros'
+import MesasToolBar from './MesasToolBar'
 
 /*******************************************************************************************************/
 // Definimos los estilos del componente //
@@ -244,6 +245,8 @@ const MesasTable = props => {
   // Renderizamos el componente
   return (
     <div className="w-full flex flex-col">
+      <MesasToolBar resetPages={resetPages} />
+      <hr />
       <Scrollbars className="flex-grow overflow-x-auto">
         <Table stickyHeader className="min-w-xl" aria-labelledby="tableTitle">
           <MesasTableHead order={order} onRequestSort={handleRequestSort} resetPages={resetPages} />
