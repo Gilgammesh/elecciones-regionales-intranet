@@ -198,9 +198,9 @@ const MonitoreoActaRegTable = props => {
                     value={`${blancos.conse}`}
                     onChange={evt => {
                       if (evt.target.value === null || evt.target.value === '') {
-                        setNulos({ ...blancos, conse: 0 })
+                        setBlancos({ ...blancos, conse: 0 })
                       } else {
-                        setNulos({ ...blancos, conse: parseInt(evt.target.value, 10) })
+                        setBlancos({ ...blancos, conse: parseInt(evt.target.value, 10) })
                       }
                     }}
                     variant="outlined"
@@ -247,9 +247,9 @@ const MonitoreoActaRegTable = props => {
                     value={`${impugnados.conse}`}
                     onChange={evt => {
                       if (evt.target.value === null || evt.target.value === '') {
-                        setNulos({ ...impugnados, conse: 0 })
+                        setImpugnados({ ...impugnados, conse: 0 })
                       } else {
-                        setNulos({ ...impugnados, conse: parseInt(evt.target.value, 10) })
+                        setImpugnados({ ...impugnados, conse: parseInt(evt.target.value, 10) })
                       }
                     }}
                     variant="outlined"

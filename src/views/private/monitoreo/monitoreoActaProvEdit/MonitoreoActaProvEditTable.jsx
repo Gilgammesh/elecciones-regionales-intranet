@@ -218,9 +218,9 @@ const MonitoreoActaProvEditTable = props => {
                       value={`${blancos.alc_dist}`}
                       onChange={evt => {
                         if (evt.target.value === null || evt.target.value === '') {
-                          setNulos({ ...blancos, alc_dist: 0 })
+                          setBlancos({ ...blancos, alc_dist: 0 })
                         } else {
-                          setNulos({ ...blancos, alc_dist: parseInt(evt.target.value, 10) })
+                          setBlancos({ ...blancos, alc_dist: parseInt(evt.target.value, 10) })
                         }
                       }}
                       variant="outlined"
@@ -269,9 +269,9 @@ const MonitoreoActaProvEditTable = props => {
                       value={`${impugnados.alc_dist}`}
                       onChange={evt => {
                         if (evt.target.value === null || evt.target.value === '') {
-                          setNulos({ ...impugnados, alc_dist: 0 })
+                          setImpugnados({ ...impugnados, alc_dist: 0 })
                         } else {
-                          setNulos({ ...impugnados, alc_dist: parseInt(evt.target.value, 10) })
+                          setImpugnados({ ...impugnados, alc_dist: parseInt(evt.target.value, 10) })
                         }
                       }}
                       variant="outlined"
